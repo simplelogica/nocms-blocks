@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NoCmsBlocks</title>
+  <%= stylesheet_link_tag    "no_cms/blocks/application", media: "all" %>
+  <%= javascript_include_tag "no_cms/blocks/application" %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

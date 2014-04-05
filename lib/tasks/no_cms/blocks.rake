@@ -1,4 +1,4 @@
 # desc "Explaining what the task does"
-# task :nocms-blocks do
+# task :blocks do
 #   # Task goes here
 # end

@@ -1,4 +1,4 @@
-require "nocms/blocks/engine"
+require "no_cms/blocks/engine"
 
 module NoCms
   module Blocks
