@@ -9,7 +9,7 @@ describe NoCms::Blocks::Block do
     context "with simple fields" do
 
       before do
-        NoCms::Block.configure do |config|
+        NoCms::Blocks.configure do |config|
           config.block_layouts = {
             'title-long_text' => {
               template: 'title-long_text',
@@ -22,7 +22,7 @@ describe NoCms::Blocks::Block do
         end
       end
 
-      let(:block_with_layout) { NoCms::Block.create attributes_for(:block).merge(layout: 'title-long_text', title: block_title) }
+      let(:block_with_layout) { NoCms::Blocks::Block.create attributes_for(:block).merge(layout: 'title-long_text', title: block_title) }
       let(:block_title) { Faker::Lorem.sentence }
 
       subject { block_with_layout }
@@ -74,23 +74,6 @@ describe NoCms::Blocks::Block do
 
       end
 
-      context "when updating one field of the block through the page" do
-
-        let(:new_block_title) { "new #{Faker::Lorem.sentence}" }
-        let(:new_page_title) { "new page #{Faker::Lorem.sentence}" }
-
-        before do
-          subject.page.update_attributes! title: new_page_title, blocks_attributes: { "0" => { title: new_block_title, id: subject.id } }
-        end
-
-        it("should save info in layout field") do
-          subject.reload
-          expect(subject.page.title).to eq new_page_title
-          expect(subject.title).to eq new_block_title
-        end
-
-      end
-
     end
 
     context "with related models" do
@@ -111,7 +94,7 @@ describe NoCms::Blocks::Block do
 
       let(:image_attributes) { attributes_for(:test_image) }
 
-      let(:block_with_layout) { NoCms::Pages::Block.create attributes_for(:nocms_block).merge(
+      let(:block_with_layout) { NoCms::Blocks::Block.create attributes_for(:nocms_block).merge(
           layout: 'logo-caption',
           caption: Faker::Lorem.sentence,
           logo: image_attributes
@@ -211,8 +194,8 @@ describe NoCms::Blocks::Block do
     before { draft_blocks && no_draft_blocks }
 
     it("should distinguish between drafts and no drafts") do
-      expect(NoCms::Block.drafts).to match_array draft_blocks
-      expect(NoCms::Block.no_drafts).to match_array no_draft_blocks
+      expect(NoCms::Blocks::Block.drafts).to match_array draft_blocks
+      expect(NoCms::Blocks::Block.no_drafts).to match_array no_draft_blocks
     end
   end
 end

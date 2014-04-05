@@ -21,3 +21,4 @@ group :test do
 end
 
 gem 'globalize'
+gem 'awesome_nested_set'

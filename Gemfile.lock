@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     nocms-blocks (0.0.1)
+      awesome_nested_set (~> 2.1, >= 2.1.6)
       rails (~> 4.0.4)
 
 GEM
@@ -33,6 +34,8 @@ GEM
       tzinfo (~> 0.3.37)
     arel (4.0.2)
     atomic (1.1.16)
+    awesome_nested_set (2.1.6)
+      activerecord (>= 3.0.0)
     builder (3.1.4)
     capybara (2.2.1)
       mime-types (>= 1.16)
@@ -122,6 +125,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_nested_set
   capybara
   database_cleaner
   factory_girl

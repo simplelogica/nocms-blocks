@@ -3,13 +3,12 @@ module NoCms::Blocks
 
     include Concerns::TranslationScopes
 
+    acts_as_nested_set
+
     scope :drafts, ->() { where_with_locale(draft: true) }
     scope :no_drafts, ->() { where_with_locale(draft: false) }
     scope :roots, ->() { where parent_id: nil }
-    belongs_to :page
 
-    belongs_to :parent, class_name: "NoCms::Pages::Block"
-    has_many :children, class_name: "NoCms::Pages::Block", foreign_key: 'parent_id', inverse_of: :parent, dependent: :destroy
     accepts_nested_attributes_for :children, allow_destroy: true
 
     attr_reader :cached_objects
@@ -21,19 +20,13 @@ module NoCms::Blocks
     end
 
     after_initialize :set_blank_fields
-    after_create :set_default_position
     before_save :save_related_objects
-    before_validation :copy_parent_page
 
     validates :fields_info, presence: { allow_blank: true }
-    validates :page, :layout, presence: true
-
-    def position
-      self[:position] || 0
-    end
+    validates :layout, presence: true
 
     def layout_config
-      NoCms::Pages.block_layouts.stringify_keys[layout]
+      NoCms::Blocks.block_layouts.stringify_keys[layout]
     end
 
     def template
@@ -139,19 +132,11 @@ module NoCms::Blocks
       super
     end
 
-    def copy_parent_page
-      self.page = parent.page unless parent.nil?
-    end
-
     private
 
     def set_blank_fields
       self.fields_info ||= {}
       @cached_objects ||= {}
-    end
-
-    def set_default_position
-      self.update_attribute :position, ((page.blocks.pluck(:position).compact.max || 0) + 1) if self[:position].blank?
     end
 
     def save_related_objects
