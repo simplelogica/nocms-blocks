@@ -127,7 +127,7 @@ module NoCms::Blocks
       end
     end
 
-    def reload
+    def reload *args
       @cached_objects = {}
       super
     end
