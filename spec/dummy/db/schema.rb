@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140405153139) do
+ActiveRecord::Schema.define(version: 20140618150847) do
 
   create_table "no_cms_blocks_block_translations", force: true do |t|
     t.integer "no_cms_blocks_block_id"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20140405153139) do
     t.integer  "lft"
     t.integer  "rgt"
     t.integer  "depth"
+    t.integer  "position"
   end
 
 end
