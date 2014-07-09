@@ -1,0 +1,28 @@
+<div class="b-title row">
+  <a href="#" class="btn-square ico-collapse-v js-collapse-block" title="Expand /Collapse"></a>
+
+  <%= f.select :layout, NoCms::Blocks.block_layouts.map{|name, layout| [
+      I18n.t("no_cms.blocks.blocks.layouts.#{name}"),
+      name,
+      'data-nest-levels' => layout[:nest_levels].nil? ? nil : layout[:nest_levels].to_json
+    ]},
+    {}, class: 'block_layout_selector' %>
+
+  <%= f.text_field :highlight_title, class: 'highlight_title third' %>
+  <div class="mo">
+    <a href="" class="ico-mini-delete"><%= t('.remove') %></a>
+    <a href="" class="ico-mini-move-up"><%= t('.move_up') %></a>
+    <a href="" class="ico-mini-move-down"><%= t('.move_down') %></a>
+    <a href="" class="ico-mini-show-hide"><%= t('.hide') %></a>
+    <a href="" class="ico-mini-highlight"><%= t('.highlight') %></a>
+  </div>
+</div>
+<div class='layout_fields'>
+  <%= render "no_cms/admin/blocks/blocks/#{f.object.template}" , f: f %>
+  <%= render 'no_cms/admin/blocks/blocks/nested_index', f: f if f.object.layout_config[:allow_nested_blocks] %>
+</div>
+
+<%= f.hidden_field :position, class: 'position' %>
+<%= f.hidden_field :draft,  class: 'draft', value: f.object.draft ? '1' : '0' %>
+<%= f.hidden_field :highlighted,  class: 'highlight', value: f.object.highlighted ? '1' : '0' %>
+<%= f.hidden_field :_destroy,  class: 'destroy', value: '0' %>
