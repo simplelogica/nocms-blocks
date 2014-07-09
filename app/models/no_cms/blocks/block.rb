@@ -1,7 +1,7 @@
 module NoCms::Blocks
   class Block < ActiveRecord::Base
 
-    include Concerns::TranslationScopes
+    include  NoCms::Blocks::Concerns::TranslationScopes
 
     acts_as_nested_set
 
