@@ -7,7 +7,7 @@ require "no_cms/blocks/version"
 Gem::Specification.new do |s|
   s.name        = "nocms-blocks"
   s.version     = NoCms::Blocks::VERSION
-  s.authors     = ["Rodrigo García Suárez", 'Fernando Fdz. Zapico']
+  s.authors     = ["Rodrigo Garcia Suarez", 'Fernando Fdz. Zapico']
   s.email       = ["rodrigo@simplelogica.net", 'fernando@simplelogica.net']
   s.homepage    = ""
   s.summary     = "Content blocks engine for noCMS."
