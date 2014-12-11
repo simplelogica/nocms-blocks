@@ -3,5 +3,6 @@
 FactoryGirl.define do
   factory :block, class: NoCms::Blocks::Block do
     layout { 'default' }
+    draft false
   end
 end
