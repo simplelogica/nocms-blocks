@@ -93,7 +93,7 @@ describe NoCms::Blocks::Block do
 
       let(:image_attributes) { attributes_for(:test_image) }
 
-      let(:block_with_layout) { NoCms::Blocks::Block.create attributes_for(:nocms_block).merge(
+      let(:block_with_layout) { NoCms::Blocks::Block.create attributes_for(:block).merge(
           layout: 'logo-caption',
           caption: Faker::Lorem.sentence,
           logo: image_attributes
@@ -174,8 +174,8 @@ describe NoCms::Blocks::Block do
           expect(subject.reload.caption).to eq new_testing_caption
         end
 
-        it("should not modify the invalid objects") do
-          expect(subject.logo.name).to_not eq logo.name
+        it("should not save the invalid objects") do
+          expect(subject.logo.reload.name).to_not be_nil
         end
 
       end

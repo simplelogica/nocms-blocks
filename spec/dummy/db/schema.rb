@@ -33,4 +33,11 @@ ActiveRecord::Schema.define(version: 20140618150847) do
     t.integer  "position"
   end
 
+  create_table "test_images", force: true do |t|
+    t.string   "logo"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
 end
