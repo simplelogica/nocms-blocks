@@ -93,7 +93,7 @@ describe NoCms::Blocks::Block do
 
       let(:image_attributes) { attributes_for(:test_image) }
 
-      let(:block_with_layout) { NoCms::Blocks::Block.create attributes_for(:nocms_block).merge(
+      let(:block_with_layout) { NoCms::Blocks::Block.create attributes_for(:block).merge(
           layout: 'logo-caption',
           caption: Faker::Lorem.sentence,
           logo: image_attributes
