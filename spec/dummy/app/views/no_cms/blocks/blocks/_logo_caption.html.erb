@@ -1,0 +1,5 @@
+<div class='logo_block'>
+  <%= image_tag block.logo.logo.url, alt: block.logo.name, title: block.logo.name %>
+  <p class="caption"><%= block.caption %></p>
+  <%= params[:cache_key] %>
+</div>
