@@ -174,8 +174,8 @@ describe NoCms::Blocks::Block do
           expect(subject.reload.caption).to eq new_testing_caption
         end
 
-        it("should not modify the invalid objects") do
-          expect(subject.logo.name).to_not eq logo.name
+        it("should not save the invalid objects") do
+          expect(subject.logo.reload.name).to_not be_nil
         end
 
       end
