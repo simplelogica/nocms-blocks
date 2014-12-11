@@ -25,6 +25,11 @@ module NoCms::Blocks
     validates :fields_info, presence: { allow_blank: true }
     validates :layout, presence: true
 
+    def cache_enabled
+      layout_config.has_key?(:cache_enabled) ? layout_config[:cache_enabled] : NoCms::Blocks.cache_enabled
+    end
+
+
     def layout_config
       NoCms::Blocks.block_layouts.stringify_keys[layout]
     end

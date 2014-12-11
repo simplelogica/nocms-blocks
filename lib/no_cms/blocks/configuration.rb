@@ -3,6 +3,7 @@ module NoCms
     include ActiveSupport::Configurable
 
     config_accessor :block_layouts
+    config_accessor :cache_enabled
 
     self.block_layouts = {
       'default' => {
@@ -13,6 +14,7 @@ module NoCms
         }
       }
     }
+    self.cache_enabled = false
 
   end
 end
