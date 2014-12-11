@@ -48,12 +48,15 @@ RSpec.configure do |config|
   config.around(:each, :caching) do |example|
 
     caching = ActionController::Base.perform_caching
+    blocks_caching = NoCms::Blocks.cache_enabled
     ActionController::Base.perform_caching = example.metadata[:caching]
+    NoCms::Blocks.cache_enabled = example.metadata[:caching]
 
     example.run
 
     Rails.cache.clear
     ActionController::Base.perform_caching = caching
+    NoCms::Blocks.cache_enabled = blocks_caching
 
   end
 
