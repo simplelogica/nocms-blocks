@@ -19,6 +19,7 @@ group :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'faker'
+  gem 'carrierwave' # For development and testing purposes (Images)
 end
 
 gem 'globalize'
