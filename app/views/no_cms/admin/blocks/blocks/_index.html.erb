@@ -1,0 +1,15 @@
+<div class="row has-children content_blocks_placeholder">
+  <div class="tool-bar-blocks">
+    <a href="#" class="btn-square ico-collapse-v js-collapse-all-children-blocks" title="Collapse all blocks"></a>
+    <label><%= t('.title') %></label>
+    <%= link_to t('.new_block'), '#', class: 'new_content_block btn _m0' %>
+  </div>
+
+
+  <%= f.fields_for :blocks, f.object.blocks.reject(&:parent).sort_by{|b| b.new_record? ? Float::INFINITY : b.position} do |f_block| %>
+
+    <div class="block row <%= block_form_classes(f_block.object).join(" ")%>" id="<%= block_form_id(f_block.object) %>">
+      <%= render 'no_cms/admin/blocks/blocks/form', f: f_block %>
+    </div>
+  <% end %>
+</div>
