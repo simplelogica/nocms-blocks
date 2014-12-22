@@ -24,6 +24,7 @@ And run the initializer:
 
 ```
 rails g nocms:blocks
+```
 
 ### Blocks
 
