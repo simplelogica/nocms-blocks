@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.summary     = "Content blocks engine for noCMS."
   s.description = "This engine allow adding content blocks to other noCMS engine or render then by their own."
 
-  s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 4.0", '>= 4.0.3'
