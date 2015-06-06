@@ -14,6 +14,7 @@ module NoCms::Blocks
     attr_reader :cached_objects
 
     translates :layout, :fields_info, :draft
+    accepts_nested_attributes_for :translations
 
     class Translation
       serialize :fields_info, Hash
