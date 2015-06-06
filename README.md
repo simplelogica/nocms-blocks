@@ -2,7 +2,7 @@
 
 ## What's this?
 
-This is a Rails engine with a basic functionality of customizable blocks. It's not attached to any particular CMS so you can use it freely within your Rails application without too much dependencies.
+This is a Rails engine with a basic functionality of customizable blocks of content attachable to objects. It's not attached to any particular CMS so you can use it freely within your Rails application without too much dependencies.
 
 ## How do I install it?
 
@@ -26,18 +26,18 @@ And run the initializer:
 rails g nocms:blocks
 ```
 
-### Blocks
+## How does it works?
 
-Blocks are the unit of contents the pages are made of. They are thought to be independent and customizable modules that can be created, edited or removed on their own, without dependency of any other module.
+Blocks are thought to be independent and customizable modules of content that can be created, edited or removed on their own, without dependency of any other module or class.
 
-#### Block layouts
+### Block layouts
 
 In NoCMS Blocks, block layouts define two main things:
 
 1. What kind of information a block contains and other settings (i.e. cache settings).
-2. How this information is displayed within the page.
+2. How this information is displayed on a view.
 
-Block settings are configured in the file `config/initializers/nocms/blocks.rb`. Here we declare all the available layouts for a block.
+Block settings are configured in the file `config/initializers/nocms/blocks.rb`. In that file we declare all the available layouts for a block.
 
 The following code
 
@@ -101,13 +101,13 @@ block.logo.class # => TestImage
 block.logo = TestImage.new name: 'testing logo' # Error! Currently assigning the object is not allowed :(
 ```
 
-#### Block templates
+### Block templates
 
 Blocks are rendered using the `render_block` helper which controls all the logic related with renderinf a block, including fragment cache control.
 
 In the end a partial is rendered using the block as a local variable to obtain the information. This partial must be found at `no_cms/blocks/blocks` views folder and have the name configured in the `template` setting of the block. This way, rendering a 'title-3_columns' would render the partial `/no_cms/blocks/blocks/title_3_columns`.
 
-This partial is a regular Rails partial (nothing special here). AS an example, this could be the content of our  `/no_cms/blocks/blocks/title_3_columns.html.erb` partial:
+This partial is a regular Rails partial (nothing special here). As an example, this could be the content of our  `/no_cms/blocks/blocks/title_3_columns.html.erb` partial:
 
 ```html
 <div class='columns_block'>
@@ -118,13 +118,13 @@ This partial is a regular Rails partial (nothing special here). AS an example, t
 </div>
 ```
 
-As you can see, the partial has a block variable containing the block object you are rendering.
+As you can see, the partial has a `block` variable containing the block object you are rendering.
 
-Since this is plain old rails you can do everything you can do with a partial (i.e. having a `/no_cms/blocks/blocks/title_3_columns.en.html.erb` for the english version and a `/no_cms/blocks/blocks/title_3_columns.es.html.erb` for the spanish one).
+Since this is plain old rails you can do everything you can do with a partial (e.g. having a `/no_cms/blocks/blocks/title_3_columns.en.html.erb` for the english version and a `/no_cms/blocks/blocks/title_3_columns.es.html.erb` for the spanish one).
 
 ### Block Cache
 
-Since blocks are independent units of content within a page, the standard Rails fragment cache seemed to fit well with them. That's why the `render_block` helper decides wether Rails cache should be used for rendering an individual block.
+Since blocks are independent units of content, the standard Rails fragment cache seemed to fit well with them. That's why the `render_block` helper decides wether Rails cache should be used for rendering an individual block.
 
 Cache for the blocks are configured at 3 levels:
 
@@ -134,7 +134,7 @@ Cache for the blocks are configured at 3 levels:
     render_block block, cache: false
   ```
 
-2. In the blocks configuration we can enable/disable the cache for all the blocks of a kind. We just have to add the cache_enabled setting.
+2. In the blocks configuration we can enable/disable the cache for all the blocks of a kind. We just have to add the `cache_enabled` setting.
 
   ```ruby
   NoCms::Blocks.configure do |config|
@@ -178,4 +178,56 @@ As a summary:
 
   render_block b, cache_enabled: false # => This won't use fragment cache as the option in the helper overrides the block configuration
 
+```
+
+## Where is the admin interface?
+
+Since blocks are always attached to another object there ¡s no separate admin interface for them.
+
+Instead of a separate admin interface this engine includes a set of partials that can be used to render it as a basic admin interface attachable to any edit view of any object that has blocks attached.
+
+```ruby
+  <%= render 'no_cms/admin/blocks/blocks/index', f: f %>
+```
+
+### NoCms Admin
+
+This partial is fully compatible with `nocms-admin` gem and works with the JS in that engine that handles creation or modification of blocks.
+
+To enable it just add the following code to your form view.
+
+```ruby
+<% content_for :ready_js do %>
+  NoCMS.Admin.BlockHandler();
+<% end %>
+```
+
+### Block admin templates
+
+Same way that a block has a partial that gets rendered in the public views it has another partial to be rendered inside the admin views if you use the no_cms/admin/blocks/blocks/index partial.
+
+This partial must be found at `no_cms/admin/blocks/blocks` views folder and have the name configured in the `template` setting of the block. This way, rendering a 'title-3_columns' would render the partial `/no_cms/admin/blocks/blocks/title_3_columns`.
+
+This partial is a regular Rails partial (nothing special here). As an example, this could be the content of our  `/no_cms/admin/blocks/blocks/title_3_columns.html.erb` partial:
+
+```html
+<div class="row">
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+</div>
+
+<div class="row">
+  <%= f.label :column_1 %>
+  <%= f.text_area :column_1 %>
+</div>
+
+<div class="row">
+  <%= f.label :column_2 %>
+  <%= f.text_area :column_2 %>
+</div>
+
+<div class="row">
+  <%= f.label :column_3 %>
+  <%= f.text_area :column_3 %>
+</div>
 ```
