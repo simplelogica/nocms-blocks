@@ -2,7 +2,7 @@
   <a href="#" class="btn-square ico-collapse-v js-collapse-block" title="Expand /Collapse"></a>
 
   <%= f.select :layout, NoCms::Blocks.block_layouts.map{|name, layout| [
-      I18n.t("no_cms.pages.blocks.layouts.#{name}"),
+      I18n.t("no_cms.blocks.blocks.layouts.#{name}"),
       name,
       'data-nest-levels' => layout[:nest_levels].nil? ? nil : layout[:nest_levels].to_json
     ]},

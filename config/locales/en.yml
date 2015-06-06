@@ -1,0 +1,15 @@
+en:
+  no_cms:
+    admin:
+      blocks:
+        blocks:
+          index:
+            new_block: New block
+            title: Blocks
+          nested_index:
+            new_block: New block
+            title: Blocks
+    blocks:
+      blocks:
+        layouts:
+          default: 'Default block'
