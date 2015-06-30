@@ -32,7 +32,7 @@ describe NoCms::Blocks::Block do
       end
 
       it("should not respond to fields from other layouts") do
-        expect{subject.no_title}.to raise_error
+        expect{subject.no_title}.to raise_error(NoMethodError)
       end
 
       it("should save info in layout fields") do
