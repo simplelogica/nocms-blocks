@@ -7,14 +7,14 @@ require "no_cms/blocks/version"
 Gem::Specification.new do |s|
   s.name        = "nocms-blocks"
   s.version     = NoCms::Blocks::VERSION
-  s.authors     = ["Rodrigo Garcia Suarez", 'Fernando Fdz. Zapico']
-  s.email       = ["rodrigo@simplelogica.net", 'fernando@simplelogica.net']
-  s.homepage    = ""
-  s.summary     = "Content blocks engine for noCMS."
-  s.description = "This engine allow adding content blocks to other noCMS engine or render then by their own."
+  s.authors     = ["Rodrigo Garcia Suarez", 'Fernando Fdz. Zapico', 'Luis Mendo', 'Victor Ortiz', 'David J. Brenes']
+  s.email       = ['gems@simplelogica.net']
+  s.homepage    = "https://github.com/simplelogica/nocms-blocks"
+  s.summary     = "Engine of configurable content blocks CMS agnostic (NoCMS)."
+  s.description = "This engine allow adding content blocks to other AR model with very few dependencies."
 
-  s.files = Dir["{app,config,db,lib}/**/*", "LICENSE", "Rakefile", "README.md"]
-  s.test_files = Dir["test/**/*"]
+  s.files = Dir["{app,config,db,lib}/**/*", "CHANGELOG", "LICENSE", "Rakefile", "README.md"]
+  s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "~> 4.0", '<= 4.2.3'
   s.add_dependency "awesome_nested_set", '>= 3.0.0.rc.6'

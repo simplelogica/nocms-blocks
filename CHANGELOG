@@ -1,0 +1,8 @@
+1.0.0
+
+  - First released version.
+  - Customizable blocks.
+  - Russian Doll Cache
+  - Global cache enabled
+  - Support for Rails 4.0, 4.1 and 4.2
+
