@@ -12,7 +12,7 @@ shared_examples_for "model with required attributes" do |model_name, required_at
         subject { model_object }
 
         it { should_not be_valid }
-        it { expect(subject.error_on(attribute_name)).to include I18n.t('errors.messages.blank') }
+        it { expect(subject.errors[attribute_name]).to include I18n.t('errors.messages.blank') }
       end
 
     end
