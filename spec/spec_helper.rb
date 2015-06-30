@@ -30,7 +30,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   # Capybara DSL only in request specs
-  config.include Capybara::DSL, :type => :request
+  config.include Capybara::DSL
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

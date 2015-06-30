@@ -11,9 +11,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140618150847) do
+ActiveRecord::Schema.define(version: 20140618150651) do
 
-  create_table "no_cms_blocks_block_translations", force: true do |t|
+  create_table "no_cms_blocks_block_translations", force: :cascade do |t|
     t.integer "no_cms_blocks_block_id"
     t.string  "locale"
     t.string  "layout"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20140618150847) do
 
   add_index "no_cms_blocks_block_translations", ["no_cms_blocks_block_id"], name: "no_cms_blocks_blocks_translations_block_id"
 
-  create_table "no_cms_blocks_blocks", force: true do |t|
+  create_table "no_cms_blocks_blocks", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "parent_id"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20140618150847) do
     t.integer  "position"
   end
 
-  create_table "test_images", force: true do |t|
+  create_table "test_images", force: :cascade do |t|
     t.string   "logo"
     t.string   "name"
     t.datetime "created_at"
