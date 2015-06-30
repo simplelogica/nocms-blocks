@@ -43,6 +43,10 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    appraisal (2.0.2)
+      bundler
+      rake
+      thor (>= 0.14.0)
     arel (6.0.0)
     awesome_nested_set (3.0.2)
       activerecord (>= 4.0.0, < 5)
@@ -144,6 +148,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  appraisal
   awesome_nested_set
   capybara
   carrierwave

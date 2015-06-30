@@ -20,6 +20,7 @@ group :test do
   gem 'database_cleaner'
   gem 'faker'
   gem 'carrierwave' # For development and testing purposes (Images)
+  gem 'appraisal'
 end
 
 gem 'globalize'
