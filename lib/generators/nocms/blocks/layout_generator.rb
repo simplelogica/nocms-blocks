@@ -10,6 +10,10 @@ module NoCms
         template "app/assets/stylesheets/no_cms/blocks/layout.scss.erb", File.join(destination_root, "app/assets/stylesheets/no_cms/blocks", "#{name}.scss")
       end
 
+      def generate_views
+        template "app/views/no_cms/blocks/blocks/layout.html.erb", File.join(destination_root, "app/views/no_cms/blocks/blocks", "#{name}.html.erb")
+        template "app/views/no_cms/admin/blocks/blocks/layout.html.erb", File.join(destination_root, "app/views/no_cms/admin/blocks/blocks", "#{name}.html.erb")
+      end
 
       def self.namespace
         "nocms:blocks:layout"
