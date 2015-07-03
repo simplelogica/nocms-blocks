@@ -3,6 +3,7 @@ PATH
   specs:
     nocms-blocks (1.0.0)
       awesome_nested_set (>= 3.0.0.rc.6)
+      globalize (> 4.0, < 5.1)
       rails (~> 4.0, <= 4.2.3)
 
 GEM
