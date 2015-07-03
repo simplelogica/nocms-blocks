@@ -16,7 +16,7 @@ module NoCms
       end
 
       def generate_initializer
-        template "config/initializers/nocms/blocks/layout.rb", File.join(destination_root, "config/initializers/nocms/blocks", "_#{name}.rb")
+        template "config/initializers/nocms/blocks/layout.rb", File.join(destination_root, "config/initializers/nocms/blocks", "#{name}.rb")
       end
 
       def self.namespace
