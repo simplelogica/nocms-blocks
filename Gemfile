@@ -21,6 +21,7 @@ group :test do
   gem 'faker'
   gem 'carrierwave' # For development and testing purposes (Images)
   gem 'appraisal'
+  gem "generator_spec"
 end
 
 gem 'globalize'
