@@ -87,6 +87,28 @@ module NoCms::Blocks
       end
     end
 
+    ##
+    # This method checks wether the field to be duplicated is an AR. In that
+    # case it removes the reference to the old version from the stored fields
+    # and stores a duplicated version in the objects cache.
+    #
+    # Notice that field duplication rely on the dup implementation of the
+    # object, so any recursive dupping or special case that object must
+    # implement is its own responsability.
+    def duplicate_field field
+      field_type = field_type field
+
+      if field_type.is_a?(Class) && field_type < ActiveRecord::Base
+        # We save in the objects cache the dupped object
+        @cached_objects[field.to_sym] = read_field(field).dup
+        # and then we remove the old id from the fields_info hash
+        fields_info["#{field}_id".to_sym] = nil
+      else
+        # else we just dup it and save it into fields_info
+        fields_info[field.to_sym] = read_field(field).dup
+      end
+    end
+
     # In this missing method we check wether we're asking for one field
     # in which case we will read or write ir
     def method_missing(m, *args, &block)
@@ -136,6 +158,41 @@ module NoCms::Blocks
     def reload *args
       @cached_objects = {}
       super
+    end
+
+    ##
+    # Method for duplicating a block. It duplicates all the attributes just like
+    # the default dup method. Then uses the 'fields_to_duplicate' layout setting
+    # to figure out which fields (usually other AR objects) must be dupped
+    # and store their new references.
+    #
+    # Notice that fields duplication rely on those field being able to dup
+    # themselves, so any object stored in a field must have its own custom dup
+    # implementation.
+    #
+    # It also recursively dup all children blocks.
+    def dup
+
+      # We have to call translations before we dup the object. Otherwise
+      # the object is unable to recover them later.
+      # This seems to be a strange interaction between Rails 4.2 and Globalize 5
+      # we should be aware of for next versions
+      self.translations
+
+      new_block = super
+
+      # Now duplicate children
+      children.each do |child|
+        new_block.children << child.dup
+      end
+
+      # And now duplicate those fields we have to duplicate
+      layout_config[:fields_to_duplicate].each do |field_to_duplicate|
+        new_block.duplicate_field field_to_duplicate
+      end unless layout_config[:fields_to_duplicate].blank?
+
+      new_block
+
     end
 
     private
