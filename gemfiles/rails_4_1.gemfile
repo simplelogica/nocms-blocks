@@ -14,6 +14,7 @@ group :test do
   gem "faker"
   gem "carrierwave"
   gem "appraisal"
+  gem "generator_spec"
 end
 
 gemspec :path => "../"
