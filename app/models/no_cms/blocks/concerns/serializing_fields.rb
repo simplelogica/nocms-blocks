@@ -146,7 +146,9 @@ module NoCms
             field.gsub!(/\=$/, '')
 
             # If this field actually exists, then we write it or read it.
-            if has_field?(field)
+            # Be careful, layout is not a serialized field, so the block has no
+            # 'layout' field
+            if field != 'layout' && has_field?(field)
               write_accessor ?
                 write_field(field, args.first) :
                 read_field(field.to_sym)
