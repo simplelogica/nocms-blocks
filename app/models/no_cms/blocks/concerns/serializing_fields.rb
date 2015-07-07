@@ -6,19 +6,6 @@ module NoCms
 
         self.included do
           after_initialize :set_blank_fields
-          before_save :save_related_objects
-
-          validates :fields_info, presence: { allow_blank: true }
-          validates :layout, presence: true
-
-          ##
-          # This attribute stores all the objects referenced on those fields
-          # from an AR subtype.
-          #
-          # It acts both as a cache and as a way to edit or create AR objects
-          # and save them when the block is saved.
-          attr_reader :cached_objects
-
 
           ##
           # This method checks wether the block's layout has cache configured
@@ -132,13 +119,11 @@ module NoCms
             field_type = field_type field
             # If field type is a model then we update the cached object
             if field_type.is_a?(Class) && field_type < ActiveRecord::Base
-              # First, we initialize the object if we don't read the object (it
-              # loads it into the cached objects)
-              if read_field(field).nil?
-                @cached_objects[field.to_sym] = field_type.new
-              end
-              # Then, assign attributes
-              @cached_objects[field.to_sym].assign_attributes value
+
+              # We read the object and assign it the attributes attributes.
+              # Since we use the read_field method it will take into account
+              # if the AR object needs to be build
+              read_field(field).assign_attributes value
             else
             # If it's not a model then we merge with the previous value
 
@@ -217,25 +202,6 @@ module NoCms
             @cached_objects ||= {}
           end
 
-          ##
-          # Saves every related object from the objects cache
-          def save_related_objects
-            # Now we save each activerecord related object
-            cached_objects.each do |field, object|
-              # Notice that we don't care if the object is actually saved.
-              #
-              # We don't care because there may be some cases where no real
-              # information is sent to an object but something is sent (i.e. the
-              # locale in a new Globalize translation) and then the object is
-              # created empty.
-              #
-              # When this happens if we save! the object an error is thrown and
-              # we can't leave the object blank
-              if object.is_a?(ActiveRecord::Base) && object.save
-                fields_info["#{field}_id".to_sym] = object.id
-              end
-            end
-          end
         end
       end
     end
