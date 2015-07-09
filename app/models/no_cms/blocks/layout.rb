@@ -14,6 +14,28 @@ class NoCms::Blocks::Layout
   end
 
   ##
+  # This method parses the fields block from the layout configuration and takes
+  # into account if they are declared in a verbose mode (with a hash) or a quick
+  # one (just the field type).
+  #
+  # It uses default values for the configuration that is not declared
+  def fields
+    return @fields if @fields
+
+    @fields = {}
+
+    config[:fields].each do | field, field_config|
+
+      field_config = { type: field_config } unless field_config.is_a? Hash
+
+      @fields[field] = field_config
+
+    end
+
+    @fields
+  end
+
+  ##
   # We look for the layout_id into the engine configuration and return a layout
   # initialized with the corresponding configuration data
   def self.find layout_id
