@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140618150651) do
+ActiveRecord::Schema.define(version: 20150709132202) do
 
   create_table "no_cms_blocks_block_translations", force: :cascade do |t|
     t.integer "no_cms_blocks_block_id"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20140618150651) do
     t.integer  "rgt"
     t.integer  "depth"
     t.integer  "position"
+    t.text     "non_translated_fields_info"
   end
 
   create_table "test_images", force: :cascade do |t|
