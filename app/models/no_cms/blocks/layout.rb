@@ -35,6 +35,22 @@ class NoCms::Blocks::Layout
     @fields
   end
 
+  def template
+    config[:template]
+  end
+
+  def allow_nested_blocks
+    config[:allow_nested_blocks]
+  end
+
+  def nest_levels
+    config[:nest_levels]
+  end
+
+  def cache_enabled
+    config[:cache_enabled]
+  end
+
   ##
   # We look for the layout_id into the engine configuration and return a layout
   # initialized with the corresponding configuration data

@@ -33,16 +33,23 @@ describe NoCms::Blocks::Layout do
       NoCms::Blocks.configure do |config|
         config.block_layouts = {
           'title-long_text' => {
-            template: 'title-long_text',
+            template: block_template,
             fields: {
               title: title_configuration[:type],
               body: body_configuration
-            }
+            },
+            allow_nested_blocks: block_allow_nested_blocks,
+            nest_levels: block_nest_levels,
+            cache_enabled: block_cache_enabled
           }
         }
       end
     end
 
+    let(:block_template) { 'title-long_text' }
+    let(:block_allow_nested_blocks) { true }
+    let(:block_nest_levels) { [0,1] }
+    let(:block_cache_enabled) { true }
     let(:title_configuration) { { type: :string } }
     let(:body_configuration) { { type: :text } }
 
@@ -54,6 +61,22 @@ describe NoCms::Blocks::Layout do
 
     it "should recover the configuration for verbosing configured fields" do
       expect(subject.fields[:body]).to eq body_configuration
+    end
+
+    it "should recover the template from the configuration" do
+      expect(subject.template).to eq block_template
+    end
+
+    it "should recover the 'allow_nested_blocks' from the configuration" do
+      expect(subject.allow_nested_blocks).to eq block_allow_nested_blocks
+    end
+
+    it "should recover the nest levels from the configuration" do
+      expect(subject.nest_levels).to eq block_nest_levels
+    end
+
+    it "should recover the 'cache enabled' setting from the configuration" do
+      expect(subject.cache_enabled).to eq block_cache_enabled
     end
 
   end
