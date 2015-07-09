@@ -14,6 +14,13 @@ module NoCms::Blocks
     include  NoCms::Blocks::Concerns::SerializingFields
 
     ##
+    # For blocks we don't set the field info as it forces globalize to modify
+    # a saved translation with an empty fields_info hash
+    def set_blank_fields
+      @cached_objects ||= {}
+    end
+
+    ##
     # This attribute stores all the objects referenced on those fields
     # from an AR subtype.
     #

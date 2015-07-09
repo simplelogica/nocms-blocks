@@ -130,7 +130,10 @@ module NoCms
               # when updating through an object (i.e. the page updates through
               # nested attributes) fields_info[field.to_sym] = value doesn't
               # work. Kudos to Rubo for this fix
-              self.fields_info = fields_info.merge field.to_sym => value
+              self.fields_info = fields_info.nil? ?
+                { field.to_sym => value } :
+                fields_info.merge(field.to_sym => value)
+
             end
           end
 
