@@ -24,12 +24,14 @@ class NoCms::Blocks::Layout
 
     @fields = {}
 
-    config[:fields].each do | field, field_config|
-
-      field_config = { type: field_config } unless field_config.is_a? Hash
-
-      @fields[field] = field_config
-
+    ## If we have a fields config we fill the fields hash
+    unless config[:fields].nil?
+      config[:fields].each do | field, field_config|
+        # If configuration is not a hash it means that we are only receiving
+        # the field type. We turn it into a proper hash.
+        field_config = { type: field_config } unless field_config.is_a? Hash
+        @fields[field] = field_config
+      end
     end
 
     @fields
@@ -40,16 +42,22 @@ class NoCms::Blocks::Layout
   end
 
   def allow_nested_blocks
-    config[:allow_nested_blocks]
+    config.has_key?(:allow_nested_blocks) ?
+      config[:allow_nested_blocks] :
+      false
   end
+  alias_method :allow_nested_blocks?, :allow_nested_blocks
 
   def nest_levels
-    config[:nest_levels]
+    config[:nest_levels] || []
   end
 
   def cache_enabled
-    config[:cache_enabled]
+    config.has_key?(:cache_enabled) ?
+      config[:cache_enabled] :
+      NoCms::Blocks.cache_enabled
   end
+  alias_method :cache_enabled?, :cache_enabled
 
   ##
   # We look for the layout_id into the engine configuration and return a layout

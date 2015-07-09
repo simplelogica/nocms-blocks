@@ -28,7 +28,7 @@ describe NoCms::Blocks::Layout do
 
   end
 
-  context "when getting layout configuration" do
+  context "when the layout has configuration" do
     before do
       NoCms::Blocks.configure do |config|
         config.block_layouts = {
@@ -77,6 +77,40 @@ describe NoCms::Blocks::Layout do
 
     it "should recover the 'cache enabled' setting from the configuration" do
       expect(subject.cache_enabled).to eq block_cache_enabled
+    end
+  end
+
+  context "when config is empty" do
+
+    before do
+      NoCms::Blocks.configure do |config|
+        config.block_layouts = {
+          'title-long_text' => {
+          }
+        }
+      end
+    end
+
+    subject { NoCms::Blocks::Layout.find('title-long_text') }
+
+    it "should recover no fields" do
+      expect(subject.fields).to be_empty
+    end
+
+    it "should recover no template" do
+      expect(subject.template).to be_nil
+    end
+
+    it "should recover default 'allow_nested_blocks' setting " do
+      expect(subject).to_not be_allow_nested_blocks
+    end
+
+    it "should recover no nest levels" do
+      expect(subject.nest_levels).to be_empty
+    end
+
+    it "should recover the global 'cache enabled' setting" do
+      expect(subject.cache_enabled).to eq NoCms::Blocks.cache_enabled
     end
 
   end
