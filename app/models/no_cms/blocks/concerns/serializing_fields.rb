@@ -94,7 +94,7 @@ module NoCms
           # stores it in the objects cache. Later, if the block is saved, this
           # object will be saved too.
           def read_field field
-            return nil unless has_field?(field)
+            raise  NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
 
             # first, we get the value
             value = fields_info[field.to_sym] ||
@@ -129,7 +129,7 @@ module NoCms
           # This solves the scenario of a nested form where a hash is passed as
           # the value of the field.
           def write_field field, value
-            return nil unless has_field?(field)
+            raise NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
             field_type = field_type field
             # If field type is a model then we update the cached object
             if field_type.is_a?(Class) && field_type < ActiveRecord::Base
