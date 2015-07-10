@@ -138,6 +138,12 @@ module NoCms
               # Since we use the read_field method it will take into account
               # if the AR object needs to be build
               read_field(field).assign_attributes value
+
+              # Even if the fields_info has not changed we need to store the
+              # modification, so an association may be saved in cascade (e.g.
+              # the translation of a block would not be saved if we don't force
+              # this)
+              fields_info_will_change!
             else
             # If it's not a model then we merge with the previous value
 
