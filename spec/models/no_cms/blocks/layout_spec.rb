@@ -56,7 +56,7 @@ describe NoCms::Blocks::Layout do
     subject { NoCms::Blocks::Layout.find('title-long_text') }
 
     it "should recover the configuration for quickly configured fields" do
-      expect(subject.fields[:title]).to eq title_configuration
+      expect(subject.fields[:title]).to eq NoCms::Blocks::Layout::DEFAULT_FIELD_CONFIGURATION.merge(title_configuration)
     end
 
     it "should recover the configuration for verbosing configured fields" do
