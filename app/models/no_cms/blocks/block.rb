@@ -9,16 +9,8 @@ module NoCms::Blocks
     scope :no_drafts, ->() { where_with_locale(draft: false) }
     scope :roots, ->() { where parent_id: nil }
 
-
-    translates :layout, :fields_info, :draft
+    translates :draft
     include  NoCms::Blocks::Concerns::SerializingFields
-
-    ##
-    # For blocks we don't set the field info as it forces globalize to modify
-    # a saved translation with an empty fields_info hash
-    def set_blank_fields
-      @cached_objects ||= {}
-    end
 
     ##
     # This attribute stores all the objects referenced on those fields
@@ -32,8 +24,11 @@ module NoCms::Blocks
     validates :fields_info, presence: { allow_blank: true }
 
     class Translation
-      serialize :fields_info, Hash
+      attr_accessor :layout
 
+      def layout
+        globalized_model.nil? ? @layout : globalized_model.layout
+      end
 
       include  NoCms::Blocks::Concerns::SerializingFields
     end

@@ -5,6 +5,9 @@ module NoCms
         extend ActiveSupport::Concern
 
         self.included do
+
+          serialize :fields_info, Hash
+
           after_initialize :set_blank_fields
 
           ##
@@ -180,6 +183,16 @@ module NoCms
             # And now separate fields and attributes
             fields = new_attributes.select{|k, _| has_field? k }.symbolize_keys
             new_attributes.reject!{|k, _| has_field? k }
+
+            # If we have translations we're going to need the layout in their
+            # attributes too so they can validate the fields.
+            # This is actually only neccesary when creating the translations,
+            # but we can afford to send the layout always to the translations
+            if new_attributes.has_key? :translations_attributes
+              new_attributes[:translations_attributes].each do |translation|
+                translation[:layout] = self.layout
+              end
+            end
 
             super(new_attributes)
 
