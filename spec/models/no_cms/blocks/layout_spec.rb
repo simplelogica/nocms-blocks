@@ -36,6 +36,7 @@ describe NoCms::Blocks::Layout do
             template: block_template,
             fields: {
               title: title_configuration[:type],
+              column: column_configuration,
               body: body_configuration
             },
             allow_nested_blocks: block_allow_nested_blocks,
@@ -51,6 +52,7 @@ describe NoCms::Blocks::Layout do
     let(:block_nest_levels) { [0,1] }
     let(:block_cache_enabled) { true }
     let(:title_configuration) { { type: :string } }
+    let(:column_configuration) { { type: :string, translated: false } }
     let(:body_configuration) { { type: :text } }
 
     subject { NoCms::Blocks::Layout.find('title-long_text') }
@@ -61,6 +63,10 @@ describe NoCms::Blocks::Layout do
 
     it "should recover the configuration for verbosing configured fields" do
       expect(subject.fields[:body]).to eq body_configuration
+    end
+
+    it "should recover the configuration for a field that overwrites some default configuration" do
+      expect(subject.fields[:column]).to eq column_configuration
     end
 
     it "should recover the template from the configuration" do
