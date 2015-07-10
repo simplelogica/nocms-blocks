@@ -13,9 +13,9 @@ module NoCms::Blocks
     include  NoCms::Blocks::Concerns::SerializingFields
 
     ##
-    # In the block we get only the not translated fields
+    # In the block we get all the fields so it can accept all of them
     def fields_configuration
-      layout_config.not_translated_fields
+      layout_config.fields
     end
 
     ##

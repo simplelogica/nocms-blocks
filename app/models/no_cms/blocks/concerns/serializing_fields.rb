@@ -47,13 +47,14 @@ module NoCms
           def has_field? field
             # We have the field if...
             !layout_config.nil? && # We have a layout configuration AND
-              (
-                # We have this field OR
-                !fields_configuration.symbolize_keys[field.to_sym].nil? ||
-                # we remove the final _id and then we have the field
-                !fields_configuration.symbolize_keys[field.to_s.
-                  gsub(/\_id$/, '').to_sym].nil?
-              )
+            !layout_config.field(field).nil? # We have this field
+          end
+
+          ##
+          # This method tells wether we are in a translation and we must manage
+          # translated fields or not
+          def is_translation?
+            !self.respond_to?(:translations)
           end
 
           ##
@@ -150,28 +151,31 @@ module NoCms
             write_accessor = field.ends_with? '='
             field.gsub!(/\=$/, '')
 
-            # If this field actually exists, then we write it or read it.
-            # Be careful, layout is not a serialized field, so the block has no
-            # 'layout' field
-            if field != 'layout' && has_field?(field)
+
+            # If we don't have this field then we send it to super and pry
+            if field == 'layout' || !has_field?(field)
+              super
+            # If this field exists, and it's not translated, then we do whatever
+            # we need to do
+            elsif !layout_config.field(field)[:translated]
               write_accessor ?
                 write_field(field, args.first) :
                 read_field(field.to_sym)
 
-              # If it doesn't exist it may be in the default translation.
-              # If we have a default translation and it has that field, then we
-              # try to obtain it from the translation it
-            elsif field != 'layout' &&
-                self.respond_to?(:translation) &&
-                translation.has_field?(field)
+              # If it's translated but we are not in the translation (we check
+              # this by checking if we have translations) then we use the
+              # default translation to obtain it
+            elsif !self.is_translation? &&
+                layout_config.field(field)[:translated]
+
+                # When we are creating the block we still have no translation
+                # and we need to fill the layout. Otherwise no write or read
+                # field will work
+                translation.layout = self.layout
 
                   write_accessor ?
                     translation.write_field(field, args.first) :
                     translation.read_field(field.to_sym)
-            # If neither the object nor the translation has this field, then we
-            # send it to super and pry
-            else
-              super
             end
           end
 
@@ -195,7 +199,14 @@ module NoCms
 
             # And now separate fields and attributes
             fields = new_attributes.select{|k, _| has_field? k }.symbolize_keys
-            new_attributes.reject!{|k, _| has_field? k }
+            # Now we filter those fields we must not manage because we are (or
+            # not) in a translation. I.e: if we have a translated field, but we
+            # are not in a translation then we let the translated field go and
+            # not manage it here
+            fields.select!{|k, _| layout_config.field(k)[:translated] == is_translation? }
+
+            # We purge the fields from the attributes
+            new_attributes.reject!{|k, _| fields.has_key? k }
 
             # If we have translations we're going to need the layout in their
             # attributes too so they can validate the fields.

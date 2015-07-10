@@ -36,7 +36,19 @@ class NoCms::Blocks::Layout
       end
     end
 
+    @fields = @fields.symbolize_keys
+
     @fields
+  end
+
+  def field field_name
+    field_name = field_name.to_sym
+    if fields.has_key? field_name
+      fields[field_name]
+    else
+      field_name = field_name.to_s.gsub(/\_id$/, '')
+      fields[field_name] if fields.has_key? field_name
+    end
   end
 
   ##
