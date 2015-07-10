@@ -19,7 +19,6 @@ module NoCms::Blocks
     end
 
     validates :layout, presence: true
-    validates :fields_info, presence: { allow_blank: true }
 
     class Translation
 

@@ -12,6 +12,8 @@ module NoCms
 
           before_save :save_related_objects
 
+          validates :fields_info, presence: { allow_blank: true }
+
           ##
           # This attribute stores all the objects referenced on those fields
           # from an AR subtype.
