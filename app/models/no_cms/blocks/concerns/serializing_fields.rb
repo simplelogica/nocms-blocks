@@ -10,6 +10,17 @@ module NoCms
 
           after_initialize :set_blank_fields
 
+          before_save :save_related_objects
+
+          ##
+          # This attribute stores all the objects referenced on those fields
+          # from an AR subtype.
+          #
+          # It acts both as a cache and as a way to edit or create AR objects
+          # and save them when the block is saved.
+          attr_reader :cached_objects
+
+
           ##
           # This method checks wether the block's layout has cache configured
           # and returns it.
@@ -137,6 +148,26 @@ module NoCms
                 { field.to_sym => value } :
                 fields_info.merge(field.to_sym => value)
 
+            end
+          end
+
+          ##
+          # Saves every related object from the objects cache
+          def save_related_objects
+            # Now we save each activerecord related object
+            @cached_objects.each do |field, object|
+              # Notice that we don't care if the object is actually saved.
+              #
+              # We don't care because there may be some cases where no real
+              # information is sent to an object but something is sent (i.e. the
+              # locale in a new Globalize translation) and then the object is
+              # created empty.
+              #
+              # When this happens if we save! the object an error is thrown and
+              # we can't leave the object blank
+              if object.is_a?(ActiveRecord::Base) && object.save
+                fields_info["#{field}_id".to_sym] = object.id
+              end
             end
           end
 
