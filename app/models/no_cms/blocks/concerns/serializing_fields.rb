@@ -14,9 +14,7 @@ module NoCms
           # If it hasn't it returns the global cache_enabled configuration for
           # NoCms::Blocks
           def cache_enabled?
-            layout_config.has_key?(:cache_enabled) ?
-              layout_config[:cache_enabled] :
-              NoCms::Blocks.cache_enabled
+            layout_config.cache_enabled?
           end
 
           ##
@@ -27,13 +25,14 @@ module NoCms
           # Returns a hash with the layout information read from the blocks
           # initializer and the 'layout' field on the corresponding object.
           def layout_config
-            NoCms::Blocks.block_layouts.stringify_keys[layout]
+            return if layout.nil?
+            @layout_config ||= NoCms::Blocks::Layout.find layout
           end
 
           ##
           # Returns the template read from the layout configuration
           def template
-            layout_config[:template] if layout_config
+            layout_config.template if layout_config
           end
 
           ##
@@ -47,9 +46,9 @@ module NoCms
             !layout_config.nil? && # We have a layout configuration AND
               (
                 # We have this field OR
-                !layout_config[:fields].symbolize_keys[field.to_sym].nil? ||
+                !layout_config.fields.symbolize_keys[field.to_sym].nil? ||
                 # we remove the final _id and then we have the field
-                !layout_config[:fields].symbolize_keys[field.to_s.
+                !layout_config.fields.symbolize_keys[field.to_s.
                   gsub(/\_id$/, '').to_sym].nil?
               )
           end
@@ -62,7 +61,7 @@ module NoCms
           # nil.
           def field_type field
             return nil unless has_field?(field)
-            layout_config[:fields].symbolize_keys[field.to_sym]
+            layout_config.fields.symbolize_keys[field.to_sym][:type]
           end
 
           ##
