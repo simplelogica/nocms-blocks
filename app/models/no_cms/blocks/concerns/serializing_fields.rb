@@ -157,6 +157,19 @@ module NoCms
               write_accessor ?
                 write_field(field, args.first) :
                 read_field(field.to_sym)
+
+              # If it doesn't exist it may be in the default translation.
+              # If we have a default translation and it has that field, then we
+              # try to obtain it from the translation it
+            elsif field != 'layout' &&
+                self.respond_to?(:translation) &&
+                translation.has_field?(field)
+
+                  write_accessor ?
+                    translation.write_field(field, args.first) :
+                    translation.read_field(field.to_sym)
+            # If neither the object nor the translation has this field, then we
+            # send it to super and pry
             else
               super
             end

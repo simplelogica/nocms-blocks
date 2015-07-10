@@ -5,12 +5,12 @@ describe NoCms::Blocks::Block do
   context "when loading simple translated fields" do
     let(:block_title_es) { Faker::Lorem.sentence }
     let(:block_title_en) { Faker::Lorem.sentence }
-    let!(:block) { NoCms::Blocks::Block.create! translations_attributes: [
-        { locale: 'es', layout: 'title-long_text', title: block_title_es },
-        { locale: 'en', layout: 'title-long_text', title: block_title_en }
+    let!(:block) { NoCms::Blocks::Block.create! layout: 'title-long_text',
+      translations_attributes: [
+        { locale: 'es', title: block_title_es },
+        { locale: 'en', title: block_title_en }
       ]
     }
-
 
     before(:all) do
       NoCms::Blocks.configure do |config|
@@ -51,7 +51,7 @@ describe NoCms::Blocks::Block do
           'title-long_text' => {
             template: 'title-long_text',
             fields: {
-              title: { type: :string, i18n: false },
+              title: { type: :string, translated: false },
               body: :text
             }
           }
