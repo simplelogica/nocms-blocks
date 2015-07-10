@@ -13,6 +13,12 @@ module NoCms::Blocks
     include  NoCms::Blocks::Concerns::SerializingFields
 
     ##
+    # In the block we get only the not translated fields
+    def fields_configuration
+      layout_config.not_translated_fields
+    end
+
+    ##
     # This attribute stores all the objects referenced on those fields
     # from an AR subtype.
     #
@@ -25,6 +31,12 @@ module NoCms::Blocks
 
     class Translation
       attr_accessor :layout
+
+      ##
+      # In the translation we get only the translated fields
+      def fields_configuration
+        layout_config.translated_fields
+      end
 
       def layout
         globalized_model.nil? ? @layout : globalized_model.layout

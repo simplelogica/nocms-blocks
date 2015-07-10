@@ -49,9 +49,9 @@ module NoCms
             !layout_config.nil? && # We have a layout configuration AND
               (
                 # We have this field OR
-                !layout_config.fields.symbolize_keys[field.to_sym].nil? ||
+                !fields_configuration.symbolize_keys[field.to_sym].nil? ||
                 # we remove the final _id and then we have the field
-                !layout_config.fields.symbolize_keys[field.to_s.
+                !fields_configuration.symbolize_keys[field.to_s.
                   gsub(/\_id$/, '').to_sym].nil?
               )
           end
@@ -64,7 +64,7 @@ module NoCms
           # nil.
           def field_type field
             return nil unless has_field?(field)
-            layout_config.fields.symbolize_keys[field.to_sym][:type]
+            fields_configuration.symbolize_keys[field.to_sym][:type]
           end
 
           ##
