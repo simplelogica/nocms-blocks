@@ -6,6 +6,8 @@ class NoCms::Blocks::Layout
 
   attr_reader :config
 
+  DEFAULT_FIELD_CONFIGURATION = { translated: true }
+
   ##
   # We receive a configuration hash like the ones defined in the configuration
   # files
@@ -29,12 +31,25 @@ class NoCms::Blocks::Layout
       config[:fields].each do | field, field_config|
         # If configuration is not a hash it means that we are only receiving
         # the field type. We turn it into a proper hash.
-        field_config = { type: field_config } unless field_config.is_a? Hash
+        field_config = DEFAULT_FIELD_CONFIGURATION.merge({ type: field_config }) unless field_config.is_a? Hash
         @fields[field] = field_config
       end
     end
 
     @fields
+  end
+
+  ##
+  # This method returns only the configuration for translated fields
+  def translated_fields
+    @translated_fields ||= fields.select{|field, config| config[:translated] }
+  end
+
+
+  ##
+  # This method returns only the configuration for not translated fields
+  def not_translated_fields
+    @not_translated_fields ||= fields.reject{|field, config| config[:translated] }
   end
 
   def template
