@@ -37,11 +37,14 @@ describe NoCms::Blocks::Block do
 
   context "when we have some untranslated fields" do
     let(:block_title) { Faker::Lorem.sentence }
+    let(:block_body_es) { Faker::Lorem.paragraph }
+    let(:block_body_en) { Faker::Lorem.paragraph }
+
     let!(:block) { NoCms::Blocks::Block.create! title: block_title,
       layout: 'title-long_text',
       translations_attributes: [
-        { locale: 'es', body: Faker::Lorem.paragraph },
-        { locale: 'en', body: Faker::Lorem.paragraph }
+        { locale: 'es', body: block_body_es },
+        { locale: 'en', body: block_body_en }
       ]
     }
 
@@ -61,9 +64,14 @@ describe NoCms::Blocks::Block do
 
     subject { NoCms::Blocks::Block.find block.id }
 
-    it "should retrieve the right text for each language" do
+    it "should retrieve the same unstranslated attribute for each language" do
       I18n.with_locale(:es) { expect(subject.title).to eq block_title }
       I18n.with_locale(:en) { expect(subject.title).to eq block_title }
+    end
+
+    it "should retrieve the right translated attribute for each language" do
+      I18n.with_locale(:es) { expect(subject.body).to eq block_body_es }
+      I18n.with_locale(:en) { expect(subject.body).to eq block_body_en }
     end
 
   end
