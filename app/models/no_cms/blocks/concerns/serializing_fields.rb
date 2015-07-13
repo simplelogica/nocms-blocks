@@ -273,12 +273,51 @@ module NoCms
             super
           end
 
+          ##
+          # Overwriting duplication method. This method relies on super for any
+          # default behaviour, then duplicate the fields just as their
+          # configuration demands and then allow the object to custimize the
+          # duplication through the duplicate_self method.
+          def dup
+            new_self = super
+
+            # Now we recover all the fields that must be duplicated here
+            fields_to_duplicate.keys.each do |field_to_duplicate|
+              duplicate_field field_to_duplicate
+            end
+
+            # And allow the class itself to append some behaviour
+            duplicate_self new_self
+
+            new_self
+          end
+
+          ##
+          # This method allows us to introduce some custom duplication for each
+          # class that includes the concern.
+          #
+          # Basic behaviour is... doing nothing
+          def duplicate_self new_self
+          end
+
+          ##
+          # This method returns a list of the fields to duplicate in this
+          # object. In the concern we will use all the fields and if the classes
+          # need to modify it they will.
+          #
+          # Notice that if the behaviour is that when duplicating the field is
+          # nullfied we will return the field here and the duplicate_field will
+          # manage it properly.
+          def fields_to_duplicate
+            fields_configuration
+          end
+
           private
 
           ##
           # Initializes both the fields_info hash and the objects cache.
           def set_blank_fields
-            self.fields_info ||= {}
+            @fields_info ||= {}
             @cached_objects ||= {}
           end
 
