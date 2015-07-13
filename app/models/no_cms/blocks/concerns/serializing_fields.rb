@@ -160,6 +160,29 @@ module NoCms
           end
 
           ##
+          # This method duplicates a field and stores its value.
+          #
+          # It takes into account that the field may be an AR object and updates
+          # the cached objects.
+          def duplicate_field field
+            field_type = field_type field
+            field_value = read_field(field)
+
+            if field_type.is_a?(Class) && field_type < ActiveRecord::Base
+              # We save in the objects cache the dupped object if it's not nil
+              unless field_value.nil?
+                @cached_objects[field.to_sym] = field_value.dup
+              end
+              # and then we remove the old id from the fields_info hash
+              fields_info["#{field}_id".to_sym] = nil
+            else
+              # else we just dup it and save it into fields_info. If it's nil we
+              # save nil (you can't dup NilClass)
+              fields_info[field.to_sym] = field_value.nil? ? nil : field_value.dup
+            end
+          end
+
+          ##
           # Saves every related object from the objects cache
           def save_related_objects
             # Now we save each activerecord related object
