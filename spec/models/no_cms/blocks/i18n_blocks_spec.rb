@@ -40,11 +40,16 @@ describe NoCms::Blocks::Block do
     let(:block_body_es) { Faker::Lorem.paragraph }
     let(:block_body_en) { Faker::Lorem.paragraph }
 
+    let(:logo_attributes) { attributes_for(:test_image) }
+    let(:background_attributes_es) { attributes_for(:test_image) }
+    let(:background_attributes_en) { attributes_for(:test_image) }
+
     let!(:block) { NoCms::Blocks::Block.create! title: block_title,
+      logo: logo_attributes,
       layout: 'title-long_text',
       translations_attributes: [
-        { locale: 'es', body: block_body_es },
-        { locale: 'en', body: block_body_en }
+        { locale: 'es', body: block_body_es, background: background_attributes_es },
+        { locale: 'en', body: block_body_en, background: background_attributes_en }
       ]
     }
 
@@ -55,7 +60,9 @@ describe NoCms::Blocks::Block do
             template: 'title-long_text',
             fields: {
               title: { type: :string, translated: false },
-              body: :text
+              body: :text,
+              logo:  { type: TestImage, translated: false },
+              background:  { type: TestImage, translated: true },
             }
           }
         }
@@ -72,6 +79,22 @@ describe NoCms::Blocks::Block do
     it "should retrieve the right translated attribute for each language" do
       I18n.with_locale(:es) { expect(subject.body).to eq block_body_es }
       I18n.with_locale(:en) { expect(subject.body).to eq block_body_en }
+    end
+
+    it "should only create 3 images (2 translated and 1 not translated)" do
+      expect(TestImage.count).to eq 3
+    end
+
+    it "should retrieve untranslated attached object" do
+      logo_es = I18n.with_locale(:es) { subject.logo }
+      logo_en = I18n.with_locale(:en) { subject.logo }
+      expect(logo_es).to eq logo_en
+    end
+
+    it "should retrieve untranslated attached object" do
+      background_es = I18n.with_locale(:es) { subject.background }
+      background_en = I18n.with_locale(:en) { subject.background }
+      expect(background_es).to_not eq background_en
     end
 
   end
