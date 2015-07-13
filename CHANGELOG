@@ -1,3 +1,9 @@
+Edge
+
+  - I18n behaviour fixed
+    * Separated objects cache for translations
+    * fields info both in the block and the translation
+
 1.0.0
 
   - First released version.

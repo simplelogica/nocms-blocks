@@ -6,6 +6,13 @@ gem "globalize"
 gem "awesome_nested_set"
 gem "rails", "4.1.12"
 
+group :development do
+  gem "pry-rails"
+  gem "pry-nav"
+  gem "pry-remote"
+  gem "pry-stack_explorer"
+end
+
 group :test do
   gem "rspec-rails", "~> 3.0"
   gem "factory_girl"
@@ -14,6 +21,8 @@ group :test do
   gem "faker"
   gem "carrierwave"
   gem "appraisal"
+  gem "simplecov"
+  gem "simplecov-json"
 end
 
 gemspec :path => "../"

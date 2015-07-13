@@ -13,6 +13,13 @@ gemspec
 # To use debugger
 # gem 'debugger'
 
+group :development, :test do
+  gem 'pry-rails'
+  gem 'pry-nav'
+  gem 'pry-remote'
+  gem 'pry-stack_explorer'
+end
+
 group :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'factory_girl'
@@ -21,6 +28,8 @@ group :test do
   gem 'faker'
   gem 'carrierwave' # For development and testing purposes (Images)
   gem 'appraisal'
+  gem 'simplecov'
+  gem 'simplecov-json'
 end
 
 gem 'globalize'
