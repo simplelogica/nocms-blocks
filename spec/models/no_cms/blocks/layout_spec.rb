@@ -53,7 +53,7 @@ describe NoCms::Blocks::Layout do
     let(:block_cache_enabled) { true }
     let(:title_configuration) { { type: :string } }
     let(:column_configuration) { { type: :string, translated: false } }
-    let(:body_configuration) { { type: :text } }
+    let(:body_configuration) { { type: :text, duplicate: :nil } }
 
     subject { NoCms::Blocks::Layout.find('title-long_text') }
 
@@ -62,11 +62,12 @@ describe NoCms::Blocks::Layout do
     end
 
     it "should recover the configuration for verbosing configured fields" do
-      expect(subject.fields[:body]).to eq body_configuration
+      expect(subject.fields[:body]).to eq NoCms::Blocks::Layout::DEFAULT_FIELD_CONFIGURATION.merge(body_configuration)
     end
 
     it "should recover the configuration for a field that overwrites some default configuration" do
-      expect(subject.fields[:column]).to eq column_configuration
+      expect(subject.fields[:body]).to eq NoCms::Blocks::Layout::DEFAULT_FIELD_CONFIGURATION.merge(body_configuration)
+      expect(subject.fields[:column]).to eq NoCms::Blocks::Layout::DEFAULT_FIELD_CONFIGURATION.merge(column_configuration)
     end
 
     it "should recover the template from the configuration" do
