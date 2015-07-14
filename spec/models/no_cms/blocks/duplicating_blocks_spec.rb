@@ -3,8 +3,9 @@ require 'spec_helper'
 describe NoCms::Blocks::Block do
 
   context "when duplicating a block without translations" do
+
     let(:block_title) { Faker::Lorem.sentence }
-    let(:block) { NoCms::Blocks::Block.create layout: 'title-long_text', title: block_title }
+    let(:block) { NoCms::Blocks::Block.create layout: 'title-long_text', title: block_title, body: Faker::Lorem.paragraph }
 
     let(:dupped_block) { block.dup }
 
@@ -16,7 +17,7 @@ describe NoCms::Blocks::Block do
             template: 'title-long_text',
             fields: {
               title: { type: :string, translated: false },
-              body: { type: :text, translated: false }
+              body: { type: :text, translated: false, duplicate: :nullify }
             }
           }
         }
@@ -34,6 +35,11 @@ describe NoCms::Blocks::Block do
     it "should have the same text" do
       expect(subject.title).to eq block_title
     end
+
+    it "should nullify the field configured to be nullified" do
+      expect(subject.body).to be_nil
+    end
+
   end
 
 end

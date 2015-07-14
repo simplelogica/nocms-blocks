@@ -164,21 +164,39 @@ module NoCms
           #
           # It takes into account that the field may be an AR object and updates
           # the cached objects.
+          #
+          # We have different options of duplication depending on the field's
+          # configuration:
+          #
+          #  * duplication: It's the default behaviour. It just performs a dup
+          #    of the field and expects the attached object to implement dup in
+          #    a proper way.
+          #
+          #  * nullify: It doesn't dup the field, it empties it. It's useful for
+          #    objects we don't want to duplicate, like images in S3 (it can
+          #    raise a timeout exception when duplicating).
           def duplicate_field field
             field_type = field_type field
             field_value = read_field(field)
 
+            dupped_value = case layout_config.field(field)[:duplicate]
+              # When dupping we just dp the object and expect it has the right
+              # behaviour. If it's nil we save nil (you can't dup NilClass)
+              when :dup
+                field_value.nil? ? nil : field_value.dup
+              # When nullifying we return nil
+              when :nullify
+                nil
+            end
+
             if field_type.is_a?(Class) && field_type < ActiveRecord::Base
-              # We save in the objects cache the dupped object if it's not nil
-              unless field_value.nil?
-                @cached_objects[field.to_sym] = field_value.dup
-              end
+              # We save in the objects cache the dupped object
+              @cached_objects[field.to_sym] = dupped_value
               # and then we remove the old id from the fields_info hash
               fields_info["#{field}_id".to_sym] = nil
             else
-              # else we just dup it and save it into fields_info. If it's nil we
-              # save nil (you can't dup NilClass)
-              fields_info[field.to_sym] = field_value.nil? ? nil : field_value.dup
+              # else we just dup it and save it into fields_info.
+              fields_info[field.to_sym] = dupped_value
             end
           end
 

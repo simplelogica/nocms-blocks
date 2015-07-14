@@ -53,7 +53,7 @@ describe NoCms::Blocks::Layout do
     let(:block_cache_enabled) { true }
     let(:title_configuration) { { type: :string } }
     let(:column_configuration) { { type: :string, translated: false } }
-    let(:body_configuration) { { type: :text, duplicate: :nil } }
+    let(:body_configuration) { { type: :text, duplicate: :nullify } }
 
     subject { NoCms::Blocks::Layout.find('title-long_text') }
 
