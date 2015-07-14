@@ -353,6 +353,15 @@ module NoCms
             fields_configuration
           end
 
+          ##
+          # When dupping we need to overwrite the cached_objects attribute.
+          # Otherwise the cached_object from the original object would start to
+          # be populated with the objects of the dupped one.
+          def initialize_dup(other)
+            @cached_objects = {}
+            super
+          end
+
           private
 
           ##

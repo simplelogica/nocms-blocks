@@ -5,7 +5,14 @@ describe NoCms::Blocks::Block do
   context "when duplicating a block without translations" do
 
     let(:block_title) { Faker::Lorem.sentence }
-    let(:block) { NoCms::Blocks::Block.create layout: 'title-long_text', title: block_title, body: Faker::Lorem.paragraph }
+    let(:image_attributes) {  }
+    let(:block) do
+      NoCms::Blocks::Block.create layout: 'title-long_text',
+        title: block_title,
+        body: Faker::Lorem.paragraph,
+        logo: attributes_for(:test_image)
+    end
+
 
     let(:dupped_block) { block.dup }
 
@@ -17,7 +24,8 @@ describe NoCms::Blocks::Block do
             template: 'title-long_text',
             fields: {
               title: { type: :string, translated: false },
-              body: { type: :text, translated: false, duplicate: :nullify }
+              body: { type: :text, translated: false, duplicate: :nullify },
+              logo: { type: TestImage, translated: false, duplicate: :dup }
             }
           }
         }
@@ -38,6 +46,11 @@ describe NoCms::Blocks::Block do
 
     it "should nullify the field configured to be nullified" do
       expect(subject.body).to be_nil
+    end
+
+    it "should duplicate an Active Record field configured to be duplicated" do
+      expect(subject.logo).to_not be_new_record
+      expect(subject.logo).to_not eq block.logo
     end
 
   end
