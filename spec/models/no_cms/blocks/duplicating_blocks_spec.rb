@@ -15,8 +15,8 @@ describe NoCms::Blocks::Block do
           'title-long_text' => {
             template: 'title-long_text',
             fields: {
-              title: :string,
-              body: :text
+              title: { type: :string, translated: false },
+              body: { type: :text, translated: false }
             }
           }
         }
