@@ -306,7 +306,7 @@ module NoCms
 
             # Now we recover all the fields that must be duplicated here
             fields_to_duplicate.keys.each do |field_to_duplicate|
-              duplicate_field field_to_duplicate
+              new_self.duplicate_field field_to_duplicate
             end
 
             # And allow the class itself to append some behaviour
