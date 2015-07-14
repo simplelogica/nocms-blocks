@@ -10,7 +10,8 @@ describe NoCms::Blocks::Block do
       NoCms::Blocks::Block.create layout: 'title-long_text',
         title: block_title,
         body: Faker::Lorem.paragraph,
-        logo: attributes_for(:test_image)
+        logo: attributes_for(:test_image),
+        background: attributes_for(:test_image)
     end
 
 
@@ -25,7 +26,8 @@ describe NoCms::Blocks::Block do
             fields: {
               title: { type: :string, translated: false },
               body: { type: :text, translated: false, duplicate: :nullify },
-              logo: { type: TestImage, translated: false, duplicate: :dup }
+              logo: { type: TestImage, translated: false, duplicate: :dup },
+              background: { type: TestImage, translated: false, duplicate: :nil }
             }
           }
         }
@@ -51,6 +53,10 @@ describe NoCms::Blocks::Block do
     it "should duplicate an Active Record field configured to be duplicated" do
       expect(subject.logo).to_not be_new_record
       expect(subject.logo).to_not eq block.logo
+    end
+
+    it "should return a new record when an AR field is configured to nullify" do
+      expect(subject.background).to be_new_record
     end
 
   end
