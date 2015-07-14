@@ -175,6 +175,11 @@ module NoCms
           #  * nullify: It doesn't dup the field, it empties it. It's useful for
           #    objects we don't want to duplicate, like images in S3 (it can
           #    raise a timeout exception when duplicating).
+          #
+          #  * link: It doesn't dup the field but stores the same object. It's
+          #    useful in Active Record fields so we can store the same id and
+          #    not creating a duplicate of the object (e.g. if we have a block
+          #    with a related post we don't want the post to be duplicated)
           def duplicate_field field
             field_type = field_type field
             field_value = read_field(field)
@@ -187,13 +192,16 @@ module NoCms
               # When nullifying we return nil
               when :nullify
                 nil
+              when :link
+                field_value
             end
 
             if field_type.is_a?(Class) && field_type < ActiveRecord::Base
               # We save in the objects cache the dupped object
               @cached_objects[field.to_sym] = dupped_value
-              # and then we remove the old id from the fields_info hash
-              fields_info["#{field}_id".to_sym] = nil
+              # and then we store the new id in the fields_info hash
+              fields_info["#{field}_id".to_sym] =
+                dupped_value.nil? ? nil : dupped_value.id
             else
               # else we just dup it and save it into fields_info.
               fields_info[field.to_sym] = dupped_value

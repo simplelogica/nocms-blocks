@@ -11,7 +11,8 @@ describe NoCms::Blocks::Block do
         title: block_title,
         body: Faker::Lorem.paragraph,
         logo: attributes_for(:test_image),
-        background: attributes_for(:test_image)
+        background: attributes_for(:test_image),
+        header: attributes_for(:test_image)
     end
 
 
@@ -27,7 +28,8 @@ describe NoCms::Blocks::Block do
               title: { type: :string, translated: false },
               body: { type: :text, translated: false, duplicate: :nullify },
               logo: { type: TestImage, translated: false, duplicate: :dup },
-              background: { type: TestImage, translated: false, duplicate: :nil }
+              background: { type: TestImage, translated: false, duplicate: :nil },
+              header: { type: TestImage, translated: false, duplicate: :link }
             }
           }
         }
@@ -57,6 +59,10 @@ describe NoCms::Blocks::Block do
 
     it "should return a new record when an AR field is configured to nullify" do
       expect(subject.background).to be_new_record
+    end
+
+    it "should link an Active Record field configured to be linked" do
+      expect(subject.header).to eq block.header
     end
 
   end
