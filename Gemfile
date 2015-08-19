@@ -32,5 +32,3 @@ group :test do
   gem 'simplecov-json'
 end
 
-gem 'globalize'
-gem 'awesome_nested_set'
