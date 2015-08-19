@@ -160,6 +160,55 @@ module NoCms
           end
 
           ##
+          # This method duplicates a field and stores its value.
+          #
+          # It takes into account that the field may be an AR object and updates
+          # the cached objects.
+          #
+          # We have different options of duplication depending on the field's
+          # configuration:
+          #
+          #  * duplication: It's the default behaviour. It just performs a dup
+          #    of the field and expects the attached object to implement dup in
+          #    a proper way.
+          #
+          #  * nullify: It doesn't dup the field, it empties it. It's useful for
+          #    objects we don't want to duplicate, like images in S3 (it can
+          #    raise a timeout exception when duplicating).
+          #
+          #  * link: It doesn't dup the field but stores the same object. It's
+          #    useful in Active Record fields so we can store the same id and
+          #    not creating a duplicate of the object (e.g. if we have a block
+          #    with a related post we don't want the post to be duplicated)
+          def duplicate_field field
+            field_type = field_type field
+            field_value = read_field(field)
+
+            dupped_value = case layout_config.field(field)[:duplicate]
+              # When dupping we just dp the object and expect it has the right
+              # behaviour. If it's nil we save nil (you can't dup NilClass)
+              when :dup
+                field_value.nil? ? nil : field_value.dup
+              # When nullifying we return nil
+              when :nullify
+                nil
+              when :link
+                field_value
+            end
+
+            if field_type.is_a?(Class) && field_type < ActiveRecord::Base
+              # We save in the objects cache the dupped object
+              @cached_objects[field.to_sym] = dupped_value
+              # and then we store the new id in the fields_info hash
+              fields_info["#{field}_id".to_sym] =
+                dupped_value.nil? ? nil : dupped_value.id
+            else
+              # else we just dup it and save it into fields_info.
+              fields_info[field.to_sym] = dupped_value
+            end
+          end
+
+          ##
           # Saves every related object from the objects cache
           def save_related_objects
             # Now we save each activerecord related object
@@ -273,12 +322,60 @@ module NoCms
             super
           end
 
+          ##
+          # Overwriting duplication method. This method relies on super for any
+          # default behaviour, then duplicate the fields just as their
+          # configuration demands and then allow the object to custimize the
+          # duplication through the duplicate_self method.
+          def dup
+            new_self = super
+
+            # Now we recover all the fields that must be duplicated here
+            fields_to_duplicate.keys.each do |field_to_duplicate|
+              new_self.duplicate_field field_to_duplicate
+            end
+
+            # And allow the class itself to append some behaviour
+            duplicate_self new_self
+
+            new_self
+          end
+
+          ##
+          # This method allows us to introduce some custom duplication for each
+          # class that includes the concern.
+          #
+          # Basic behaviour is... doing nothing
+          def duplicate_self new_self
+          end
+
+          ##
+          # This method returns a list of the fields to duplicate in this
+          # object. In the concern we will use all the fields and if the classes
+          # need to modify it they will.
+          #
+          # Notice that if the behaviour is that when duplicating the field is
+          # nullfied we will return the field here and the duplicate_field will
+          # manage it properly.
+          def fields_to_duplicate
+            fields_configuration
+          end
+
+          ##
+          # When dupping we need to overwrite the cached_objects attribute.
+          # Otherwise the cached_object from the original object would start to
+          # be populated with the objects of the dupped one.
+          def initialize_dup(other)
+            @cached_objects = {}
+            super
+          end
+
           private
 
           ##
           # Initializes both the fields_info hash and the objects cache.
           def set_blank_fields
-            self.fields_info ||= {}
+            @fields_info ||= {}
             @cached_objects ||= {}
           end
 

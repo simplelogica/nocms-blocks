@@ -20,6 +20,18 @@ module NoCms::Blocks
 
     validates :layout, presence: true
 
+    ##
+    # A block dups all it's children and the translations
+    def duplicate_self new_self
+
+      new_self.translations = translations.map(&:dup)
+      new_self.translations.each { |t| t.globalized_model = new_self }
+
+      children.each do |child|
+        new_self.children << child.dup
+      end
+    end
+
     class Translation
 
       ##
@@ -47,4 +59,5 @@ module NoCms::Blocks
     accepts_nested_attributes_for :translations
 
   end
+
 end
