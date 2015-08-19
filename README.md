@@ -6,15 +6,19 @@ This is a Rails engine with a basic functionality of customizable blocks of cont
 
 ## How do I install it?
 
-Right now there's no proper gem, although we have a couple of projects making extensive use of it.
+Just include in your Gemfile:
 
-To install it just put the repo in your Gemfile:
+```ruby
+gem "nocms-blocks"
+```
+
+If you're brave and want to use the last development version you can use:
 
 ```ruby
 gem "nocms-blocks", git: 'git@github.com:simplelogica/nocms-blocks.git'
 ```
 
-And then import all the migrations:
+Once the gem is installed you can import all the migrations:
 
 ```
 rake no_cms_blocks:install:migrations
