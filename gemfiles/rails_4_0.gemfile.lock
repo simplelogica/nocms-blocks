@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    nocms-blocks (1.0.0)
+    nocms-blocks (1.0.1)
       awesome_nested_set (~> 3.0.0)
       globalize (>= 4.0.0, < 5.1)
       rails (~> 4.0, <= 4.2.3)
