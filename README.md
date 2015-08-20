@@ -34,6 +34,21 @@ rails g nocms:blocks
 
 Blocks are thought to be independent and customizable modules of content that can be created, edited or removed on their own, without dependency of any other module or class.
 
+### Creating a new block layout
+
+In the following sections some files will be mentioned (initializers, views, assets...). You can create them by hand or you can use a layout generator by typing:
+
+```
+rails g nocms:blocks:layout LAYOUT_NAME
+```
+
+This will create the following files:
+
+1. `config/initializers/nocms/blocks/LAYOUT_NAME.rb`: An initializer where you can configure the layout (more info on next section).
+2. `app/views/no_cms/blocks/blocks/_LAYOUT_NAME.html.erb`: Public template for the block (more info on next section).
+3. `app/views/no_cms/admin/blocks/blocks/_LAYOUT_NAME.html.erb`: Template for block administration. You can choose not to use it depending on which admin interface you're using.
+4. `app/assets/stylesheets/no_cms/blocks/_LAYOUT_NAME.scss`: Stylesheet asset so you can organize your SCSS code. Of course, you can not use it, but we strongly recommend trying to maintain styles from a block in a separated stylesheet. Notice that you must import (`@import "app/assets/stylesheets/no_cms/blocks/_LAYOUT_NAME.scss"`) it from your application.css.scss or where it should be used.
+
 ### Block layouts
 
 In NoCMS Blocks, block layouts define two main things:

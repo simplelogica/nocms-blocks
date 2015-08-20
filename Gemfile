@@ -30,5 +30,6 @@ group :test do
   gem 'appraisal'
   gem 'simplecov'
   gem 'simplecov-json'
+  gem "generator_spec"
 end
 

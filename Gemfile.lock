@@ -75,8 +75,11 @@ GEM
       activesupport (>= 3.0.0)
     faker (1.5.0)
       i18n (~> 0.5)
-    globalid (0.3.6)
+    generator_spec (0.9.3)
+      activesupport (>= 3.0.0)
       activesupport (>= 4.1.0)
+      railties (>= 3.0.0)
+    globalid (0.3.6)
     globalize (5.0.1)
       activemodel (>= 4.2.0, < 4.3)
       activerecord (>= 4.2.0, < 4.3)
@@ -184,6 +187,7 @@ DEPENDENCIES
   database_cleaner
   factory_girl
   faker
+  generator_spec
   nocms-blocks!
   pry-nav
   pry-rails
