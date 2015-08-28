@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828085904) do
+ActiveRecord::Schema.define(version: 20150828101122) do
 
   create_table "no_cms_blocks_block_slots", force: :cascade do |t|
     t.integer  "container_id"
@@ -44,6 +44,12 @@ ActiveRecord::Schema.define(version: 20150828085904) do
     t.integer  "position"
     t.text     "non_translated_fields_info"
     t.string   "layout"
+  end
+
+  create_table "slotted_pages", force: :cascade do |t|
+    t.string   "title"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "test_images", force: :cascade do |t|
