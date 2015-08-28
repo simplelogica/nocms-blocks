@@ -6,4 +6,7 @@ describe NoCms::Blocks::Block do
 
   it_behaves_like "model with has many through belongs to relationship",
     :slotted_page, :block_slot, :block, :block_slots, :block, :blocks
+
+  it_behaves_like "model with has many relationship", :block_slot, :block_slot, :children, :parent
+
 end

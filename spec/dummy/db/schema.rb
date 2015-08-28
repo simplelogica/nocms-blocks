@@ -11,52 +11,61 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150828101122) do
+ActiveRecord::Schema.define(version: 20150828120611) do
 
   create_table "no_cms_blocks_block_slots", force: :cascade do |t|
-    t.integer  "container_id"
-    t.string   "container_type"
-    t.integer  "block_id"
-    t.integer  "position",       default: 0
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "container_id",   limit: 4
+    t.string   "container_type", limit: 255
+    t.integer  "block_id",       limit: 4
+    t.integer  "position",       limit: 4,   default: 0
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "parent_id",      limit: 4
+    t.integer  "lft",            limit: 4
+    t.integer  "rgt",            limit: 4
+    t.integer  "depth",          limit: 4
   end
 
-  add_index "no_cms_blocks_block_slots", ["block_id"], name: "index_no_cms_blocks_block_slots_on_block_id"
-  add_index "no_cms_blocks_block_slots", ["container_type", "container_id"], name: "index_no_cms_blocks_block_slots_on_container_type_and_id"
+  add_index "no_cms_blocks_block_slots", ["block_id"], name: "index_no_cms_blocks_block_slots_on_block_id", using: :btree
+  add_index "no_cms_blocks_block_slots", ["container_type", "container_id"], name: "index_no_cms_blocks_block_slots_on_container_type_and_id", using: :btree
+  add_index "no_cms_blocks_block_slots", ["parent_id"], name: "index_no_cms_blocks_block_slots_on_parent_id", using: :btree
 
   create_table "no_cms_blocks_block_translations", force: :cascade do |t|
-    t.integer "no_cms_blocks_block_id"
-    t.string  "locale"
+    t.integer "no_cms_blocks_block_id", limit: 4
+    t.string  "locale",                 limit: 255
     t.text    "fields_info",            limit: 4294967295
     t.boolean "draft"
   end
 
-  add_index "no_cms_blocks_block_translations", ["no_cms_blocks_block_id"], name: "no_cms_blocks_blocks_translations_block_id"
+  add_index "no_cms_blocks_block_translations", ["no_cms_blocks_block_id"], name: "no_cms_blocks_blocks_translations_block_id", using: :btree
 
   create_table "no_cms_blocks_blocks", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "parent_id"
-    t.integer  "lft"
-    t.integer  "rgt"
-    t.integer  "depth"
-    t.integer  "position"
-    t.text     "fields_info"
-    t.string   "layout"
+    t.integer  "parent_id",   limit: 4
+    t.integer  "lft",         limit: 4
+    t.integer  "rgt",         limit: 4
+    t.integer  "depth",       limit: 4
+    t.integer  "position",    limit: 4
+    t.text     "fields_info", limit: 4294967295
+    t.string   "layout",      limit: 255
   end
 
+  add_index "no_cms_blocks_blocks", ["parent_id"], name: "fk_rails_edaaea4d66", using: :btree
+
   create_table "slotted_pages", force: :cascade do |t|
-    t.string   "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "title",      limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "test_images", force: :cascade do |t|
-    t.string   "logo"
-    t.string   "name"
+    t.string   "logo",       limit: 255
+    t.string   "name",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_foreign_key "no_cms_blocks_block_slots", "no_cms_blocks_block_slots", column: "parent_id"
+  add_foreign_key "no_cms_blocks_blocks", "no_cms_blocks_blocks", column: "parent_id"
 end
