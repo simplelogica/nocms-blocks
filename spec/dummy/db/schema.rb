@@ -16,14 +16,14 @@ ActiveRecord::Schema.define(version: 20150828101122) do
   create_table "no_cms_blocks_block_slots", force: :cascade do |t|
     t.integer  "container_id"
     t.string   "container_type"
-    t.integer  "no_cms_blocks_block_id"
-    t.integer  "position",               default: 0
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.integer  "block_id"
+    t.integer  "position",       default: 0
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
   end
 
+  add_index "no_cms_blocks_block_slots", ["block_id"], name: "index_no_cms_blocks_block_slots_on_block_id"
   add_index "no_cms_blocks_block_slots", ["container_type", "container_id"], name: "index_no_cms_blocks_block_slots_on_container_type_and_id"
-  add_index "no_cms_blocks_block_slots", ["no_cms_blocks_block_id"], name: "index_no_cms_blocks_block_slots_on_no_cms_blocks_block_id"
 
   create_table "no_cms_blocks_block_translations", force: :cascade do |t|
     t.integer "no_cms_blocks_block_id"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20150828101122) do
     t.integer  "rgt"
     t.integer  "depth"
     t.integer  "position"
-    t.text     "non_translated_fields_info"
+    t.text     "fields_info"
     t.string   "layout"
   end
 
