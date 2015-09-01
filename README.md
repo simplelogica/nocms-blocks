@@ -120,11 +120,64 @@ block.logo.class # => TestImage
 block.logo = TestImage.new name: 'testing logo' # Error! Currently assigning the object is not allowed :(
 ```
 
+### Attaching blocks to your models
+
+Now you have your blocks configured, but... how do yo use them?. You need to
+create a relationship between the blocks and your model and you have two ways to
+do it.
+
+#### Relationship with blocks
+
+You can create your own belongs_to/has_many relationship with the
+`NoCms::Blocks::Block` model. The only thing required is to create a migration
+to create the relationship:
+
+```
+rails g migration AddPageToNoCmsBlocksBlock page:belongs_to
+```
+
+```ruby
+class Page
+   has_many :blocks, class_name: "NoCms::Blocks::Block
+end
+```
+
+This was the default attaching way in the first versions of the gem and it's
+used in the nocms-pages gem.
+
+However this is only recommended if your block can't be attached to more than
+one model. If that's not the case we recomend using block slots.
+
+#### Using slots
+
+The `BlockSlot` model allows you to easily create relationships between the
+blocks and any other model allowing you to organize them independently for each
+model (e.g: you can have the same module in different positions in diffferent models).
+
+For creating the relationship you just have to include the
+`NoCms::Blocks::Concerns::ModelWithSlots` concern in the models and you're done.
+
+```ruby
+class Page
+  include NoCms::Blocks::Concerns::ModelWithSlots
+end
+```
+
 ### Block templates
 
-Blocks are rendered using the `render_block` helper which controls all the logic related with rendering a block, including fragment cache control.
+Blocks are rendered using the `render_block` or `render_block_slot` helpers
+which control all the logic related with rendering a block, including fragment
+cache control.
 
-In the end a partial is rendered using the block as a local variable to obtain the information. This partial must be found at `no_cms/blocks/blocks` views folder and have the name configured in the `template` setting of the block. This way, rendering a 'title-3_columns' would render the partial `/no_cms/blocks/blocks/title_3_columns`.
+The `render_block_slot` helper is a wrapper of the `render_block` helper that
+includes the block slot information in the cache key and the block slot as a
+local variable (slot) for the partial.
+
+In the end a partial is rendered using the block as a local variable to obtain
+the information. This partial must be found at `no_cms/blocks/blocks` views
+folder and have the name configured in the `template` setting of the block. This
+way, rendering a 'title-3_columns' would render the partial
+`/no_cms/blocks/blocks/title_3_columns`.
 
 This partial is a regular Rails partial (nothing special here). As an example, this could be the content of our  `/no_cms/blocks/blocks/title_3_columns.html.erb` partial:
 
@@ -159,7 +212,36 @@ And, as with any other partial, you can use them inside.
 ```
 
 
-Since this is plain old rails you can do everything you can do with a partial (e.g. having a `/no_cms/blocks/blocks/title_3_columns.en.html.erb` for the english version and a `/no_cms/blocks/blocks/title_3_columns.es.html.erb` for the spanish one).
+Since this is plain old rails you can do everything you can do with a partial
+(e.g. having a `/no_cms/blocks/blocks/title_3_columns.en.html.erb` for the
+english version and a `/no_cms/blocks/blocks/title_3_columns.es.html.erb` for
+the spanish one).
+
+
+#### Nested blocks
+
+As seen before you can nest some blocks inside others.
+
+However, displaying the nested blocks is your responsability. You should use the
+`render_block` or `render_block_slot` helpers depending on whether you're using
+slots.
+
+A rather typical template would be:
+
+```erb
+<h2 class="title"><%= block.title %></h2>
+<div class='nested_block'>
+  <% if local_assigns.has_key? :slot %>
+    <% slot.children.each do |c| %>
+      <%= render_block_slot c %>
+    <% end -%>
+  <% else %>
+    <% block.children.each do |c| %>
+      <%= render_block c %>
+    <% end -%>
+  <% end -%>
+</div>
+```
 
 ### Block Cache
 
