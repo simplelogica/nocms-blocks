@@ -77,6 +77,7 @@ describe NoCms::Blocks::Block do
 
       let(:block_logo) { create :block, layout: 'logo-caption', caption: Faker::Lorem.sentence, logo: image_attributes }
       let(:cache_key) { 'supercalifragilisticoespialidoso' }
+      let(:second_cache_key) { 'supercalifragilisticoes-pia-li-do-so' }
 
       before { block_logo }
 
@@ -85,6 +86,8 @@ describe NoCms::Blocks::Block do
         expect(page).to_not have_text cache_key
         visit "/?cache_key=#{cache_key}"
         expect(page).to have_text cache_key
+        visit "/?cache_key=#{second_cache_key}"
+        expect(page).to have_text second_cache_key
       end
 
     end
