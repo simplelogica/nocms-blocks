@@ -1,0 +1,3 @@
+<% @page.blocks.each do |block| %>
+  <%= render_block block, initial_cache_key: params[:cache_key] %>
+<% end -%>
