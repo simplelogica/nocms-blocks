@@ -16,6 +16,10 @@ module NoCms
           block_slot.cache_key :
           "#{block_slot.cache_key}/#{options[:initial_cache_key]}"
 
+        # We include the slot in the locals option
+        options[:locals] ||= {}
+        options[:locals][:slot] = block_slot
+
         render_block block_slot.block, options
       end
 

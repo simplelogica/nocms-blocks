@@ -10,6 +10,11 @@ describe NoCms::Blocks::BlockSlot do
     let(:block_logo) { create :block, layout: 'logo-caption', caption: Faker::Lorem.sentence, logo: image_attributes }
     let(:block_draft) { create :block, layout: 'default', title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph, draft: true }
     let(:slotted_page) { create :slotted_page }
+    let(:nestable_container_block) { create :block, layout: 'nestable_container', title: Faker::Lorem.sentence }
+    let(:nestable_container_block_slot) { create :block_slot, block: nestable_container_block }
+    let(:nested_block) { create :block, layout: 'default', title: nested_title, body: Faker::Lorem.paragraph }
+    let(:nested_block_slot) { create :block_slot, block: nested_block, parent: nestable_container_block_slot }
+    let(:nested_title) { "#{Faker::Lorem.sentence}-#{Time.now.to_i}" }
 
     before do
       NoCms::Blocks.configure do |config|
@@ -36,7 +41,15 @@ describe NoCms::Blocks::BlockSlot do
               caption: :string,
               logo: TestImage
             }
-          }
+          },
+          'nestable_container' => {
+            template: 'nestable_container',
+            fields: {
+              title: :string,
+            },
+            allow_nested_blocks: true
+          },
+
         }
 
       end
@@ -45,6 +58,8 @@ describe NoCms::Blocks::BlockSlot do
       slotted_page.blocks << block_3_columns_layout
       slotted_page.blocks << block_logo
       slotted_page.blocks << block_draft
+      slotted_page.block_slots << nestable_container_block_slot
+      slotted_page.block_slots << nested_block_slot
 
       visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page)
 
@@ -65,6 +80,10 @@ describe NoCms::Blocks::BlockSlot do
     it("should display logo layout block") do
       expect(page).to have_selector('.caption', text: block_logo.caption)
       expect(page).to have_selector("img[src='#{block_logo.logo.logo.url}']")
+    end
+
+    it("should display the nested block") do
+      expect(page).to have_selector('.title', text: nested_title)
     end
 
     it("should display not draft block") do
