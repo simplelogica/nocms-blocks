@@ -20,7 +20,7 @@ module NoCms
       end
 
       def cache_key_for_blocks block, block_template, options = {}
-        "#{block_template}/#{block.id}/#{block.updated_at.to_i}#{"/#{options[:initial_cache_key]}" unless options[:initial_cache_key] }"
+        "#{block_template}/#{block.id}/#{block.updated_at.to_i}#{"/#{options[:initial_cache_key]}" if options[:initial_cache_key] }"
       end
 
     end
