@@ -1,3 +1,3 @@
 <% @page.block_slots.each do |block_slot| %>
-  <%= render_block_slot block_slot, initial_cache_key: params[:cache_key] %>
+  <%= render_block_slot block_slot, initial_cache_key: params[:cache_key], locals: { cache_key: params[:cache_key] } %>
 <% end -%>
