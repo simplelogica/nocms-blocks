@@ -80,9 +80,9 @@ describe NoCms::Blocks::BlockSlot do
       before { block_logo }
 
       it("should not cache it") do
-        visit '/'
+        visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page)
         expect(page).to_not have_text cache_key
-        visit "/?cache_key=#{cache_key}"
+        visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page, "cache_key" => cache_key)
         expect(page).to have_text cache_key
       end
 
