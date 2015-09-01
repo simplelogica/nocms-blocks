@@ -9,7 +9,9 @@ describe NoCms::Blocks::Block do
     let(:block_3_columns_layout) { create :block, layout: 'title-3_columns', title: Faker::Lorem.sentence, column_1: Faker::Lorem.paragraph, column_2: Faker::Lorem.paragraph, column_3: Faker::Lorem.paragraph }
     let(:block_logo) { create :block, layout: 'logo-caption', caption: Faker::Lorem.sentence, logo: image_attributes }
     let(:block_draft) { create :block, layout: 'default', title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph, draft: true }
-
+    let(:nestable_container_block) { create :block, layout: 'nestable_container', title: Faker::Lorem.sentence }
+    let(:nested_block) { create :block, layout: 'default', title: nested_title, body: Faker::Lorem.paragraph, parent: nestable_container_block }
+    let(:nested_title) { "#{Faker::Lorem.sentence}-#{Time.now.to_i}" }
 
     before do
       NoCms::Blocks.configure do |config|
@@ -36,7 +38,14 @@ describe NoCms::Blocks::Block do
               caption: :string,
               logo: TestImage
             }
-          }
+          },
+          'nestable_container' => {
+            template: 'nestable_container',
+            fields: {
+              title: :string,
+            },
+            allow_nested_blocks: true
+          },
         }
 
       end
@@ -45,7 +54,8 @@ describe NoCms::Blocks::Block do
       block_draft
       block_default_layout
       block_3_columns_layout
-
+      nestable_container_block
+      nested_block
 
       visit '/'
 
@@ -66,6 +76,10 @@ describe NoCms::Blocks::Block do
     it("should display logo layout block") do
       expect(page).to have_selector('.caption', text: block_logo.caption)
       expect(page).to have_selector("img[src='#{block_logo.logo.logo.url}']")
+    end
+
+    it("should display the nested block") do
+      expect(page).to have_selector('.title', text: nested_title)
     end
 
     it("should display not draft block") do
