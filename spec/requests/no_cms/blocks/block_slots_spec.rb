@@ -1,16 +1,19 @@
 require 'spec_helper'
 
-describe NoCms::Blocks::Block do
+describe NoCms::Blocks::BlockSlot do
 
-  context "when visiting the home" do
+  context "when visiting a page with slots" do
 
     let(:image_attributes) { attributes_for(:test_image) }
     let(:block_default_layout) { create :block, layout: 'default', title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph }
     let(:block_3_columns_layout) { create :block, layout: 'title-3_columns', title: Faker::Lorem.sentence, column_1: Faker::Lorem.paragraph, column_2: Faker::Lorem.paragraph, column_3: Faker::Lorem.paragraph }
     let(:block_logo) { create :block, layout: 'logo-caption', caption: Faker::Lorem.sentence, logo: image_attributes }
     let(:block_draft) { create :block, layout: 'default', title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph, draft: true }
+    let(:slotted_page) { create :slotted_page }
     let(:nestable_container_block) { create :block, layout: 'nestable_container', title: Faker::Lorem.sentence }
-    let(:nested_block) { create :block, layout: 'default', title: nested_title, body: Faker::Lorem.paragraph, parent: nestable_container_block }
+    let(:nestable_container_block_slot) { create :block_slot, block: nestable_container_block }
+    let(:nested_block) { create :block, layout: 'default', title: nested_title, body: Faker::Lorem.paragraph }
+    let(:nested_block_slot) { create :block_slot, block: nested_block, parent: nestable_container_block_slot }
     let(:nested_title) { "#{Faker::Lorem.sentence}-#{Time.now.to_i}" }
 
     before do
@@ -46,18 +49,19 @@ describe NoCms::Blocks::Block do
             },
             allow_nested_blocks: true
           },
+
         }
 
       end
 
-      block_logo
-      block_draft
-      block_default_layout
-      block_3_columns_layout
-      nestable_container_block
-      nested_block
+      slotted_page.blocks << block_default_layout
+      slotted_page.blocks << block_3_columns_layout
+      slotted_page.blocks << block_logo
+      slotted_page.blocks << block_draft
+      slotted_page.block_slots << nestable_container_block_slot
+      slotted_page.block_slots << nested_block_slot
 
-      visit '/'
+      visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page)
 
     end
 
@@ -96,11 +100,11 @@ describe NoCms::Blocks::Block do
       before { block_logo }
 
       it("should not cache it") do
-        visit '/'
+        visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page)
         expect(page).to_not have_text cache_key
-        visit "/?cache_key=#{cache_key}"
+        visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page, "cache_key" => cache_key)
         expect(page).to have_text cache_key
-        visit "/?cache_key=#{second_cache_key}"
+        visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page, "cache_key" => second_cache_key)
         expect(page).to have_text second_cache_key
       end
 

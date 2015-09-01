@@ -1,5 +1,7 @@
 Edge
 
+  - Slots for allowing to create multiple relationships between blocks and other
+    model.
   - "locals" param for sending values from the container view to the partials
   - Fixed bug with initial_cache_key option for render_block
 

@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    nocms-blocks (1.1.0)
+    nocms-blocks (1.1.1)
       awesome_nested_set (~> 3.0.0)
       globalize (>= 4.0.0, < 5.1)
       rails (~> 4.0, <= 4.2.3)
@@ -44,6 +44,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+    addressable (2.3.8)
     appraisal (2.1.0)
       bundler
       rake
@@ -60,6 +61,9 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-screenshot (1.0.11)
+      capybara (>= 1.0, < 3)
+      launchy
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
@@ -85,6 +89,8 @@ GEM
       activerecord (>= 4.2.0, < 4.3)
     i18n (0.7.0)
     json (1.8.3)
+    launchy (2.4.3)
+      addressable (~> 2.3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -93,6 +99,7 @@ GEM
     mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.8.0)
+    mysql2 (0.3.20)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     pry (0.10.1)
@@ -183,11 +190,13 @@ PLATFORMS
 DEPENDENCIES
   appraisal
   capybara
+  capybara-screenshot
   carrierwave
   database_cleaner
   factory_girl
   faker
   generator_spec
+  mysql2
   nocms-blocks!
   pry-nav
   pry-rails
