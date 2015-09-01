@@ -26,13 +26,16 @@ module NoCms
 
         block_template = "no_cms/blocks/blocks/#{block.template}"
 
+        locals = options[:locals] || {}
+        locals[:block] = block
+
         # And now decide if we use cache or not
         if options[:cache_enabled]
           Rails.cache.fetch cache_key_for_blocks(block, block_template, options) do
-            render block_template, block: block
+            render block_template, locals
           end
         else
-          render block_template, block: block
+          render block_template, locals
         end
 
       end
