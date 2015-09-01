@@ -76,6 +76,7 @@ describe NoCms::Blocks::BlockSlot do
 
       let(:block_logo) { create :block, layout: 'logo-caption', caption: Faker::Lorem.sentence, logo: image_attributes }
       let(:cache_key) { 'supercalifragilisticoespialidoso' }
+      let(:second_cache_key) { 'supercalifragilisticoes-pia-li-do-so' }
 
       before { block_logo }
 
@@ -84,6 +85,8 @@ describe NoCms::Blocks::BlockSlot do
         expect(page).to_not have_text cache_key
         visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page, "cache_key" => cache_key)
         expect(page).to have_text cache_key
+        visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page, "cache_key" => second_cache_key)
+        expect(page).to have_text second_cache_key
       end
 
     end
