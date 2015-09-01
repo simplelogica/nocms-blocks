@@ -1,5 +1,6 @@
 Edge
 
+  - "locals" param for sending values from the container view to the partials
   - Fixed bug with initial_cache_key option for render_block
 
 1.1.1

@@ -122,13 +122,13 @@ block.logo = TestImage.new name: 'testing logo' # Error! Currently assigning the
 
 ### Block templates
 
-Blocks are rendered using the `render_block` helper which controls all the logic related with renderinf a block, including fragment cache control.
+Blocks are rendered using the `render_block` helper which controls all the logic related with rendering a block, including fragment cache control.
 
 In the end a partial is rendered using the block as a local variable to obtain the information. This partial must be found at `no_cms/blocks/blocks` views folder and have the name configured in the `template` setting of the block. This way, rendering a 'title-3_columns' would render the partial `/no_cms/blocks/blocks/title_3_columns`.
 
 This partial is a regular Rails partial (nothing special here). As an example, this could be the content of our  `/no_cms/blocks/blocks/title_3_columns.html.erb` partial:
 
-```html
+```erb
 <div class='columns_block'>
   <h2 class="title"><%= block.title %></h2>
   <p class="column_1"><%= block.column_1 %></p>
@@ -138,6 +138,26 @@ This partial is a regular Rails partial (nothing special here). As an example, t
 ```
 
 As you can see, the partial has a `block` variable containing the block object you are rendering.
+
+Other local variables can be declared and sent using a locals option when
+calling the `render_block` method:
+
+```ruby
+render_block block, locals: { user: current_user }
+```
+
+And, as with any other partial, you can use them inside.
+
+```erb
+<div class='columns_block'>
+  <h1>This is just for you <%= user.name %>!!</h2>
+  <h2 class="title"><%= block.title %></h2>
+  <p class="column_1"><%= block.column_1 %></p>
+  <p class="column_2"><%= block.column_2 %></p>
+  <p class="column_3"><%= block.column_3 %></p>
+</div>
+```
+
 
 Since this is plain old rails you can do everything you can do with a partial (e.g. having a `/no_cms/blocks/blocks/title_3_columns.en.html.erb` for the english version and a `/no_cms/blocks/blocks/title_3_columns.es.html.erb` for the spanish one).
 
