@@ -1,3 +1,7 @@
+Edge
+
+  - Fixed bug with initial_cache_key option for render_block
+
 1.1.1
 
   - Layout generator: It creates the initializer and views for one layout
