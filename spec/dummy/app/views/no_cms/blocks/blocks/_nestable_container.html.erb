@@ -1,0 +1,12 @@
+<h2 class="title"><%= block.title %></h2>
+<div class='nested_block'>
+  <% if local_assigns.has_key? :slot %>
+    <% slot.children.each do |c| %>
+      <%= render_block_slot c %>
+    <% end -%>
+  <% else %>
+    <% block.children.each do |c| %>
+      <%= render_block c %>
+    <% end -%>
+  <% end -%>
+</div>
