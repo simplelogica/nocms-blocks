@@ -1,5 +1,6 @@
 Edge
 
+  - Support for rails 4.2.4 and 4.1.13
   - Slots for allowing to create multiple relationships between blocks and other
     model.
   - "locals" param for sending values from the container view to the partials
