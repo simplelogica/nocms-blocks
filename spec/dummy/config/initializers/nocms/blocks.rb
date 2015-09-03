@@ -17,6 +17,14 @@ NoCms::Blocks.configure do |config|
   #       title: :string,
   #       long_text: :text,
   #       image: Image, # You may use another ActiveRecord classes of your own
+  #       column: { # You can configure the block with more options than just
+  #                # the type of the field. If you use the "quick" configuration
+  #                # all other settings will get the default value
+  #         type: :text, # The type of the field, just as explained before
+  #         translated: true # If the field must store different values for
+  #                           # each translation. By default every field is
+  #                           # translated
+  #       }
   #     }
   #    allow_nested_blocks: true, # A block with this layout may include a list of nested blocks
   #                               # This setting is actually used by nocms-admin gem to show
@@ -40,4 +48,29 @@ NoCms::Blocks.configure do |config|
   # }
   # config.block_layouts = {}
 
+
+  # In this section we configure the skeletons available to define collections of
+  # placeholders and blocks allowed on those placeholders.
+  #
+  # The usual case is to have another model (e.g. Page) where you store which
+  # skeleton is enabled for the current page and all the restrictions are then
+  # set up.
+  #
+  # By default there's one skeleton with three zones (called bones) defined.
+  # config.skeletons = {
+  #   'default' => {
+  #     blocks: nil,
+  #     bones: {
+  #       header: {
+  #         blocks: nil
+  #       },
+  #       body: {
+  #         blocks: nil
+  #       },
+  #       footer: {
+  #         blocks: nil
+  #       }
+  #     }
+  #   }
+  # }
 end
