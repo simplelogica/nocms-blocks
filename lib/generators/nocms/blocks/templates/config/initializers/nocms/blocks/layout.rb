@@ -8,6 +8,14 @@ NoCms::Blocks.configure do |config|
       text: :string,
   #   long_text: :text,
   #   image: Image, # You may use another ActiveRecord classes of your own
+  #   column: { # You can configure the block with more options than just
+  #                # the type of the field. If you use the "quick" configuration
+  #                # all other settings will get the default value
+  #         type: :text, # The type of the field, just as explained before
+  #         translated: true # If the field must store different values for
+  #                           # each translation. By default every field is
+  #                           # translated
+  #       }
     },
     allow_nested_blocks: true, # A block with this layout may include a list of nested blocks
                                # This setting is actually used by nocms-admin gem to show
