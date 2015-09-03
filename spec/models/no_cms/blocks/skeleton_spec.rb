@@ -7,10 +7,13 @@ describe NoCms::Blocks::Skeleton do
       NoCms::Blocks.configure do |config|
         config.skeletons = {
           'default' => {
+            blocks: [:general1, :general2],
             bones: {
               header: {
+                blocks: [:header1, :header2]
               },
               body: {
+                blocks: [:body]
               },
               footer: {
               }
@@ -38,6 +41,12 @@ describe NoCms::Blocks::Skeleton do
       expect(NoCms::Blocks::Skeleton.find('default').bone(:body)).to_not be_nil
       expect(NoCms::Blocks::Skeleton.find('default').bone(:footer)).to_not be_nil
       expect(NoCms::Blocks::Skeleton.find('default').bone(:fake)).to be_nil
+    end
+
+    it "should find the allowed blocks within a bone" do
+      expect(NoCms::Blocks::Skeleton.find('default').bone(:header).allowed_blocks).to match_array  [:general1, :general2, :header1, :header2]
+      expect(NoCms::Blocks::Skeleton.find('default').bone(:body).allowed_blocks).to match_array  [:general1, :general2, :body]
+      expect(NoCms::Blocks::Skeleton.find('default').bone(:footer).allowed_blocks).to match_array  [:general1, :general2]
     end
 
   end
