@@ -19,12 +19,19 @@ class NoCms::Blocks::Skeleton
   # This method returns an array of the bones contained by this skeleton with
   # its configuration
   def bones
-    config[:bones].map do |bone_name, bone_config|
+    @bones ||= config[:bones].map do |bone_name, bone_config|
       bone_config = bone_config.merge({blocks: config[:blocks]}) do |original_value, new_value|
         [original_value, new_value].compact.flatten.uniq
       end
       NoCms::Blocks::Bone.new bone_name, bone_config
     end
+  end
+
+  ##
+  # This method returns the configuration for just one bone which name is passed
+  # as parameter
+  def bone bone_id
+    bones.detect{|b| b.name.to_s == bone_id.to_s }
   end
 
   ##

@@ -33,5 +33,12 @@ describe NoCms::Blocks::Skeleton do
       expect(NoCms::Blocks::Skeleton.find('default').bones.count).to eq 3
     end
 
+    it "should find a bone within a skeleton" do
+      expect(NoCms::Blocks::Skeleton.find('default').bone(:header)).to_not be_nil
+      expect(NoCms::Blocks::Skeleton.find('default').bone(:body)).to_not be_nil
+      expect(NoCms::Blocks::Skeleton.find('default').bone(:footer)).to_not be_nil
+      expect(NoCms::Blocks::Skeleton.find('default').bone(:fake)).to be_nil
+    end
+
   end
 end
