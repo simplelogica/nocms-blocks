@@ -22,6 +22,15 @@ describe NoCms::Blocks::Concerns::ModelWithSkeleton do
     end
   end
 
+  context "a model with skeletons" do
+
+    it "should define its valid skeletons" do
+      expect(SlottedPage.allowed_skeletons).to match_array ['default']
+    end
+
+  end
+
+
   context "when a page has a valid skeleton" do
 
     let!(:page) { create :slotted_page, skeleton: 'default' }
