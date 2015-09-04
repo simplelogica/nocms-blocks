@@ -3,7 +3,7 @@ class NoCms::Blocks::SkeletonMigrationGenerator < Rails::Generators::NamedBase
 
 
   def generate_migration
-    generate "migration", "AddSkeletonTo#{class_name} skeleton:string:null"
+    generate "migration", "AddSkeletonTo#{name} skeleton:string:null"
   end
 
   def self.namespace
