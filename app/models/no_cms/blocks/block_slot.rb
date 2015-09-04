@@ -7,5 +7,11 @@ module NoCms::Blocks
     belongs_to :block, class_name: "NoCms::Blocks::Block"
 
     accepts_nested_attributes_for :block
+
+    scope :for_bone, -> (bone) { where(bone: bone) }
+
+    validates :bone, presence: true
+
+
   end
 end
