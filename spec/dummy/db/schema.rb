@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150903133200) do
+ActiveRecord::Schema.define(version: 20150904125311) do
 
   create_table "no_cms_blocks_block_slots", force: :cascade do |t|
     t.integer  "container_id",   limit: 4
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20150903133200) do
     t.integer  "lft",            limit: 4
     t.integer  "rgt",            limit: 4
     t.integer  "depth",          limit: 4
+    t.string   "bone",           limit: 255
   end
 
   add_index "no_cms_blocks_block_slots", ["block_id"], name: "index_no_cms_blocks_block_slots_on_block_id", using: :btree
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 20150903133200) do
     t.integer  "position",    limit: 4
     t.text     "fields_info", limit: 4294967295
     t.string   "layout",      limit: 255
+    t.string   "bone",        limit: 255
   end
 
   add_index "no_cms_blocks_blocks", ["parent_id"], name: "fk_rails_edaaea4d66", using: :btree
