@@ -4,14 +4,14 @@
 # block is allowed to be.
 class NoCms::Blocks::Skeleton
 
-  attr_reader :config
+  attr_reader :config, :name
 
   DEFAULT_FIELD_CONFIGURATION = { translated: true, duplicate: :dup }
 
   ##
   # We receive a configuration hash like the ones defined in the configuration
   # files
-  def initialize config
+  def initialize name, config
     @config = config
   end
 
@@ -44,7 +44,13 @@ class NoCms::Blocks::Skeleton
   # skeleton initialized with the corresponding configuration data
   def self.find skeleton_id
     skeleton_config = NoCms::Blocks.skeletons.stringify_keys[skeleton_id.to_s]
-    NoCms::Blocks::Skeleton.new skeleton_config unless skeleton_config.nil?
+    NoCms::Blocks::Skeleton.new skeleton_id, skeleton_config unless skeleton_config.nil?
+  end
+
+  ##
+  # Two skeletons are the same if they have the same skeleton name
+  def == another
+    self.name == another.name
   end
 
 end

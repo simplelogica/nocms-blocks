@@ -38,7 +38,7 @@ describe NoCms::Blocks::Concerns::ModelWithSkeleton do
     subject { page }
 
     it "should find its skeleton" do
-      expect(subject.skeleton_config.config).to eq NoCms::Blocks::Skeleton.find('default').config
+      expect(subject.skeleton_config).to eq NoCms::Blocks::Skeleton.find('default')
     end
 
   end
