@@ -26,4 +26,8 @@ class NoCms::Blocks::Bone
     @allowed_blocks
   end
 
+  def to_param
+    name
+  end
+
 end
