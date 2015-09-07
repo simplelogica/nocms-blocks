@@ -17,3 +17,5 @@ en:
         body: Body
         footer: Footer
         header: Header
+      skeletons:
+        default: Default

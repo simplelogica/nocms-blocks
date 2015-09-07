@@ -13,6 +13,7 @@ class NoCms::Blocks::Skeleton
   # files
   def initialize name, config
     @config = config
+    @name = name
   end
 
   ##
@@ -51,6 +52,10 @@ class NoCms::Blocks::Skeleton
   # Two skeletons are the same if they have the same skeleton name
   def == another
     self.name == another.name
+  end
+
+  def human_name
+    I18n.t("no_cms.blocks.skeletons.#{self.name}")
   end
 
 end
