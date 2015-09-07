@@ -13,3 +13,7 @@ en:
       blocks:
         layouts:
           default: 'Default block'
+      bones:
+        body: Body
+        footer: Footer
+        header: Header

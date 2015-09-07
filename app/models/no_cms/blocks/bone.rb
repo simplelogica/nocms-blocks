@@ -30,4 +30,8 @@ class NoCms::Blocks::Bone
     name
   end
 
+  def human_name
+    I18n.t("no_cms.blocks.bones.#{name}")
+  end
+
 end
