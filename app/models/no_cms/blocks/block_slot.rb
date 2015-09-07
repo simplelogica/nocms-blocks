@@ -12,6 +12,9 @@ module NoCms::Blocks
 
     validates :bone, presence: true
 
+    def bone_config
+      container.skeleton_config.bone(bone)
+    end
 
   end
 end
