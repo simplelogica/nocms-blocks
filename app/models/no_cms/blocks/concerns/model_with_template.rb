@@ -15,6 +15,10 @@ module NoCms::Blocks::Concerns
         @template_config ||= NoCms::Blocks::Template.find(self.template)
       end
 
+      def template_zones
+        template_config.zones
+      end
+
     end
 
   end
