@@ -49,18 +49,18 @@ NoCms::Blocks.configure do |config|
   # config.block_layouts = {}
 
 
-  # In this section we configure the skeletons available to define collections of
+  # In this section we configure the templates available to define collections of
   # placeholders and blocks allowed on those placeholders.
   #
   # The usual case is to have another model (e.g. Page) where you store which
-  # skeleton is enabled for the current page and all the restrictions are then
-  # set up.
+  # template is enabled for the current instance and all the restrictions are
+  # then automatically set up from the configuration.
   #
-  # By default there's one skeleton with three zones (called bones) defined.
-  # config.skeletons = {
+  # By default there's one template with three zones defined.
+  # config.templates = {
   #   'default' => {
   #     blocks: nil,
-  #     bones: {
+  #     zones: {
   #       header: {
   #         blocks: nil
   #       },

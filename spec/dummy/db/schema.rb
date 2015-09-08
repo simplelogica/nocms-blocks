@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150904125311) do
+ActiveRecord::Schema.define(version: 20150908143202) do
 
   create_table "no_cms_blocks_block_slots", force: :cascade do |t|
     t.integer  "container_id",   limit: 4
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20150904125311) do
     t.integer  "lft",            limit: 4
     t.integer  "rgt",            limit: 4
     t.integer  "depth",          limit: 4
-    t.string   "bone",           limit: 255
+    t.string   "template_zone",  limit: 255
   end
 
   add_index "no_cms_blocks_block_slots", ["block_id"], name: "index_no_cms_blocks_block_slots_on_block_id", using: :btree
@@ -43,14 +43,14 @@ ActiveRecord::Schema.define(version: 20150904125311) do
   create_table "no_cms_blocks_blocks", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "parent_id",   limit: 4
-    t.integer  "lft",         limit: 4
-    t.integer  "rgt",         limit: 4
-    t.integer  "depth",       limit: 4
-    t.integer  "position",    limit: 4
-    t.text     "fields_info", limit: 4294967295
-    t.string   "layout",      limit: 255
-    t.string   "bone",        limit: 255
+    t.integer  "parent_id",     limit: 4
+    t.integer  "lft",           limit: 4
+    t.integer  "rgt",           limit: 4
+    t.integer  "depth",         limit: 4
+    t.integer  "position",      limit: 4
+    t.text     "fields_info",   limit: 4294967295
+    t.string   "layout",        limit: 255
+    t.string   "template_zone", limit: 255
   end
 
   add_index "no_cms_blocks_blocks", ["parent_id"], name: "fk_rails_edaaea4d66", using: :btree
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 20150904125311) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.string   "skeleton",   limit: 255
+    t.string   "template",   limit: 255
   end
 
   create_table "test_images", force: :cascade do |t|

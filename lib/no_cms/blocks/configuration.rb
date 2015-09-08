@@ -4,13 +4,13 @@ module NoCms
 
     config_accessor :block_layouts
     config_accessor :cache_enabled
-    config_accessor :skeletons
+    config_accessor :templates
 
 
-    self.skeletons = {
+    self.templates = {
       'default' => {
         blocks: nil,
-        bones: {
+        zones: {
           header: {
             blocks: nil
           },

@@ -1,8 +1,0 @@
-Description:
-    Generates the required skeleton migration in a model passed as parameter
-
-Example:
-    rails generate skeleton_migration Thing
-
-    This will create:
-        db/migrate/XXXX_add_skeleton_to_thing.rb

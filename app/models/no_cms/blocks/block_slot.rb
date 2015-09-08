@@ -8,12 +8,12 @@ module NoCms::Blocks
 
     accepts_nested_attributes_for :block
 
-    scope :for_bone, -> (bone) { where(bone: bone) }
+    scope :for_template_zone, -> (template_zone) { where(template_zone: template_zone) }
 
-    validates :bone, presence: true
+    validates :template_zone, presence: true
 
-    def bone_config
-      container.skeleton_config.bone(bone)
+    def template_zone_config
+      container.template_config.zone(template_zone)
     end
 
   end

@@ -13,9 +13,9 @@ en:
       blocks:
         layouts:
           default: 'Default block'
-      bones:
+      template_zones:
         body: Body
         footer: Footer
         header: Header
-      skeletons:
+      templates:
         default: Default
