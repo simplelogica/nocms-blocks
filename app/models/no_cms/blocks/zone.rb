@@ -31,7 +31,7 @@ class NoCms::Blocks::Zone
   end
 
   def human_name
-    I18n.t("no_cms.blocks.zones.#{self.name}")
+    I18n.t("no_cms.blocks.template_zones.#{self.name}")
   end
 
 end
