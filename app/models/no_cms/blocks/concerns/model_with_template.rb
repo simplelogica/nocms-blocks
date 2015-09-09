@@ -9,7 +9,7 @@ module NoCms::Blocks::Concerns
       end
 
       validates :template, presence: true,
-        inclusion: { in: klass.allowed_templates.map(&:to_s) }
+        inclusion: { in: klass.allowed_templates.map(&:name).map(&:to_s) }
 
       def template_config
         @template_config ||= NoCms::Blocks::Template.find(self.template)

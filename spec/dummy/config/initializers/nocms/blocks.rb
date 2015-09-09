@@ -57,20 +57,47 @@ NoCms::Blocks.configure do |config|
   # then automatically set up from the configuration.
   #
   # By default there's one template with three zones defined.
-  # config.templates = {
-  #   'default' => {
-  #     blocks: nil,
-  #     zones: {
-  #       header: {
-  #         blocks: nil
-  #       },
-  #       body: {
-  #         blocks: nil
-  #       },
-  #       footer: {
-  #         blocks: nil
-  #       }
-  #     }
-  #   }
-  # }
+  config.templates = {
+    'default' => {
+      blocks: [:general1, :general2],
+      zones: {
+        header: {
+          blocks: [:header1, :header2]
+        },
+        body: {
+          blocks: [:body]
+        },
+        footer: {
+        }
+      }
+    },
+    'image' => {
+      blocks: [:general1, :general2],
+      models: ["TestImage"],
+      zones: {
+        header: {
+          blocks: [:header1, :header2]
+        },
+        body: {
+          blocks: [:body]
+        },
+        footer: {
+        }
+      }
+    },
+    'two-columns' => {
+      blocks: [:general1, :general2],
+      models: ["SlottedPage"],
+      zones: {
+        header: {
+          blocks: [:header1, :header2]
+        },
+        body: {
+          blocks: [:body]
+        },
+        footer: {
+        }
+      }
+    }
+  }
 end

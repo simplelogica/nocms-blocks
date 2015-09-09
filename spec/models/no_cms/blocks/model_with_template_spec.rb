@@ -2,26 +2,6 @@ require 'spec_helper'
 
 describe NoCms::Blocks::Concerns::ModelWithTemplate do
 
-  before do
-    NoCms::Blocks.configure do |config|
-      config.templates = {
-        'default' => {
-          blocks: [:general1, :general2],
-          zones: {
-            header: {
-              blocks: [:header1, :header2]
-            },
-            body: {
-              blocks: [:body]
-            },
-            footer: {
-            }
-          }
-        }
-      }
-    end
-  end
-
   context "a model with templates" do
 
     it "should define its valid templates" do
@@ -43,7 +23,7 @@ describe NoCms::Blocks::Concerns::ModelWithTemplate do
 
   end
 
-  context "when a page has an invalid template" do
+  context "when a page has an non existent template" do
 
     let!(:page) { build :slotted_page, template: 'fake-template' }
 
@@ -54,4 +34,17 @@ describe NoCms::Blocks::Concerns::ModelWithTemplate do
     end
 
   end
+
+  context "when a page has a non-appliable template" do
+
+    let!(:page) { build :slotted_page, template: 'image' }
+
+    subject { page }
+
+    it "should not be valid" do
+      expect(subject).to_not be_valid
+    end
+
+  end
+
 end

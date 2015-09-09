@@ -3,26 +3,6 @@ require 'spec_helper'
 describe NoCms::Blocks::Template do
   context "when looking for a template" do
 
-    before do
-      NoCms::Blocks.configure do |config|
-        config.templates = {
-          'default' => {
-            blocks: [:general1, :general2],
-            zones: {
-              header: {
-                blocks: [:header1, :header2]
-              },
-              body: {
-                blocks: [:body]
-              },
-              footer: {
-              }
-            }
-          }
-        }
-      end
-    end
-
     it "should find the declared templates" do
       expect(NoCms::Blocks::Template.find('default')).to_not be_nil
     end
