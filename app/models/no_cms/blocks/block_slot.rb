@@ -18,24 +18,38 @@ module NoCms::Blocks
       end
     end
 
-    validate :block_layout_belongs_to_template?
+    validate :validate_block_layout
 
     ##
     # If the container has template restrictions we should take them into
     # account to check that the block layout is actually allowed in the current
     # template and zone
-    def block_layout_belongs_to_template?
+    def validate_block_layout
       if container && container.class.include?(NoCms::Blocks::Concerns::ModelWithTemplate)
         # If we change the zone, or the container changed the template, or the
         # block changed the layout, we check everything is alright
-        if template_zone_changed? || container.template_changed? || block.layout_changed?
-          unless template_zone_config.allowed_blocks.include?(block.layout.to_sym)
-            errors.add(:template_zone, :invalid) if template_zone_changed?
+        if template_zone_changed?
+          unless block_layout_belongs_to_template?
+            errors.add(:template_zone, :invalid)
           end
         end
       end
     end
-    private :block_layout_belongs_to_template?
+    private :validate_block_layout
+
+    ##
+    # This method checks that the block layout is valid in the context of the
+    # contaienr template and the slot zone (if they have restrictions)
+    def block_layout_belongs_to_template?
+      if template_zone_config
+        template_zone_config.allowed_blocks.include?(block.layout.to_sym)
+      else
+        # If there's no template configuration that means we have no
+        # restrictions and must return true always
+        true
+      end
+    end
+
 
 
   end
