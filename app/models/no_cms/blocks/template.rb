@@ -58,4 +58,11 @@ class NoCms::Blocks::Template
     I18n.t("no_cms.blocks.templates.#{self.name}")
   end
 
+  ##
+  # This method returns wether the template is appliable to the model parameter
+  # according to the configuration
+  def appliable? model
+    config[:models].blank? || config[:models].include?(model.name)
+  end
+
 end

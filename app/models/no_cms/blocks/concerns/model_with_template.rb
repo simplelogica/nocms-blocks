@@ -5,7 +5,7 @@ module NoCms::Blocks::Concerns
     self.included do |klass|
 
       def self.allowed_templates
-        NoCms::Blocks.templates.keys
+        NoCms::Blocks.templates_config.select{|t| t.appliable? self }
       end
 
       validates :template, presence: true,

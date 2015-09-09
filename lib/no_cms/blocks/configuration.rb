@@ -10,6 +10,7 @@ module NoCms
     self.templates = {
       'default' => {
         blocks: nil,
+        models: [],
         zones: {
           header: {
             blocks: nil
@@ -34,6 +35,12 @@ module NoCms
       }
     }
     self.cache_enabled = false
+
+    def self.templates_config
+      @templates_config ||= NoCms::Blocks.templates.map do |template_name, template_config|
+        NoCms::Blocks::Template.new template_name, template_config
+      end
+    end
 
   end
 end

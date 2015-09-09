@@ -25,7 +25,7 @@ describe NoCms::Blocks::Concerns::ModelWithTemplate do
   context "a model with templates" do
 
     it "should define its valid templates" do
-      expect(SlottedPage.allowed_templates).to match_array ['default']
+      expect(SlottedPage.allowed_templates.map(&:name)).to match_array ['default', 'two-columns']
     end
 
   end
