@@ -1,12 +1,17 @@
 require 'spec_helper'
 
-describe NoCms::Blocks::Block do
+describe NoCms::Blocks::BlockSlot do
 
-  it_behaves_like "model with has many relationship", :slotted_page, :block_slot, :block_slots, :container
+  context "when the slot is built with a block with a wrong layout" do
 
-  it_behaves_like "model with has many through belongs to relationship",
-    :slotted_page, :block_slot, :block, :block_slots, :block, :blocks
+    let(:container) { build(:slotted_page, template: 'default' ) }
+    let(:block) { build(:block, layout: 'header1') }
+    let(:slot) { build :block_slot, container: container , template_zone: 'body', block: block }
 
-  it_behaves_like "model with has many relationship", :block_slot, :block_slot, :children, :parent
+    it "detects that the layout is not valid" do
+      expect(slot).to_not be_valid
+    end
+
+  end
 
 end
