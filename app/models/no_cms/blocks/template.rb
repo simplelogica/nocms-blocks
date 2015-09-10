@@ -19,9 +19,9 @@ class NoCms::Blocks::Template
   ##
   # This method returns the blocks allowed globally for this template. If no
   # block is allowed then we return an empty array
-  def allowed_blocks
-    return @allowed_blocks if @allowed_blocks
-    @allowed_blocks = config[:blocks] || []
+  def allowed_layouts
+    return @allowed_layouts if @allowed_layouts
+    @allowed_layouts = config[:blocks] || []
   end
 
   ##

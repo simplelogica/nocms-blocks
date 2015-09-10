@@ -24,9 +24,9 @@ describe NoCms::Blocks::Template do
     end
 
     it "should find the allowed blocks within a zone" do
-      expect(NoCms::Blocks::Template.find('default').zone(:header).allowed_blocks).to match_array  [:general1, :general2, :header1, :header2]
-      expect(NoCms::Blocks::Template.find('default').zone(:body).allowed_blocks).to match_array  [:general1, :general2, :body]
-      expect(NoCms::Blocks::Template.find('default').zone(:footer).allowed_blocks).to match_array  [:general1, :general2]
+      expect(NoCms::Blocks::Template.find('default').zone(:header).allowed_layouts).to match_array  [:general1, :general2, :header1, :header2]
+      expect(NoCms::Blocks::Template.find('default').zone(:body).allowed_layouts).to match_array  [:general1, :general2, :body]
+      expect(NoCms::Blocks::Template.find('default').zone(:footer).allowed_layouts).to match_array  [:general1, :general2]
     end
 
   end

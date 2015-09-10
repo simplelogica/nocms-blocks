@@ -19,11 +19,11 @@ class NoCms::Blocks::Zone
   ##
   # This method returns a mix of the blocks allowed for this zone and the ones
   # allowed for the template gobally
-  def allowed_blocks
-    return @allowed_blocks if @allowed_blocks
-    @allowed_blocks = [config[:blocks], @template.allowed_blocks].compact.flatten.uniq
-    @allowed_blocks = NoCms::Blocks.block_layouts.keys if @allowed_blocks.blank?
-    @allowed_blocks
+  def allowed_layouts
+    return @allowed_layouts if @allowed_layouts
+    @allowed_layouts = [config[:blocks], @template.allowed_layouts].compact.flatten.uniq
+    @allowed_layouts = NoCms::Blocks.block_layouts.keys if @allowed_layouts.blank?
+    @allowed_layouts
   end
 
   def to_param
