@@ -10,6 +10,7 @@ module NoCms::Blocks
     scope :drafts, ->() { where_with_locale(draft: true) }
     scope :no_drafts, ->() { where_with_locale(draft: false) }
     scope :roots, ->() { where parent_id: nil }
+    scope :for_template_zone, -> (template_zone) { where(template_zone: template_zone) }
 
     translates :draft
     include  NoCms::Blocks::Concerns::SerializingFields
