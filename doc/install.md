@@ -36,3 +36,7 @@ two configurations:
   layouts. This setting can be overriden by a particular block layout.
 * block_layouts: All the layout configuration. You can see more info about the
   layouts in [the layouts section of the documentation](./layouts.md).
+* templates: Define templates and zones where the blocks can be assigned so we
+  can have some organization in our contents. You can see more info about the
+  templates and their zones in [the templates section of the
+  documentation](./templates.md).
