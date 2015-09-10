@@ -42,7 +42,7 @@ module NoCms::Blocks
     # contaienr template and the slot zone (if they have restrictions)
     def block_layout_belongs_to_template?
       if template_zone_config
-        template_zone_config.allowed_blocks.include?(block.layout.to_sym)
+        template_zone_config.allowed_blocks.map(&:to_s).include?(block.layout.to_s)
       else
         # If there's no template configuration that means we have no
         # restrictions and must return true always
