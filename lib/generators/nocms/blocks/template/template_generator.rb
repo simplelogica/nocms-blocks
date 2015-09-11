@@ -11,7 +11,13 @@ class TemplateGenerator < Rails::Generators::NamedBase
     :default => "",
     :description => "Comma separated names of the layouts globally allowed in the template"
 
+  class_option :models,
+    :type => :string,
+    :default => "",
+    :description => "Comma separated names of the models restricted to this template"
+
   def parse_options
+
     @zones = {}
     options.zones.split(',').each do |zone_info|
       zone_name, layout_names = zone_info.gsub('}','').split('{')
@@ -19,6 +25,9 @@ class TemplateGenerator < Rails::Generators::NamedBase
     end
 
     @layouts = options.layouts.split(',')
+
+    @models = options.models.split(',')
+
   end
 
   def generate_template_initializer
