@@ -1,0 +1,15 @@
+Description:
+    The generator adds an initializer with information about the template
+
+Example:
+    rails generate template template_name --zones=zone_1,zone_2
+    >> This creates a template with two zones
+
+    rails generate template template_name --zones=zone_1{layout1:layout2:layout3},zone_2
+    >> This creates a template with two zones. The first one has 3 layouts allowed
+
+    rails generate template template_name --zones=zone_1,zone_2 --layouts=layout1,layout2
+    >> This creates a template with two zones and two layouts globally allowed in the template
+
+    This will create:
+      config/initializers/no_cms/blocks/templates/template_name.rb
