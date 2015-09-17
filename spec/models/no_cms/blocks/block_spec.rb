@@ -106,6 +106,7 @@ describe NoCms::Blocks::Block do
       it("should respond to layout fields") do
         expect{subject.caption}.to_not raise_error
         expect{subject.logo}.to_not raise_error
+        expect{subject.logo_id}.to_not raise_error
       end
 
       it("should return objects") do
@@ -180,6 +181,21 @@ describe NoCms::Blocks::Block do
 
       end
 
+      context "when we change the image object" do
+
+        let(:new_logo) { create(:test_image) }
+
+        let(:logo) { TestImage.first }
+
+        before do
+          subject.update_attribute :logo_id, new_logo.id
+        end
+
+        it("should store the new association") do
+          expect(subject.reload.logo).to eq new_logo
+        end
+
+      end
 
     end
 

@@ -76,9 +76,21 @@ module NoCms
           #
           # If the field is not present in the layout configuration it returns
           # nil.
+          #
+          # If the field is the id of an ActiveRecord field then we return
+          # :id
           def field_type field
             return nil unless has_field?(field)
-            fields_configuration.symbolize_keys[field.to_sym][:type]
+
+            # If the field exists in the fields configuration then we return its
+            # type
+            if fields_configuration.symbolize_keys[field.to_sym]
+              fields_configuration.symbolize_keys[field.to_sym][:type]
+            # If it doesn't (but remember! the has_field? method returned true)
+            # then it must be an ActiveRecord field's id.
+            else
+              :id
+            end
           end
 
           ##

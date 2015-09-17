@@ -1,3 +1,7 @@
+Edge
+
+  - Fixed bugs when assigning ActiveRecord fields to blocks
+
 1.1.1
 
   - Layout generator: It creates the initializer and views for one layout

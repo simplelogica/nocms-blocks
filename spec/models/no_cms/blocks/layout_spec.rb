@@ -37,7 +37,8 @@ describe NoCms::Blocks::Layout do
             fields: {
               title: title_configuration[:type],
               column: column_configuration,
-              body: body_configuration
+              body: body_configuration,
+              image: image_configuration
             },
             allow_nested_blocks: block_allow_nested_blocks,
             nest_levels: block_nest_levels,
@@ -52,6 +53,7 @@ describe NoCms::Blocks::Layout do
     let(:block_nest_levels) { [0,1] }
     let(:block_cache_enabled) { true }
     let(:title_configuration) { { type: :string } }
+    let(:image_configuration) { { type: TestImage } }
     let(:column_configuration) { { type: :string, translated: false } }
     let(:body_configuration) { { type: :text, duplicate: :nullify } }
 
@@ -84,6 +86,17 @@ describe NoCms::Blocks::Layout do
 
     it "should recover the 'cache enabled' setting from the configuration" do
       expect(subject.cache_enabled).to eq block_cache_enabled
+    end
+
+    it "should recognize that the simple fields are configured" do
+      expect(subject.field(:title)).to_not be_nil
+      expect(subject.field(:body)).to_not be_nil
+      expect(subject.field(:column)).to_not be_nil
+    end
+
+    it "should recognize that the object fields are configured" do
+      expect(subject.field(:image)).to_not be_nil
+      expect(subject.field(:image_id)).to_not be_nil
     end
   end
 
