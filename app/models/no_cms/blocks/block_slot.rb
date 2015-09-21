@@ -50,7 +50,14 @@ module NoCms::Blocks
       end
     end
 
-
+    ##
+    # When we duplicate block slots we duplicate the block and assign the new
+    # block to the slot
+    def dup
+      dupped = super
+      dupped.block = block.dup
+      dupped
+    end
 
   end
 end
