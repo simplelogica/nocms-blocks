@@ -51,11 +51,16 @@ module NoCms::Blocks
     end
 
     ##
-    # When we duplicate block slots we duplicate the block and assign the new
-    # block to the slot
-    def dup
-      dupped = super
-      dupped.block = block.dup
+    # When duplicating a block slot we receive a configuration that allows us to
+    # know wether we should duplicate the block andasigning the new one or just
+    # link the same instance
+    def dup options = {}
+      options.reverse_merge!({ dup_block: true })
+
+      dupped = super()
+      if options[:dup_block]
+        dupped.block = block.dup
+      end
       dupped
     end
 
