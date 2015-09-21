@@ -1,6 +1,6 @@
 NoCms::Blocks.configure do |config|
 
-  config.templates[:one_column] = {
+  config.templates['one_column'] = {
     blocks: [],
     zones: {
       header: {
