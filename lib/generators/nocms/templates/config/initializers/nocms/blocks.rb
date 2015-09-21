@@ -48,4 +48,36 @@ NoCms::Blocks.configure do |config|
   # }
   # config.block_layouts = {}
 
+
+  # In this section we configure the templates available to define collections of
+  # placeholders and blocks allowed on those placeholders.
+  #
+  # The usual case is to have another model (e.g. Page) where you store which
+  # template is enabled for the current instance and all the restrictions are
+  # then automatically set up from the configuration.
+  #
+  # By default there's one template with three zones defined.
+  # config.templates = {
+  #   'default' => {
+  #     blocks: nil, # These are the block layouts globally allowed in every
+  #                  # zone of this template
+  #     models: ["Page"],  # These are the name of the models where this
+  #                        # template is appliable. If there are no models it
+  #                        # means that it :Dapplies to every model with templates
+  #     zones: {     # These are the defined zones
+  #       header: {  # Each zone has a name, which will be used by the blocks
+  #                  # and slots to store where they belong
+  #         blocks: [ 'sample' ] # Blocks allowed in this zone. If it's blank
+  #                              # and there are not blocks allowed in the
+  #                              # template, then there will be no restriction
+  #       },
+  #       body: {
+  #         blocks: nil
+  #       },
+  #       footer: {
+  #         blocks: nil
+  #       }
+  #     }
+  #   }
+  # }
 end

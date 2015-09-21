@@ -3,5 +3,6 @@
 FactoryGirl.define do
   factory :block_slot, class: NoCms::Blocks::BlockSlot do
     block { FactoryGirl.create :block }
+    template_zone 'header'
   end
 end

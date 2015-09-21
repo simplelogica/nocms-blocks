@@ -10,6 +10,7 @@ module NoCms::Blocks
     scope :drafts, ->() { where_with_locale(draft: true) }
     scope :no_drafts, ->() { where_with_locale(draft: false) }
     scope :roots, ->() { where parent_id: nil }
+    scope :for_template_zone, -> (template_zone) { where(template_zone: template_zone) }
 
     translates :draft
     include  NoCms::Blocks::Concerns::SerializingFields
@@ -21,6 +22,7 @@ module NoCms::Blocks
     end
 
     validates :layout, presence: true
+    validate :validate_block_layout
 
     ##
     # A block dups all it's children and the translations
@@ -60,6 +62,17 @@ module NoCms::Blocks
     accepts_nested_attributes_for :children, allow_destroy: true
     accepts_nested_attributes_for :translations
 
+    ##
+    # If the block has slots and the layout has changed we check that the layout
+    # restrictions from the templates are satisfied
+    def validate_block_layout
+      if layout_changed?
+        if slots.detect{|s| !s.block_layout_belongs_to_template? }
+          errors.add(:layout, :invalid)
+        end
+      end
+    end
+    private :validate_block_layout
   end
 
 end

@@ -54,10 +54,10 @@ describe NoCms::Blocks::BlockSlot do
 
       end
 
-      slotted_page.blocks << block_default_layout
-      slotted_page.blocks << block_3_columns_layout
-      slotted_page.blocks << block_logo
-      slotted_page.blocks << block_draft
+      slotted_page.block_slots << create(:block_slot, block: block_default_layout)
+      slotted_page.block_slots << create(:block_slot, block: block_3_columns_layout)
+      slotted_page.block_slots << create(:block_slot, block: block_logo)
+      slotted_page.block_slots << create(:block_slot, block: block_draft)
       slotted_page.block_slots << nestable_container_block_slot
       slotted_page.block_slots << nested_block_slot
 
