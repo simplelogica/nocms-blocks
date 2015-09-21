@@ -2,20 +2,6 @@ require 'spec_helper'
 
 describe NoCms::Blocks::BlockSlot do
 
-  context "when duplicating a slot" do
-
-    let(:block_title) { Faker::Lorem.sentence }
-    let(:block_body) { Faker::Lorem.paragraph }
-
-    let(:slot) { create :block_slot, block: create(:block,
-      layout: 'title-long_text',
-      title: block_title,
-      body: block_body)
-    }
-    let(:dupped_slot) { slot.dup }
-
-    subject { dupped_slot }
-
     before(:all) do
       NoCms::Blocks.configure do |config|
         config.block_layouts = {
@@ -30,6 +16,21 @@ describe NoCms::Blocks::BlockSlot do
       end
     end
 
+    let(:block_title) { Faker::Lorem.sentence }
+    let(:block_body) { Faker::Lorem.paragraph }
+
+    let(:slot) { create :block_slot, block: create(:block,
+      layout: 'title-long_text',
+      title: block_title,
+      body: block_body)
+    }
+
+  context "when duplicating a slot and its block" do
+
+    let(:dupped_slot) { slot.dup }
+
+    subject { dupped_slot }
+
     it "should have the a block with the same info" do
       expect(subject.block.layout).to eq slot.block.layout
       expect(subject.block.title).to eq slot.block.title
@@ -38,6 +39,18 @@ describe NoCms::Blocks::BlockSlot do
 
     it "should not have the same block" do
       expect(subject.block).to_not eq slot.block
+    end
+
+  end
+
+    context "when duplicating a slot but not its block" do
+
+    let(:dupped_slot) { slot.dup(dup_block: false) }
+
+    subject { dupped_slot }
+
+    it "should have the same block" do
+      expect(subject.block).to eq slot.block
     end
 
   end
