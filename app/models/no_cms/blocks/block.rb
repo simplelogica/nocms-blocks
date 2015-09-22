@@ -5,7 +5,7 @@ module NoCms::Blocks
 
     acts_as_nested_set
 
-    has_many :slots, class_name: "NoCms::Blocks::BlockSlot"
+    has_many :slots, class_name: "NoCms::Blocks::BlockSlot", dependent: :destroy
 
     scope :drafts, ->() { where_with_locale(draft: true) }
     scope :no_drafts, ->() { where_with_locale(draft: false) }
