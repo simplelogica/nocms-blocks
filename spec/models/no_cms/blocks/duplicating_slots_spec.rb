@@ -46,7 +46,7 @@ describe NoCms::Blocks::BlockSlot do
 
   end
 
-    context "when duplicating a slot but not its block" do
+  context "when duplicating a slot but not its block" do
 
     let(:dupped_slot) { slot.dup }
 
