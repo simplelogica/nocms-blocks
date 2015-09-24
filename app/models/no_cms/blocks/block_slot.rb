@@ -52,13 +52,23 @@ module NoCms::Blocks
 
     ##
     # When duplicating a block slot we receive a configuration that allows us to
-    # know wether we should duplicate the block andasigning the new one or just
+    # know wether we should duplicate the block and asigning the new one or just
     # link the same instance
-    def dup options = {}
-      options.reverse_merge!({ dup_block: true })
 
+    ##
+    # This configuration is received via an attr_accessor because we can't
+    # modify the dup method signature, as it would be non-compatible with the
+    # standard dup method from Ruby
+
+    attr_accessor :dup_block_when_duping_slot
+
+    ##
+    # In the dup implementation we check for the value of the
+    # `dup_block_when_duping_slot` virtual attribute and then dup the block
+    # instead of linking to the same instance.
+    def dup
       dupped = super()
-      if options[:dup_block]
+      if dup_block_when_duping_slot
         dupped.block = block.dup
       end
       dupped
