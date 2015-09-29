@@ -6,6 +6,18 @@ NoCms::Blocks.configure do |config|
   # e.g: render_block block, cache: true
   # config.cache_enabled = false
 
+  # Route inside your app/views/ folder where the block partial files will be
+  # located.
+  # By default the no_cms/blocks/blocks folder will be used, but you can
+  # customize it to fix better in your views structure (e.g: my_app/blocks)
+  # config.front_partials_folder = 'no_cms/blocks/blocks'
+
+  # Route inside your app/views/ folder where the block partial files for
+  # amdinistration will be located.
+  # By default the no_cms/admin/blocks/blocks folder will be used, but you can
+  # customize it to fix better in your views structure (e.g: my_app/blocks)
+  # config.admin_partials_folder = 'no_cms/admin/blocks/blocks'
+
   # In this section we configure block layouts. It's just an array of layouts, each consisting on a hash.
   # Each layout has a series of options
   # E.g: config.block_layouts = {

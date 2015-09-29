@@ -28,7 +28,7 @@ module NoCms
         # If we don't have any option about cache enabled then we ask the block
         options[:cache_enabled] = block.cache_enabled unless options.has_key? :cache_enabled
 
-        block_template = "no_cms/blocks/blocks/#{block.template}"
+        block_template = block.to_partial_path
 
         locals = options[:locals] || {}
         locals[:block] = block

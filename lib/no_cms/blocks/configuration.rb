@@ -5,7 +5,8 @@ module NoCms
     config_accessor :block_layouts
     config_accessor :cache_enabled
     config_accessor :templates
-
+    config_accessor :front_partials_folder
+    config_accessor :admin_partials_folder
 
     self.templates = {
       'default' => {
@@ -35,6 +36,9 @@ module NoCms
       }
     }
     self.cache_enabled = false
+
+    self.front_partials_folder = 'no_cms/blocks/blocks'
+    self.admin_partials_folder = 'no_cms/admin/blocks/blocks'
 
     def self.templates_config
       @templates_config ||= NoCms::Blocks.templates.map do |template_name, template_config|
