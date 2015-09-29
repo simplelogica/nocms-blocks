@@ -33,6 +33,22 @@ describe NoCms::Blocks::Block do
       I18n.with_locale(:en) { expect(subject.title).to eq block_title_en }
     end
 
+    context "from globalize_fields_for hash" do
+
+      let!(:block) { NoCms::Blocks::Block.create! layout: 'title-long_text',
+        translations_attributes: {
+          "1" => { "id" => "", "locale" => "es", "title" => block_title_es },
+          "2" => { "id" => "", "locale" => "en", "title" => block_title_en }
+        }
+      }
+
+      it "should have retrieve the right text for each language" do
+        I18n.with_locale(:es) { expect(subject.title).to eq block_title_es }
+        I18n.with_locale(:en) { expect(subject.title).to eq block_title_en }
+      end
+
+    end
+
   end
 
   context "when we have some untranslated fields" do

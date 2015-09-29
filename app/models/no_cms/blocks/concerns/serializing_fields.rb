@@ -262,20 +262,28 @@ module NoCms
                 write_field(field, args.first) :
                 read_field(field.to_sym)
 
-              # If it's translated but we are not in the translation (we check
-              # this by checking if we have translations) then we use the
-              # default translation to obtain it
+            # If it's translated but we are not in the translation (we check
+            # this by checking if we have translations) then we use the
+            # default translation to obtain it
             elsif !self.is_translation? &&
                 layout_config.field(field)[:translated]
 
-                # When we are creating the block we still have no translation
-                # and we need to fill the layout. Otherwise no write or read
-                # field will work
-                translation.layout = self.layout
+              # When we are creating the block we still have no translation
+              # and we need to fill the layout. Otherwise no write or read
+              # field will work
+              translation.layout = self.layout
 
-                  write_accessor ?
-                    translation.write_field(field, args.first) :
-                    translation.read_field(field.to_sym)
+              write_accessor ?
+                translation.write_field(field, args.first) :
+                translation.read_field(field.to_sym)
+
+            # If it's translated and we are in the translation
+            elsif self.is_translation? &&
+                layout_config.field(field)[:translated]
+              # Write or read field will work
+              write_accessor ?
+                write_field(field, args.first) :
+                read_field(field.to_sym)
             end
           end
 
@@ -314,7 +322,11 @@ module NoCms
             # but we can afford to send the layout always to the translations
             if new_attributes.has_key? :translations_attributes
               new_attributes[:translations_attributes].each do |translation|
-                translation[:layout] = self.layout
+                if translation.is_a? Array
+                  translation.last[:layout] = self.layout
+                else
+                  translation[:layout] = self.layout
+                end
               end
             end
 
