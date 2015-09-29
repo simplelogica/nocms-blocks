@@ -77,17 +77,17 @@ module NoCms::Blocks
     ##
     # Method that will define wich partial is used in the public views. It uses
     # the engine configuration to read the partials folder and then add the
-    # block layout
+    # block template
     def to_partial_path
-      "#{NoCms::Blocks.front_partials_folder}/#{self.layout}"
+      "#{NoCms::Blocks.front_partials_folder}/#{self.template}"
     end
 
     ##
     # Method that will define wich partial is used for the block in the admin
     # views. It uses the engine configuration to read the partials folder and
-    # then add the block layout
+    # then add the block template
     def to_admin_partial_path
-      "#{NoCms::Blocks.admin_partials_folder}/#{self.layout}"
+      "#{NoCms::Blocks.admin_partials_folder}/#{self.template}"
     end
   end
 
