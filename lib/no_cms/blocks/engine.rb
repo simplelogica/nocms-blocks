@@ -1,5 +1,6 @@
 require 'globalize'
 require 'awesome_nested_set'
+require 'active_resource'
 
 module NoCms
   module Blocks
