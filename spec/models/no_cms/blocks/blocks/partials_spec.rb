@@ -4,7 +4,11 @@ describe NoCms::Blocks::Block do
 
   context "when the partials folder is configured" do
 
+    let!(:front_partials_folder) { NoCms::Blocks.front_partials_folder }
+    let!(:admin_partials_folder) { NoCms::Blocks.admin_partials_folder }
+
     before do
+
       NoCms::Blocks.configure do |config|
         config.block_layouts = {
           'title-long_text' => {
@@ -18,6 +22,13 @@ describe NoCms::Blocks::Block do
 
         config.front_partials_folder = 'my_app/blocks'
         config.admin_partials_folder = 'my_app/admin/blocks'
+      end
+    end
+
+    after do
+      NoCms::Blocks.configure do |config|
+        config.front_partials_folder = front_partials_folder
+        config.admin_partials_folder = admin_partials_folder
       end
     end
 
