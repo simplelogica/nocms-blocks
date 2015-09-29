@@ -11,10 +11,19 @@ includes the block slot information in the cache key and the block slot as a
 local variable (slot) for the partial.
 
 In the end a partial is rendered using the block as a local variable to obtain
-the information. This partial must be found at `no_cms/blocks/blocks` views
-folder and have the name configured in the `template` setting of the block. This
-way, rendering a 'title-3_columns' would render the partial
-`/no_cms/blocks/blocks/title_3_columns`.
+the information.
+
+This partial must be found at the partials folder configured in the engine's
+initializer using the `front_partials_folder` option. By default this folder will
+be `no_cms/blocks/blocks` inside the `views` folder of yout application.
+
+The partials name will also be configured in the `template` setting of the
+block.
+
+This way, rendering a 'title-3_columns' would render the partial
+`/no_cms/blocks/blocks/title_3_columns`. If we configure
+`NoCms::blocks.front_partials_folder` to be `my_skin/blocks` then it would
+render the partial `my_skin/blocks/title_3_columns`.
 
 This partial is a regular Rails partial (nothing special here). As an example,
 this could be the content of our

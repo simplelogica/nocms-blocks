@@ -7,6 +7,7 @@ Edge
   - Fixed bug with initial_cache_key option for render_block
   - Templates and zones for container models and restrictions for block layouts
     being used in the zones.
+  - Customizable folders for front and admin block partials
 
 1.1.1
 
