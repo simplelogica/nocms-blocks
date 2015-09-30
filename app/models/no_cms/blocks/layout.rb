@@ -47,7 +47,7 @@ class NoCms::Blocks::Layout
     if fields.has_key? field_name
       fields[field_name]
     else
-      field_name = field_name.to_s.gsub(/\_id$/, '')
+      field_name = field_name.to_s.gsub(/\_id$/, '').to_sym
       fields[field_name] if fields.has_key? field_name
     end
   end

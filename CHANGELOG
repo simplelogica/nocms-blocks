@@ -9,6 +9,10 @@ Edge
     being used in the zones.
   - Customizable folders for front and admin block partials
 
+1.1.2
+
+  - Fixed bugs when assigning ActiveRecord fields to blocks
+
 1.1.1
 
   - Layout generator: It creates the initializer and views for one layout
