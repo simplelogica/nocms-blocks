@@ -214,31 +214,9 @@ module NoCms
           #    not creating a duplicate of the object (e.g. if we have a block
           #    with a related post we don't want the post to be duplicated)
           def duplicate_field field
-            field_type = field_type field
-            field_value = read_field(field)
 
-            dupped_value = case layout_config.field(field)[:duplicate]
-              # When dupping we just dp the object and expect it has the right
-              # behaviour. If it's nil we save nil (you can't dup NilClass)
-              when :dup
-                field_value.nil? ? nil : field_value.dup
-              # When nullifying we return nil
-              when :nullify
-                nil
-              when :link
-                field_value
-            end
+            return field_serializer(field).duplicate
 
-            if field_type.is_a?(Class) && field_type < ActiveRecord::Base
-              # We save in the objects cache the dupped object
-              @cached_objects[field.to_sym] = dupped_value
-              # and then we store the new id in the fields_info hash
-              fields_info["#{field}_id".to_sym] =
-                dupped_value.nil? ? nil : dupped_value.id
-            else
-              # else we just dup it and save it into fields_info.
-              fields_info[field.to_sym] = dupped_value
-            end
           end
 
           ##
@@ -402,7 +380,7 @@ module NoCms
           # nullfied we will return the field here and the duplicate_field will
           # manage it properly.
           def fields_to_duplicate
-            fields_configuration
+            fields_configuration.select{|k, config| config[:translated] == is_translation? }
           end
 
           ##
