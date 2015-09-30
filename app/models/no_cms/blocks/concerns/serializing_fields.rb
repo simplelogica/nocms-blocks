@@ -106,7 +106,7 @@ module NoCms
             end
 
             serializer ||= NoCms::Blocks.default_serializer
-            @field_serializers[field] = serializer.constantize.new field, self
+            @field_serializers[field] = serializer.constantize.new field, layout_config.field(field), self
           end
 
           ##
