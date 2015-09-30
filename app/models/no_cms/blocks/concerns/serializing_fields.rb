@@ -286,11 +286,6 @@ module NoCms
             elsif !self.is_translation? &&
                 layout_config.field(field)[:translated]
 
-                # When we are creating the block we still have no translation
-                # and we need to fill the layout. Otherwise no write or read
-                # field will work
-                translation.layout = self.layout
-
                   write_accessor ?
                     translation.write_field(field, args.first) :
                     translation.read_field(field.to_sym)
@@ -335,6 +330,11 @@ module NoCms
                 translation[:layout] = self.layout
               end
             end
+
+            # When we are creating the block we still have no translation
+            # and we need to fill the layout. Otherwise no write or read
+            # field will work
+            translation.layout = self.layout unless is_translation?
 
             super(new_attributes)
 
