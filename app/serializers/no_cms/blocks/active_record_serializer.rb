@@ -19,8 +19,18 @@ module NoCms::Blocks
     end
 
     def write value
-      read.assign_attributes value
-      container.fields_info_will_change!
+      case value
+      when Hash
+        read.assign_attributes value
+      when ActiveRecord::Base, nil
+        # We save in the objects cache the new value
+        self.container.cached_objects[field.to_sym] = value
+        # and then we store the new id in the fields_info hash
+        self.container.fields_info["#{field}_id".to_sym] = value.nil? ? nil : value.id
+      end
+      self.container.fields_info_will_change!
+
+      value
     end
   end
 end
