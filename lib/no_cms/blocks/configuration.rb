@@ -43,7 +43,8 @@ module NoCms
     self.admin_partials_folder = 'no_cms/admin/blocks/blocks'
 
     self.serializers = {
-      "ActiveRecord::Base" => "NoCms::Blocks::ActiveRecordSerializer"
+      "ActiveRecord::Base" => "NoCms::Blocks::ActiveRecordSerializer",
+      "ActiveResource::Base" => "NoCms::Blocks::ActiveResourceSerializer"
     }
 
     self.default_serializer = "NoCms::Blocks::SimpleFieldSerializer"
