@@ -323,11 +323,6 @@ module NoCms
               end
             end
 
-            # When we are creating the block we still have no translation
-            # and we need to fill the layout. Otherwise no write or read
-            # field will work
-            translation.layout = self.layout unless is_translation?
-
             super(new_attributes)
 
             Rails.logger.info "Writing #{fields.inspect} to #{self.layout} block"
