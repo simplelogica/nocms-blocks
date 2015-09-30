@@ -162,6 +162,9 @@ module NoCms
           # the value of the field.
           def write_field field, value
             raise NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
+
+            return field_serializer(field.to_sym).write value
+
             field_type = field_type field
             # If field type is a model then we update the cached object
             if field_type.is_a?(Class) && field_type < ActiveRecord::Base
