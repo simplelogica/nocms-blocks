@@ -267,31 +267,37 @@ module NoCms
           #
           # If there's no field we just let it go to super.
           def method_missing(m, *args, &block)
-            # We get the name of the field stripping out the '=' for writers
-            field = m.to_s
-            write_accessor = field.ends_with? '='
-            field.gsub!(/\=$/, '')
+            begin
+              # We get the name of the field stripping out the '=' for writers
+              field = m.to_s
+              write_accessor = field.ends_with? '='
+              field.gsub!(/\=$/, '')
 
+              # If we don't have this field then we send it to super and pry
+              if field == 'layout' || !has_field?(field)
+                super
+              # If this field exists, and it's not translated, then we do whatever
+              # we need to do
+              elsif !layout_config.field(field)[:translated]
+                write_accessor ?
+                  write_field(field, args.first) :
+                  read_field(field.to_sym)
 
-            # If we don't have this field then we send it to super and pry
-            if field == 'layout' || !has_field?(field)
-              super
-            # If this field exists, and it's not translated, then we do whatever
-            # we need to do
-            elsif !layout_config.field(field)[:translated]
-              write_accessor ?
-                write_field(field, args.first) :
-                read_field(field.to_sym)
+                # If it's translated but we are not in the translation (we check
+                # this by checking if we have translations) then we use the
+                # default translation to obtain it
+              elsif !self.is_translation? &&
+                  layout_config.field(field)[:translated]
 
-              # If it's translated but we are not in the translation (we check
-              # this by checking if we have translations) then we use the
-              # default translation to obtain it
-            elsif !self.is_translation? &&
-                layout_config.field(field)[:translated]
-
-                  write_accessor ?
-                    translation.write_field(field, args.first) :
-                    translation.read_field(field.to_sym)
+                    write_accessor ?
+                      translation.write_field(field, args.first) :
+                      translation.read_field(field.to_sym)
+              end
+            rescue StandardError => e
+              Rails.logger.error "Error while accessing #{m}"
+              Rails.logger.error e.message
+              Rails.logger.error e.backtrace.join("\n")
+              raise e
             end
           end
 
