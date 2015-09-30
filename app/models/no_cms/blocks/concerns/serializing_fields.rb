@@ -93,130 +93,59 @@ module NoCms
             end
           end
 
+          ##
+          # This method returns the field Serializer attached to the `field`
+          # passed as parameter.
+          #
+          # To avoid calculating the same several times we cache the results in
+          # a field_serializers variable, so the serializer is only calculated
+          # the first time.
           def field_serializer field
+            # We try if the serializer is already cachd
             @field_serializers ||= {}
             @field_serializers[field] if @field_serializers.has_key? field
 
+            # If it's not we obtain the field type
             field_class = field_type(field)
 
+            # If the field is an object then we check which serializer is the
+            # right one. We iterate through the configured serializers and get
+            # the first one attached to a parent class of the field (e.g if we
+            # have an ActiveRecordModel it will get the serializer configured
+            # for ActiveRecord::Base)
             if field_class.is_a? Class
               _, serializer = NoCms::Blocks.serializers.detect do |serialized_class, _|
                 field_class < serialized_class.constantize
               end
             end
 
+            # if we have no serializer, then we get the default one
             serializer ||= NoCms::Blocks.default_serializer
+
+            # And cache it and return it
             @field_serializers[field] = serializer.constantize.new field, layout_config.field(field), self
           end
 
           ##
-          # Returns the stored value of the field for this block.
-          #
-          # If the field is not present in the layout configuration it returns
-          # nil.
-          #
-          # If the field is an Active Record object but it's not present on our
-          # objects cache we fetch it from the database using the id stored in
-          # the #{field}_id field.
-          #
-          # If it's an Active Record object but we don't have the #{field}_id
-          # field then it creates (with new, not with create) a new one and
-          # stores it in the objects cache. Later, if the block is saved, this
-          # object will be saved too.
+          # This method uses the field serializer to read a field
           def read_field field
             raise  NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
-
-            return field_serializer(field.to_sym).read
-
-            # first, we get the value
-            value = fields_info[field.to_sym] ||
-                      # or we get it from the cached objects
-                      @cached_objects[field.to_sym]
-
-            # If value is still nil, but the field exists we must get the object
-            # from the database
-            if value.nil?
-              field_type = field_type(field)
-              field_id = fields_info["#{field}_id".to_sym]
-              unless field_id.nil?
-                value = field_type.find(field_id)
-                @cached_objects[field.to_sym] = value
-              end
-            end
-
-            # If value is still nil, and the field_type is an ActiveRecord
-            # class, then we build a new one
-            if value.nil? && field_type.is_a?(Class)
-              value = field_type.new
-              @cached_objects[field.to_sym] = value
-            end
-            value
+            field_serializer(field.to_sym).read
           end
 
           ##
-          # This method stores the parameter value into the corresponding field.
-          #
-          # If the field is an Active Record object then we load it into the
-          # objects cache and assign it the value through an assign_attributes.
-          # This solves the scenario of a nested form where a hash is passed as
-          # the value of the field.
+          # This method uses the field serializer to write a field and store
+          # its value.
           def write_field field, value
             raise NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
-
-            return field_serializer(field.to_sym).write value
-
-            field_type = field_type field
-            # If field type is a model then we update the cached object
-            if field_type.is_a?(Class) && field_type < ActiveRecord::Base
-
-              # We read the object and assign it the attributes attributes.
-              # Since we use the read_field method it will take into account
-              # if the AR object needs to be build
-              read_field(field).assign_attributes value
-
-              # Even if the fields_info has not changed we need to store the
-              # modification, so an association may be saved in cascade (e.g.
-              # the translation of a block would not be saved if we don't force
-              # this)
-              fields_info_will_change!
-            else
-            # If it's not a model then we merge with the previous value
-
-              # when updating through an object (i.e. the page updates through
-              # nested attributes) fields_info[field.to_sym] = value doesn't
-              # work. Kudos to Rubo for this fix
-              self.fields_info = fields_info.nil? ?
-                { field.to_sym => value } :
-                fields_info.merge(field.to_sym => value)
-
-            end
+            field_serializer(field.to_sym).write value
           end
 
           ##
-          # This method duplicates a field and stores its value.
-          #
-          # It takes into account that the field may be an AR object and updates
-          # the cached objects.
-          #
-          # We have different options of duplication depending on the field's
-          # configuration:
-          #
-          #  * duplication: It's the default behaviour. It just performs a dup
-          #    of the field and expects the attached object to implement dup in
-          #    a proper way.
-          #
-          #  * nullify: It doesn't dup the field, it empties it. It's useful for
-          #    objects we don't want to duplicate, like images in S3 (it can
-          #    raise a timeout exception when duplicating).
-          #
-          #  * link: It doesn't dup the field but stores the same object. It's
-          #    useful in Active Record fields so we can store the same id and
-          #    not creating a duplicate of the object (e.g. if we have a block
-          #    with a related post we don't want the post to be duplicated)
+          # This method uses the field serializer to duplicate a field and store
+          # its value.
           def duplicate_field field
-
             return field_serializer(field).duplicate
-
           end
 
           ##
