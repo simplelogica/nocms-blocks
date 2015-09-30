@@ -93,6 +93,22 @@ module NoCms
             end
           end
 
+          def field_serializer field
+            @field_serializers ||= {}
+            @field_serializers[field] if @field_serializers.has_key? field
+
+            field_class = field_type(field)
+
+            if field_class.is_a? Class
+              _, serializer = NoCms::Blocks.serializers.detect do |serialized_class, _|
+                field_class < serialized_class.constantize
+              end
+            end
+
+            serializer ||= NoCms::Blocks.default_serializer
+            @field_serializers[field] = serializer.constantize.new field, self
+          end
+
           ##
           # Returns the stored value of the field for this block.
           #
@@ -109,6 +125,8 @@ module NoCms
           # object will be saved too.
           def read_field field
             raise  NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
+
+            return field_serializer(field.to_sym).read
 
             # first, we get the value
             value = fields_info[field.to_sym] ||
