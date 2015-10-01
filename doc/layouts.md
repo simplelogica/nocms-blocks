@@ -81,6 +81,35 @@ The layout has the following options:
   use the global cache setting specified in the `NoCms::Blocks.cache_enabled`
   variable.
 
+#### Models in the fields
+
+Notice that fields doesn't have to be only strings, integers or other "simple"
+values. They can be also classes.
+
+For storing an object you only have to put the class in the `type` configuration
+in the field. E.g in the following layout:
+
+```ruby
+  'logo-caption' => {
+    template: 'logo_caption',
+    fields: {
+      caption: :string,
+      logo: TestImage
+    }
+  }
+```
+
+the `logo` attribute is a `TestImage` object.
+
+Currently ActiveRecord and ActiveResource objects are supported through the
+ActiveRecordSerializer and ActiveResourceSerializer classes.
+
+You can write your own Serializer and add it to the NoCms::Blocks.serializers
+hash.
+
+Look at the `app/serializers` folder and the
+`lib/no_cms/blocks/configuration.rb` files.
+
 ### How to use a layout
 
 A `NoCms::Blocks::Block` instance has a layout attribute that stores which

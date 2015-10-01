@@ -8,6 +8,8 @@ Edge
   - Templates and zones for container models and restrictions for block layouts
     being used in the zones.
   - Customizable folders for front and admin block partials
+  - Refactoring write/read operations in serializers
+  - Added ActiveResource support
 
 1.1.2
 
