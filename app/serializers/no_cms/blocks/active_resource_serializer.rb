@@ -42,7 +42,10 @@ module NoCms::Blocks
     def write value
       case value
       when Hash
-        read.assign_attributes value
+        resource = read
+        value.each do |attribute_name, attribute_value|
+          resource.send("#{attribute_name}=", attribute_value)
+        end
       when ActiveResource::Base, nil
         # We save in the objects cache the new value
         self.container.cached_objects[field.to_sym] = value
