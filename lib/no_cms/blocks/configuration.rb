@@ -7,6 +7,8 @@ module NoCms
     config_accessor :templates
     config_accessor :front_partials_folder
     config_accessor :admin_partials_folder
+    config_accessor :serializers
+    config_accessor :default_serializer
 
     self.templates = {
       'default' => {
@@ -39,6 +41,13 @@ module NoCms
 
     self.front_partials_folder = 'no_cms/blocks/blocks'
     self.admin_partials_folder = 'no_cms/admin/blocks/blocks'
+
+    self.serializers = {
+      "ActiveRecord::Base" => "NoCms::Blocks::ActiveRecordSerializer",
+      "ActiveResource::Base" => "NoCms::Blocks::ActiveResourceSerializer"
+    }
+
+    self.default_serializer = "NoCms::Blocks::SimpleFieldSerializer"
 
     def self.templates_config
       @templates_config ||= NoCms::Blocks.templates.map do |template_name, template_config|
