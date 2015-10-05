@@ -10,6 +10,7 @@ Edge
   - Customizable folders for front and admin block partials
   - Refactoring write/read operations in serializers
   - Added ActiveResource support
+  - Added Date fields support
 
 1.1.2
 
