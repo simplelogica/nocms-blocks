@@ -115,7 +115,7 @@ module NoCms
             # for ActiveRecord::Base)
             if field_class.is_a? Class
               _, serializer = NoCms::Blocks.serializers.detect do |serialized_class, _|
-                field_class < serialized_class.constantize
+                field_class <= serialized_class.constantize
               end
             end
 
