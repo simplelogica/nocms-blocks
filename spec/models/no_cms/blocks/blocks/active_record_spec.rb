@@ -13,7 +13,8 @@ describe NoCms::Blocks::Block do
               template: 'logo_caption',
               fields: {
                 caption: :string,
-                logo: TestImage
+                logo: TestImage,
+                slides: { type: TestImage, multiple: true }
               }
             }
           }
