@@ -162,7 +162,7 @@ module NoCms
               #
               # When this happens if we save! the object an error is thrown and
               # we can't leave the object blank
-              if object.is_a?(ActiveRecord::Base) && object.save
+              if object.respond_to?(:save) && object.save
                 fields_info["#{field}_id".to_sym] = object.id
               end
             end
