@@ -16,7 +16,14 @@ module NoCms::Blocks
     ##
     # It stores the value in the fields_info hash
     def write_field value
-      self.container.fields_info[self.field] = value.strftime('%Y-%m-%dT%H:%M:%S.%N %Z')
+      if value.nil?
+        self.container.fields_info[self.field] = value
+      elsif value.is_a?(String)
+        value = self.field_config[:type].parse(value)
+        self.container.fields_info[self.field] = value.strftime('%Y-%m-%dT%H:%M:%S.%N %Z')
+      else
+        self.container.fields_info[self.field] = value.strftime('%Y-%m-%dT%H:%M:%S.%N %Z')
+      end
     end
 
   end

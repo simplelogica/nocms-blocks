@@ -15,7 +15,8 @@ describe NoCms::Blocks::Block do
                 starts_at: DateTime,
                 ends_at: DateTime,
                 date_field: Date,
-                time_field: Time
+                time_field: Time,
+                string_field: Date
               }
             }
           }
@@ -26,11 +27,13 @@ describe NoCms::Blocks::Block do
         layout: 'title-long_text',
         starts_at: starts_at_example,
         date_field: date_example,
-        time_field: time_example)
+        time_field: time_example,
+        string_field: string_example)
       }
       let(:starts_at_example) {  1.day.from_now.to_datetime }
       let(:date_example) {  1.day.from_now.to_date }
       let(:time_example) {  1.day.from_now }
+      let(:string_example) {  "2015-10-04" }
 
       subject { block_with_layout }
 
@@ -54,6 +57,9 @@ describe NoCms::Blocks::Block do
         expect(subject.time_field).to be_a Time
       end
 
+      it("should save also strings") do
+        expect(subject.string_field).to eq Date.parse(string_example)
+      end
 
     end
   end
