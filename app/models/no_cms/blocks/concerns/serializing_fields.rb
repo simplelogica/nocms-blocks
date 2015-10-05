@@ -229,7 +229,7 @@ module NoCms
             self.layout = new_layout unless new_layout.nil?
 
             Rails.logger.info "Searching #{new_attributes.keys.inspect} fields"+
-              "in #{self.layout} layout"
+              " in #{self.layout} layout #{is_translation? ? 'translation' : ''}"
 
             # And now separate fields and attributes
             fields = new_attributes.select{|k, _| has_field? k }.symbolize_keys
@@ -251,6 +251,8 @@ module NoCms
                 translation[:layout] = self.layout
               end
             end
+
+            Rails.logger.info "Assigning #{new_attributes.inspect} through Rails"
 
             super(new_attributes)
 
