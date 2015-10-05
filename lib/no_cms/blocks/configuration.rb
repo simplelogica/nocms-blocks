@@ -43,6 +43,9 @@ module NoCms
     self.admin_partials_folder = 'no_cms/admin/blocks/blocks'
 
     self.serializers = {
+      "DateTime" => "NoCms::Blocks::DateSerializer",
+      "Date" => "NoCms::Blocks::DateSerializer",
+      "Time" => "NoCms::Blocks::DateSerializer",
       "ActiveRecord::Base" => "NoCms::Blocks::ActiveRecordSerializer",
       "ActiveResource::Base" => "NoCms::Blocks::ActiveResourceSerializer"
     }
