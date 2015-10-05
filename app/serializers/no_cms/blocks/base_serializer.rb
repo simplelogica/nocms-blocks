@@ -19,17 +19,33 @@ class NoCms::Blocks::BaseSerializer
   end
 
   ##
+  # This method just delegates the reading to a subclass, but it may allow us to
+  # customize some behaviour in the Base Serializer in the future
+  def read
+    read_field
+  end
+
+  ##
   # Method that must be overwritten by the subclass with the implementation for
   # reading the field's value
-  def read
-    raise NotImplementedError.new("The serializer has no 'read' implementation")
+  def read_field
+    raise NotImplementedError.new("The serializer #{self.inspect} has no 'read_field' implementation")
+  end
+
+  ##
+  # This method delegates the writing to a subclass and marks the container as
+  # changed, so ActiveRecord saves it. This prevents translations not being
+  # saved in some Rails versions.
+  def write value
+    write_field value
+    self.container.fields_info_will_change!
   end
 
   ##
   # Method that must be overwritten by the subclass with the implementation for
   # writing the field's value
-  def write value
-    raise NotImplementedError.new("The serializer has no 'write' implementation")
+  def write_field value
+    raise NotImplementedError.new("The serializer #{self.inspect} has no 'write_field' implementation")
   end
 
   ##

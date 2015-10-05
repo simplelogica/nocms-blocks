@@ -9,13 +9,13 @@ module NoCms::Blocks
 
     ##
     # It reads the value from the fields_info hash
-    def read
+    def read_field
       self.container.fields_info[self.field]
     end
 
     ##
     # It stores the value in the fields_info hash
-    def write value
+    def write_field value
       self.container.fields_info[self.field] = value
     end
 

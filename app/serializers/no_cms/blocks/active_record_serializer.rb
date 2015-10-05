@@ -14,7 +14,7 @@ module NoCms::Blocks
     # If we don't have the #{field}_id field then it builds (with new, not with
     # create) a new one and stores it in the objects cache. Later, if the block
     # is saved, this object will be saved too.
-    def read
+    def read_field
       # We get and return the object from the cached objects
       value = self.container.cached_objects[self.field.to_sym]
       return value if value
@@ -39,7 +39,7 @@ module NoCms::Blocks
     #
     # When `value` is an object (or nil) we save it in the object's cache and
     # overwrite the _id field
-    def write value
+    def write_field value
       case value
       when Hash
         read.assign_attributes value
@@ -49,7 +49,6 @@ module NoCms::Blocks
         # and then we store the new id in the fields_info hash
         self.container.fields_info["#{field}_id".to_sym] = value.nil? ? nil : value.id
       end
-      self.container.fields_info_will_change!
 
       value
     end
