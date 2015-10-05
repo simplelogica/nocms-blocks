@@ -96,6 +96,8 @@ module NoCms::Blocks
         self.container.cached_objects[field.to_sym] = value
         # and then we store the new id in the fields_info hash
         self.container.fields_info["#{field}_id".to_sym] = value.nil? ? nil : value.id
+      else
+        raise ArgumentError.new "Hash, ActiveRecord or nil expected for #{field} attribute"
       end
 
       value
