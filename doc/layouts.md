@@ -101,14 +101,43 @@ in the field. E.g in the following layout:
 
 the `logo` attribute is a `TestImage` object.
 
-Currently ActiveRecord and ActiveResource objects are supported through the
-ActiveRecordSerializer and ActiveResourceSerializer classes.
+Currently there are 3 kind of objects supported through 3 different serializers:
+
+  - Date, DateTime, Time: using the DateSerializer.
+  - ActiveRecord objects: using the ActiveRecordSerializer.
+  - ActiveResource objects: using the ActiveResourceSerializer.
 
 You can write your own Serializer and add it to the NoCms::Blocks.serializers
 hash.
 
 Look at the `app/serializers` folder and the
 `lib/no_cms/blocks/configuration.rb` files.
+
+#### Multiple models in a field
+
+Both ActiveRecord and ActiveResource fields can be configured to store more than
+one object. In order to enable that you just have to configure the field with
+`multiple: true`. E.g in the following layout:
+
+```ruby
+  'logo-caption' => {
+    template: 'logo_caption',
+    fields: {
+      caption: :string,
+      logo: TestImage,
+      slides: { type: TestImage, multiple: true}
+    }
+  }
+```
+
+A block with layout will respond to the following methods:
+
+```ruby
+  block.logo
+  block.logo_id
+  block.slides
+  block.slides_ids
+```
 
 ### How to use a layout
 

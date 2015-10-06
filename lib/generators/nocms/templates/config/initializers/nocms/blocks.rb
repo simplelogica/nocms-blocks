@@ -28,7 +28,9 @@ NoCms::Blocks.configure do |config|
   #     fields: { # This is the list of fields a block with this layout would have
   #       title: :string,
   #       long_text: :text,
-  #       image: Image, # You may use another ActiveRecord classes of your own
+  #       image: Image, # You may use another ActiveRecord or ActiveResource classes
+  #                     # of your own
+  #       starts_at: Date, # You can also use Date / Time / DateTime classes
   #       column: { # You can configure the block with more options than just
   #                # the type of the field. If you use the "quick" configuration
   #                # all other settings will get the default value
@@ -36,7 +38,12 @@ NoCms::Blocks.configure do |config|
   #         translated: true # If the field must store different values for
   #                           # each translation. By default every field is
   #                           # translated
-  #       }
+  #         duplicate: :dup, # behaviour of the field when the block is duplicated.
+  #                          # It can be set to :dup (it executes the dup method),
+  #                          # :nullify (it sets the field to nil) or :link (it
+  #                          # uses the same exact object)
+  #         multiple: false # Configures whether the field stores only one
+  #                         # object or more than one.
   #     }
   #    allow_nested_blocks: true, # A block with this layout may include a list of nested blocks
   #                               # This setting is actually used by nocms-admin gem to show

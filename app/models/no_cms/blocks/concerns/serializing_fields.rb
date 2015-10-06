@@ -162,7 +162,11 @@ module NoCms
               #
               # When this happens if we save! the object an error is thrown and
               # we can't leave the object blank
-              if object.respond_to?(:save) && object.save
+              if object.is_a? Array
+                saveable_objects = object.select{|o| o.respond_to?(:save)}
+                saveable_objects.each(&:save)
+                fields_info["#{field}_ids".to_sym] = saveable_objects.map(&:id)
+              elsif object.respond_to?(:save) && object.save
                 fields_info["#{field}_id".to_sym] = object.id
               end
             end
