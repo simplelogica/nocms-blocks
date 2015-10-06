@@ -5,21 +5,7 @@ module NoCms::Blocks
   #
   # It uses the objects cache from the container in order to store the objectand
   # update the _id field.
-  class ActiveRecordSerializer < BaseSerializer
-
-
-    ##
-    # This method is the "read" implementation for the ActiveRecord serializer.
-    #
-    # Depending on the field being configured as multiple or not it delegates
-    # the reading to the `read_multiple_field` or `read_single_field`.
-    def read_field
-      if field_config[:multiple]
-        read_multiple_field
-      else
-        read_single_field
-      end
-    end
+  class ActiveRecordSerializer < BaseMultipleSerializer
 
     ##
     # If the field is not present in our objects cache we fetch it from the
@@ -67,19 +53,6 @@ module NoCms::Blocks
         self.container.cached_objects[field.to_sym] = values
       end
 
-    end
-
-    ##
-    # This method is the "write" implementation for the ActiveRecord serializer.
-    #
-    # Depending on the field being configured as multiple or not it delegates
-    # the writing to the `write_multiple_field` or `write_single_field`.
-    def write_field value
-      if field_config[:multiple]
-        write_multiple_field value
-      else
-        write_single_field value
-      end
     end
 
     ##
