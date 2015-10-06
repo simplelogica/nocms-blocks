@@ -63,5 +63,29 @@ module NoCms::Blocks
     def write_multiple_field values
       raise NotImplementedError.new("The serializer #{self.inspect} has no 'write_multiple_field' implementation")
     end
+
+    ##
+    # In fields configured as multiple and with the :dup behaviour, we have to
+    # get the whole array or relation and dup each element one by one. Otherwise
+    # we just dup the array.
+    #
+    # In any other case (the field is not multiple or has any other duplication
+    # behaviour) we are fine with the default behaviour from BaseSerializer.
+    def duplicate
+      if field_config[:multiple] && field_config[:duplicate] == :dup
+        field_value = read
+        dupped_value = case field_value
+        when nil
+          nil
+        when Array, ActiveRecord::Relation
+          field_value.map(&:dup)
+        else
+          field_value.dup
+        end
+        write dupped_value
+      else
+        super
+      end
+    end
   end
 end
