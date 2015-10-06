@@ -45,7 +45,11 @@ module NoCms::Blocks
     end
 
     ##
-    # If we don't have the array of objects in the cache object
+    # If we don't have the array of objects in the cache object we fetch it from the
+    # database using the id stored in the #{field}_ids field.
+    #
+    # If we don't have the #{field}_ids field or it's blank then it returns an
+    # empty array.
     def read_multiple_field
 
       # We get and return the objects from the cached objects
@@ -104,14 +108,17 @@ module NoCms::Blocks
     end
 
     #
-    # This method `value` to be a Hash or an ActiveRecord object.
+    # This method expects `value` to be an array of Hashes or ActiveRecord
+    # objects.
     #
-    # When `value` is a Hash we load the object and assign the hash through an
-    # assign_attributes. This solves the scenario of a nested form where a hash
-    # is passed as the value of the field.
+    # When a hash comes with an id attribute then we get the object from the
+    # database and assign it the attributes. In other case we create a new
+    # record.
     #
-    # When `value` is an object (or nil) we save it in the object's cache and
-    # overwrite the _id field
+    # When an object (or nil) is in the array we just get it.
+    #
+    # Then we get all the objects in the objects cache and save the ids in the
+    # ids field.
     def write_multiple_field values
       raise ArgumentError.new "Array expected for #{field} attribute" unless values.is_a? Array
 
