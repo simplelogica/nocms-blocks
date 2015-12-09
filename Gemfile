@@ -18,8 +18,6 @@ group :development, :test do
   gem 'pry-nav'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
-
-  gem 'mysql2'
 end
 
 group :test do

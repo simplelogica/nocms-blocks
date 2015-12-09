@@ -8,7 +8,9 @@ class CreateNoCmsBlocksBlockSlots < ActiveRecord::Migration
       t.timestamps null: false
     end
 
-    add_foreign_key :no_cms_blocks_blocks, :no_cms_blocks_blocks, column: 'parent_id'
+    if Rails.version > "4.2"
+      add_foreign_key :no_cms_blocks_blocks, :no_cms_blocks_blocks, column: 'parent_id'
+    end
 
   end
 end
