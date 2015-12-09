@@ -12,6 +12,7 @@ Edge
   - Added ActiveResource support
   - Added Date fields support
   - Added multiple ActiveRecord/ActiveResource fields
+  - Added appraisals to test support with PostgreSQL
 
 1.1.2
 
