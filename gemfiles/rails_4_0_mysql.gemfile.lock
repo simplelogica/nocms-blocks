@@ -5,7 +5,7 @@ PATH
       activeresource (~> 4.0, <= 4.1)
       awesome_nested_set (~> 3.0.0)
       globalize (>= 4.0.0, < 5.1)
-      rails (~> 4.0, <= 4.2.4)
+      rails (~> 4.0, < 4.3)
 
 GEM
   remote: https://rubygems.org/
