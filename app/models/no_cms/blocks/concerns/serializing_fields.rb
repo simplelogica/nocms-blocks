@@ -6,7 +6,7 @@ module NoCms
 
         self.included do
 
-          serialize :fields_info, Hash
+          serialize :fields_info, NoCms::Blocks.database_serializer
 
           after_initialize :set_blank_fields
 
