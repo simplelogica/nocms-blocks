@@ -23,6 +23,11 @@ module NoCms::Blocks
       # If there was nothing in the cache then we try to get the object id and
       # find the object in the database
       field_id = self.container.fields_info.symbolize_keys["#{field}_id".to_sym]
+
+      # Hstore serializes every field as a string, so we have to turn it into an
+      # integer
+      field_id = field_id.to_i if field_id && NoCms::Blocks.database_serializer == :hstore
+
       value = field_config[:type].find(field_id) unless field_id.nil?
 
       # If we still don't have any object then we build a new one
@@ -45,6 +50,12 @@ module NoCms::Blocks
 
       # If there was nothing in the cache then we try to get the object ids
       field_ids = self.container.fields_info.symbolize_keys["#{field}_ids".to_sym]
+
+      # Hstore serializes every field as a string, so we have to turn "[1, 2]"
+      # to an actual array of integers
+      if NoCms::Blocks.database_serializer == :hstore
+        field_ids = field_ids.gsub(/[\[\]]/, '').split(',').map(&:to_i)
+      end
 
       # If there's any id we try to get them from the API
       if field_ids.blank?
