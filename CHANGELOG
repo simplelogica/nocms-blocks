@@ -14,6 +14,8 @@ Edge
   - Added multiple ActiveRecord/ActiveResource fields
   - Added appraisals to test support with PostgreSQL
   - Configurable database serializer: Hash and JSON.
+  - Configurable database serializer: :hstore. THis includes support for
+    PostgreSQL's hstore serialization.
 
 1.1.2
 
