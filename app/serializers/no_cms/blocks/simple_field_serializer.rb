@@ -10,7 +10,7 @@ module NoCms::Blocks
     ##
     # It reads the value from the fields_info hash
     def read_field
-      self.container.fields_info[self.field]
+      self.container.fields_info.symbolize_keys[self.field]
     end
 
     ##

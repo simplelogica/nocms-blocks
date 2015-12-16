@@ -22,7 +22,7 @@ module NoCms::Blocks
 
       # If there was nothing in the cache then we try to get the object id and
       # find the object in the database
-      field_id = self.container.fields_info["#{field}_id".to_sym]
+      field_id = self.container.fields_info.symbolize_keys["#{field}_id".to_sym]
       value = field_config[:type].find(field_id) unless field_id.nil?
 
       # If we still don't have any object then we build a new one
@@ -44,7 +44,7 @@ module NoCms::Blocks
       return values if values
 
       # If there was nothing in the cache then we try to get the object ids
-      field_ids = self.container.fields_info["#{field}_ids".to_sym]
+      field_ids = self.container.fields_info.symbolize_keys["#{field}_ids".to_sym]
 
       # If there's any id we try to get them from the API
       if field_ids.blank?

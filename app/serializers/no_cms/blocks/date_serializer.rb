@@ -9,7 +9,7 @@ module NoCms::Blocks
     # It parses the date from the value in the fields_info hash. It uses the
     # class in the field configuration to parse the saved string
     def read_field
-      date_string = self.container.fields_info[self.field]
+      date_string = self.container.fields_info.symbolize_keys[self.field]
       date_string.blank? ? nil : self.field_config[:type].parse(date_string)
     end
 
