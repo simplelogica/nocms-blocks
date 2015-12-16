@@ -13,6 +13,7 @@ Edge
   - Added Date fields support
   - Added multiple ActiveRecord/ActiveResource fields
   - Added appraisals to test support with PostgreSQL
+  - Configurable database serializer: Hash and JSON.
 
 1.1.2
 

@@ -40,3 +40,21 @@ two configurations:
   can have some organization in our contents. You can see more info about the
   templates and their zones in [the templates section of the
   documentation](./templates.md).
+
+### Database serializer
+
+An special setting is the database serializer that will control how the block
+fields are serialized into the database.
+
+The whole serialization relies on
+`ActiveRecord::AttributeMethods::Serialization` and its `serialize` method, so
+the options acepted as database serializer are the valid options for that
+method: `Hash` and `JSON`.
+
+**Take into account that once the serialization method is set you should not
+change it.** If you do, you won't be able to unserialize the already saved blocks
+and a lot of errors will appear.
+
+The default database serializer is `Hash` as it was the one used from the
+beginning in the gem. This serializer serializes the fields using the YAML
+parser.
