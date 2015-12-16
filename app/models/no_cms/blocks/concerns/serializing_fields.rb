@@ -6,7 +6,11 @@ module NoCms
 
         self.included do
 
-          serialize :fields_info, NoCms::Blocks.database_serializer
+          # Since Rails 4.0 we don't need to 'serialize' the column when using
+          # hstore
+          unless NoCms::Blocks.database_serializer == :hstore
+            serialize :fields_info, NoCms::Blocks.database_serializer
+          end
 
           after_initialize :set_blank_fields
 
