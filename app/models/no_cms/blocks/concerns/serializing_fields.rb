@@ -332,15 +332,16 @@ module NoCms
           # Initializes both the fields_info hash and the objects cache.
           def set_blank_fields
             @fields_info ||= {}
-            # When we are serializing to JSON we need to create also the field,
-            # as it's not a Hash by default.
-            # We also need to make sure that the
-            # object has the fields_info attribute. This is due to Globalize,
-            # since the object can be a strange Block::translation without any
-            # field created
-            self.fields_info ||= {} if (NoCms::Blocks.database_serializer == JSON) &&
-              self.respond_to?(:fields_info)
-
+            # When we are not serializing to Hash we need to create also the
+            # field, as it's not a Hash by default.
+            #
+            # We also need to make sure that the object has the fields_info
+            # attribute. This is due to Globalize, since the object can be a
+            # strange Block::translation without any field created
+            if (NoCms::Blocks.database_serializer != Hash) && self.respond_to?(:fields_info)
+              self.fields_info ||= {}
+              self.fields_info.symbolize_keys!
+            end
             @cached_objects ||= {}
           end
 
