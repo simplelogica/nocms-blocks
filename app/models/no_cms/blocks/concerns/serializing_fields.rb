@@ -286,6 +286,11 @@ module NoCms
           def dup
             new_self = super
 
+            # We need to set the blank fields because in Rails 4.0 and 4.1, when
+            # using hstore, the original fields_info hash was not symbolized and
+            # errors were detected with linked models
+            new_self.send :set_blank_fields
+
             # Now we recover all the fields that must be duplicated here
             fields_to_duplicate.keys.each do |field_to_duplicate|
               new_self.duplicate_field field_to_duplicate
