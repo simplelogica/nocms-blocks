@@ -49,7 +49,7 @@ fields are serialized into the database.
 The whole serialization relies on
 `ActiveRecord::AttributeMethods::Serialization` and its `serialize` method, so
 the options acepted as database serializer are the valid options for that
-method: `Hash` and `JSON`.
+method (`Hash` and `JSON`) and `:hstore`.
 
 **Take into account that once the serialization method is set you should not
 change it.** If you do, you won't be able to unserialize the already saved blocks
@@ -58,3 +58,12 @@ and a lot of errors will appear.
 The default database serializer is `Hash` as it was the one used from the
 beginning in the gem. This serializer serializes the fields using the YAML
 parser.
+
+#### PostgreSQL HStore support
+
+When using hstore you need to configure the database serializer as `:hstore`
+before running migrations, as setting this database serializer will enable the
+extension in the migration and create the hstore fields in the database.
+
+Obviously, **you need PostgreSQL to configure hstore support**. Otherwise, your
+database will complain when trying to create an hstore field in the migration.

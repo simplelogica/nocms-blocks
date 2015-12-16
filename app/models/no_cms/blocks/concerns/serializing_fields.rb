@@ -6,7 +6,11 @@ module NoCms
 
         self.included do
 
-          serialize :fields_info, NoCms::Blocks.database_serializer
+          # Since Rails 4.0 we don't need to 'serialize' the column when using
+          # hstore
+          unless NoCms::Blocks.database_serializer == :hstore
+            serialize :fields_info, NoCms::Blocks.database_serializer
+          end
 
           after_initialize :set_blank_fields
 
@@ -282,6 +286,11 @@ module NoCms
           def dup
             new_self = super
 
+            # We need to set the blank fields because in Rails 4.0 and 4.1, when
+            # using hstore, the original fields_info hash was not symbolized and
+            # errors were detected with linked models
+            new_self.send :set_blank_fields
+
             # Now we recover all the fields that must be duplicated here
             fields_to_duplicate.keys.each do |field_to_duplicate|
               new_self.duplicate_field field_to_duplicate
@@ -328,15 +337,16 @@ module NoCms
           # Initializes both the fields_info hash and the objects cache.
           def set_blank_fields
             @fields_info ||= {}
-            # When we are serializing to JSON we need to create also the field,
-            # as it's not a Hash by default.
-            # We also need to make sure that the
-            # object has the fields_info attribute. This is due to Globalize,
-            # since the object can be a strange Block::translation without any
-            # field created
-            self.fields_info ||= {} if (NoCms::Blocks.database_serializer == JSON) &&
-              self.respond_to?(:fields_info)
-
+            # When we are not serializing to Hash we need to create also the
+            # field, as it's not a Hash by default.
+            #
+            # We also need to make sure that the object has the fields_info
+            # attribute. This is due to Globalize, since the object can be a
+            # strange Block::translation without any field created
+            if (NoCms::Blocks.database_serializer != Hash) && self.respond_to?(:fields_info)
+              self.fields_info ||= {}
+              self.fields_info.symbolize_keys!
+            end
             @cached_objects ||= {}
           end
 

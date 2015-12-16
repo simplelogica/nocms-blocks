@@ -4,6 +4,7 @@ pkg/
 .ruby-gemset
 .ruby-version
 spec/dummy/db/*.sqlite3
+spec/dummy/db/schema.rb
 spec/dummy/log
 spec/dummy/tmp
 spec/dummy/public/uploads/

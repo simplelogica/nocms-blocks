@@ -18,13 +18,4 @@ can use it freely within your Rails application without too much dependencies.
 
 ## How do I make some PR?
 
-1. [Behave yourself](./CODE_OF_CONDUCT.md)
-2. Clone the repo
-3. Commit your changes in a new branch.
-4. Test your changes in all the [Appraisals](https://github.com/thoughtbot/appraisal). Notice that using appraisals is mandatory as no database gem is listed in the default gemfile.
-
-- Test that your changes don't break any right behaviour from the tests.
-- Test that any new feature is properly tested.
-- If some feature is only appliable in some Rails version or database you should make sure that any other appraisal is still working. You can limit your new feature by using `Rails.version` and `NoCms::Blocks.installed_db_gem`.
-
-Finally, ask for a pull request and we will be very grateful.
+Just follow our [contribution conventions](./doc/contribute.md).

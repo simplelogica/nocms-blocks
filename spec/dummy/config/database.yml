@@ -36,5 +36,5 @@ test_pg: &test_pg
   encoding: utf8
 
 test:
-  database: nocms_blocks_test
+  database: nocms_blocks_test<%= "_hstore" if ENV["SERIALIZER"] == "hstore" %>
   <<: *test_<%= NoCms::Blocks.installed_db_gem %>

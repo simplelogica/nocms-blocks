@@ -13,7 +13,15 @@ NoCms::Blocks.configure do |config|
   #
   # Right now, Hash and JSON are the only valid options with hash as the default
   # value.
-  config.database_serializer = ENV["SERIALIZER"].constantize || Hash
+  config.database_serializer = if ENV["SERIALIZER"]
+    if ENV["SERIALIZER"] == "hstore"
+      :hstore
+    else
+      ENV["SERIALIZER"].constantize
+    end
+  else
+    Hash
+  end
 
   # Route inside your app/views/ folder where the block partial files will be
   # located.
