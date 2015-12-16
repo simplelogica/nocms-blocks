@@ -1,8 +1,12 @@
 # This migration comes from no_cms_blocks (originally 20140405135410)
 class CreateNoCmsBlocksBlocks < ActiveRecord::Migration
   def change
-    create_table :no_cms_blocks_blocks do |t|
 
+    if NoCms::Blocks.database_serializer.to_s == "hstore"
+      enable_extension 'hstore'
+    end
+
+    create_table :no_cms_blocks_blocks do |t|
       t.timestamps
     end
 
@@ -13,7 +17,11 @@ class CreateNoCmsBlocksBlocks < ActiveRecord::Migration
       t.string :locale
       t.string :layout
       if NoCms::Blocks.installed_db_gem == 'pg'
-        t.text :fields_info
+        if NoCms::Blocks.database_serializer.to_s == "hstore"
+          t.hstore :fields_info
+        else
+          t.text :fields_info
+        end
       else
         t.text :fields_info, :limit => 4294967295
       end
