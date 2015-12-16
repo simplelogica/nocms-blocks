@@ -8,11 +8,12 @@ NoCms::Blocks.configure do |config|
 
   # Option used in the blocks model for serializing all the fields info.
   #
-  # It will be used as the second option in the serialize method from Active
-  # Record as seen in http://api.rubyonrails.org/classes/ActiveRecord/AttributeMethods/Serialization/ClassMethods.html#method-i-serialize
+  # Exceppt when :hstore is set, it will be used as the second option in the
+  # serialize method from Active Record as seen in
+  # http://api.rubyonrails.org/classes/ActiveRecord/AttributeMethods/Serialization/ClassMethods.html#method-i-serialize
   #
-  # Right now, Hash and JSON are the only valid options with hash as the default
-  # value.
+  # Right now, Hash, JSON and :hstore are the only valid options with hash as
+  # the default value.
   # config.database_serializer = Hash
 
   # Route inside your app/views/ folder where the block partial files will be
