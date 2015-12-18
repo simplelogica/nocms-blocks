@@ -18,11 +18,17 @@ class NoCms::Blocks::Zone
 
   ##
   # This method returns a mix of the blocks allowed for this zone and the ones
-  # allowed for the template gobally
-  def allowed_layouts
-    return @allowed_layouts if @allowed_layouts
+  # allowed for the template gobally.
+  # We can also filter the layouts for a certain level
+  def allowed_layouts nest_level = nil
+
     @allowed_layouts = [config[:blocks], @template.allowed_layouts].compact.flatten.uniq
     @allowed_layouts = NoCms::Blocks.block_layouts.keys if @allowed_layouts.blank?
+    @allowed_layouts = @allowed_layouts.select do |layout_name|
+      layout = NoCms::Blocks.block_layouts[layout_name]
+      layout[:nest_levels].blank? || layout[:nest_levels].include?(nest_level)
+    end unless nest_level.nil?
+
     @allowed_layouts
   end
 
