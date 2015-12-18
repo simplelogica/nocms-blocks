@@ -7,6 +7,7 @@ module NoCms::Blocks
     belongs_to :block, class_name: "NoCms::Blocks::Block"
 
     accepts_nested_attributes_for :block
+    accepts_nested_attributes_for :children, allow_destroy: true
 
     scope :for_template_zone, -> (template_zone) { where(template_zone: template_zone) }
 
