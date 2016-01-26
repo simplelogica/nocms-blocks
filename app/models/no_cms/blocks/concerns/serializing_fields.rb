@@ -362,7 +362,7 @@ module NoCms
           # nullfied we will return the field here and the duplicate_field will
           # manage it properly.
           def fields_to_duplicate
-            fields_configuration.select{|k, config| config[:translated] == is_translation? }
+            fields_configuration.select{|k, config| !!config[:translated] == is_translation? }
           end
 
           ##
