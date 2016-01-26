@@ -272,8 +272,10 @@ module NoCms
             # Now we filter those fields we must not manage because we are (or
             # not) in a translation. I.e: if we have a translated field, but we
             # are not in a translation then we let the translated field go and
-            # not manage it here
-            fields.select!{|k, _| layout_config.field(k)[:translated] == is_translation? }
+            # not manage it here.
+            # Notice that :translated can be a hash, not a boolean. That's why
+            # we perforn a double negation, to turn it into a boolean.
+            fields.select!{|k, _| !!layout_config.field(k)[:translated] == is_translation? }
 
             # We purge the fields from the attributes
             new_attributes.reject!{|k, _| fields.has_key? k }

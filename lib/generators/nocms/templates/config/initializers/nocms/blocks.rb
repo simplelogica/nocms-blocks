@@ -22,6 +22,14 @@ NoCms::Blocks.configure do |config|
   # nil it will search in the corresponding translation and return that value
   # config.i18n_fallbacks_enabled = true
 
+  # The fallback translation usually only works with nil values, but in the
+  # blocks scenario it seems interesting to do it also with blank fields. This
+  # options controls this behaviour and it's enabled by default.
+  #
+  # You can configure it later for each block when defining the block layout
+  # (see the layouts initializer).
+  # config.i18n_fallback_on_blank = true
+
   # Option for defining i18n fallback rules
   #
   # By default the rules are the same than in Globalize
@@ -56,9 +64,13 @@ NoCms::Blocks.configure do |config|
   #                # the type of the field. If you use the "quick" configuration
   #                # all other settings will get the default value
   #         type: :text, # The type of the field, just as explained before
-  #         translated: true # If the field must store different values for
-  #                           # each translation. By default every field is
-  #                           # translated
+  #         translated: # If the field must store different values for each
+  #                     # translation.
+  #                     true # By default every field is translated
+  #                     false # But you can disable it.
+  #                     { fallback_on_blank: true } # or configure the fallback on blank behaviour
+  #
+  #
   #         duplicate: :dup, # behaviour of the field when the block is duplicated.
   #                          # It can be set to :dup (it executes the dup method),
   #                          # :nullify (it sets the field to nil) or :link (it

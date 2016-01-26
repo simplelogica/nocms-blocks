@@ -12,6 +12,7 @@ module NoCms
     config_accessor :database_serializer
     config_accessor :i18n_fallbacks_enabled
     config_accessor :i18n_fallbacks
+    config_accessor :i18n_fallback_on_blank
 
     self.templates = {
       'default' => {
@@ -58,6 +59,7 @@ module NoCms
     self.database_serializer = Hash
 
     self.i18n_fallbacks_enabled = true
+    self.i18n_fallback_on_blank = true
     self.i18n_fallbacks = Globalize.fallbacks
 
     def self.templates_config
