@@ -34,81 +34,212 @@ describe NoCms::Blocks::Block do
       I18n.with_locale(:en) { expect(subject.title).to eq block_title_en }
     end
 
-    context "when the value in the locale" do
+    context "when the fallbacks are disabled" do
+
+      before do
+        NoCms::Blocks.i18n_fallbacks_enabled = false
+      end
+
+      context "and the value in the locale" do
+
+        context "is nil" do
+
+          context "and there's only a fallback locale" do
+            before do
+              NoCms::Blocks.i18n_fallbacks = :en
+            end
+            it "should retrieve the value on the fallback locale " do
+              I18n.with_locale(:de) { expect(subject.title).to eq nil }
+              I18n.with_locale(:it) { expect(subject.title).to eq nil }
+            end
+          end
+
+          context "and there are various fallback locales" do
+            before do
+              NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: :es, fr: [:ca, :es] }
+              I18n.default_locale = :en
+            end
+            it "should retrieve the value on the first locale with a translation" do
+              I18n.with_locale(:de) { expect(subject.title).to eq nil }
+              I18n.with_locale(:ca) { expect(subject.title).to eq nil }
+              I18n.with_locale(:fr) { expect(subject.title).to eq nil }
+            end
+
+            it "should retrieve the value on the default locale if no fallback is available" do
+              I18n.with_locale(:pt) { expect(subject.title).to eq nil }
+            end
+          end
+
+        end
+
+        context "is blank" do
+
+          let(:block_title_es) { "" }
+
+          before do
+            NoCms::Blocks.i18n_fallback_on_blank = true
+          end
+
+          context "and there's only a fallback locale" do
+            it "should retrieve the value on the fallback locale " do
+              I18n.with_locale(:es) { expect(subject.title).to eq "" }
+            end
+          end
+
+        end
+
+      end
+    end
+
+    context "when the fallbacks are enabled" do
 
       before do
         NoCms::Blocks.i18n_fallbacks_enabled = true
       end
 
-      context "is nil" do
+      context "but the blank fallbaks are disabled" do
 
         before do
           NoCms::Blocks.i18n_fallback_on_blank = false
         end
 
-        context "and there's only a fallback locale" do
-          before do
-            NoCms::Blocks.i18n_fallbacks = :en
+        context "and the value in the locale" do
+
+          context "is nil" do
+
+            context "and there's only a fallback locale" do
+              before do
+                NoCms::Blocks.i18n_fallbacks = :en
+              end
+              it "should retrieve the value on the fallback locale " do
+                I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+                I18n.with_locale(:it) { expect(subject.title).to eq block_title_en }
+              end
+            end
+
+            context "and there are various fallback locales" do
+              before do
+                NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: :es, fr: [:ca, :es] }
+                I18n.default_locale = :en
+              end
+              it "should retrieve the value on the first locale with a translation" do
+                I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+                I18n.with_locale(:ca) { expect(subject.title).to eq block_title_es }
+                I18n.with_locale(:fr) { expect(subject.title).to eq block_title_es }
+              end
+
+              it "should retrieve the value on the default locale if no fallback is available" do
+                I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
+              end
+            end
+
           end
-          it "should retrieve the value on the fallback locale " do
-            I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
-            I18n.with_locale(:it) { expect(subject.title).to eq block_title_en }
+
+          context "is blank" do
+
+            let(:block_title_es) { "" }
+
+            context "and there's only a fallback locale" do
+              before do
+                NoCms::Blocks.i18n_fallbacks = :en
+              end
+              it "should retrieve the value on the fallback locale " do
+                I18n.with_locale(:es) { expect(subject.title).to eq "" }
+              end
+            end
+
+            context "and there are various fallback locales" do
+              before do
+                NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: [:es, :en], fr: [:ca, :es, :en] }
+                I18n.default_locale = :en
+              end
+              it "should retrieve the value on the first locale with a translation" do
+                I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+                I18n.with_locale(:ca) { expect(subject.title).to eq "" }
+                I18n.with_locale(:fr) { expect(subject.title).to eq "" }
+              end
+
+              it "should retrieve the value on the default locale if no fallback is available" do
+                I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
+              end
+            end
+
           end
         end
 
-        context "and there are various fallback locales" do
+
+        context "and the blank fallbaks are enabled" do
+
           before do
-            NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: :es, fr: [:ca, :es] }
-            I18n.default_locale = :en
-          end
-          it "should retrieve the value on the first locale with a translation" do
-            I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
-            I18n.with_locale(:ca) { expect(subject.title).to eq block_title_es }
-            I18n.with_locale(:fr) { expect(subject.title).to eq block_title_es }
+            NoCms::Blocks.i18n_fallback_on_blank = true
           end
 
-          it "should retrieve the value on the default locale if no fallback is available" do
-            I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
+          context "and the value in the locale" do
+
+            context "is nil" do
+
+              context "and there's only a fallback locale" do
+                before do
+                  NoCms::Blocks.i18n_fallbacks = :en
+                end
+                it "should retrieve the value on the fallback locale " do
+                  I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+                  I18n.with_locale(:it) { expect(subject.title).to eq block_title_en }
+                end
+              end
+
+              context "and there are various fallback locales" do
+                before do
+                  NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: :es, fr: [:ca, :es] }
+                  I18n.default_locale = :en
+                end
+                it "should retrieve the value on the first locale with a translation" do
+                  I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+                  I18n.with_locale(:ca) { expect(subject.title).to eq block_title_es }
+                  I18n.with_locale(:fr) { expect(subject.title).to eq block_title_es }
+                end
+
+                it "should retrieve the value on the default locale if no fallback is available" do
+                  I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
+                end
+              end
+
+            end
+
+            context "is blank" do
+
+              let(:block_title_es) { "" }
+
+              context "and there's only a fallback locale" do
+                before do
+                  NoCms::Blocks.i18n_fallbacks = :en
+                end
+                it "should retrieve the value on the fallback locale " do
+                  I18n.with_locale(:es) { expect(subject.title).to eq block_title_en }
+                end
+              end
+
+              context "and there are various fallback locales" do
+                before do
+                  NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: [:es, :en], fr: [:ca, :es, :en] }
+                  I18n.default_locale = :en
+                end
+                it "should retrieve the value on the first locale with a translation" do
+                  I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+                  I18n.with_locale(:ca) { expect(subject.title).to eq block_title_en }
+                  I18n.with_locale(:fr) { expect(subject.title).to eq block_title_en }
+                end
+
+                it "should retrieve the value on the default locale if no fallback is available" do
+                  I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
+                end
+              end
+
+            end
           end
         end
 
       end
-
-      context "is blank" do
-
-        let(:block_title_es) { "" }
-
-        before do
-          NoCms::Blocks.i18n_fallback_on_blank = true
-        end
-
-        context "and there's only a fallback locale" do
-          before do
-            NoCms::Blocks.i18n_fallbacks = :en
-          end
-          it "should retrieve the value on the fallback locale " do
-            I18n.with_locale(:es) { expect(subject.title).to eq block_title_en }
-          end
-        end
-
-        context "and there are various fallback locales" do
-          before do
-            NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: [:es, :en], fr: [:ca, :es, :en] }
-            I18n.default_locale = :en
-          end
-          it "should retrieve the value on the first locale with a translation" do
-            I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
-            I18n.with_locale(:ca) { expect(subject.title).to eq block_title_en }
-            I18n.with_locale(:fr) { expect(subject.title).to eq block_title_en }
-          end
-
-          it "should retrieve the value on the default locale if no fallback is available" do
-            I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
-          end
-        end
-
-      end
-
     end
 
   end
