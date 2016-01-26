@@ -10,6 +10,8 @@ module NoCms
     config_accessor :serializers
     config_accessor :default_serializer
     config_accessor :database_serializer
+    config_accessor :i18n_fallbacks_enabled
+    config_accessor :i18n_fallbacks
 
     self.templates = {
       'default' => {
@@ -54,6 +56,9 @@ module NoCms
     self.default_serializer = "NoCms::Blocks::SimpleFieldSerializer"
 
     self.database_serializer = Hash
+
+    self.i18n_fallbacks_enabled = true
+    self.i18n_fallbacks = Globalize.fallbacks
 
     def self.templates_config
       @templates_config ||= NoCms::Blocks.templates.map do |template_name, template_config|

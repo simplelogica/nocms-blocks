@@ -8,13 +8,24 @@ NoCms::Blocks.configure do |config|
 
   # Option used in the blocks model for serializing all the fields info.
   #
-  # Exceppt when :hstore is set, it will be used as the second option in the
+  # Except when :hstore is set, it will be used as the second option in the
   # serialize method from Active Record as seen in
   # http://api.rubyonrails.org/classes/ActiveRecord/AttributeMethods/Serialization/ClassMethods.html#method-i-serialize
   #
-  # Right now, Hash, JSON and :hstore are the only valid options with hash as
+  # Right now, Hash, JSON and :hstore are the only valid options with Hash as
   # the default value.
   # config.database_serializer = Hash
+
+  # Option for enable i18n fallbacks in the blocks. By default it's enabled.
+  #
+  # The behaviour is the same as in Globalize. If any translated field is set to
+  # nil it will search in the corresponding translation and return that value
+  # config.i18n_fallbacks_enabled = true
+
+  # Option for defining i18n fallback rules
+  #
+  # By default the rules are the same than in Globalize
+  # config.i18n_fallbacks = Globalize.fallbacks
 
   # Route inside your app/views/ folder where the block partial files will be
   # located.
