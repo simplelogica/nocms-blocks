@@ -33,19 +33,42 @@ describe NoCms::Blocks::Block do
       I18n.with_locale(:en) { expect(subject.title).to eq block_title_en }
     end
 
-    context "when there's no text in the locale" do
+    context "when the value in the locale" do
 
       before do
         NoCms::Blocks.i18n_fallbacks_enabled = true
       end
 
-      it "should retrieve the text on the default locale" do
-        NoCms::Blocks.i18n_fallbacks = :en
-        I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+      context "is nil" do
+
+        context "and there's only a fallback locale" do
+          before do
+            NoCms::Blocks.i18n_fallbacks = :en
+          end
+          it "should retrieve the value on the fallback locale " do
+            I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+          end
+        end
+
+        context "and there are various fallback locales" do
+          before do
+            NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: :es, fr: [:ca, :es] }
+            I18n.default_locale = :en
+          end
+          it "should retrieve the value on the first locale with a translation" do
+            I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+            I18n.with_locale(:ca) { expect(subject.title).to eq block_title_es }
+            I18n.with_locale(:fr) { expect(subject.title).to eq block_title_es }
+          end
+
+          it "should retrieve the value on the default locale if no fallback is available" do
+            I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
+          end
+        end
+
       end
 
     end
-
 
   end
 
