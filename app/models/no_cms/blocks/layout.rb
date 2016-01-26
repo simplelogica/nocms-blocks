@@ -7,7 +7,7 @@ class NoCms::Blocks::Layout
   attr_reader :config
 
   DEFAULT_FIELD_CONFIGURATION = { translated: {
-      fallback_on_blank: true
+      fallback_on_blank: NoCms::Blocks.i18n_fallback_on_blank
     },
     duplicate: :dup,
     multiple: false

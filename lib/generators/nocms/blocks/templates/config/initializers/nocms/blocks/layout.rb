@@ -18,7 +18,7 @@ NoCms::Blocks.configure do |config|
   #                     # translation.
   #                     true # By default every field is translated
   #                     false # But you can disable it.
-  #                     { fallback_on_blank: true } # or configure the fallback on blank behaviour
+  #                     { fallback_on_blank: NoCms::Blocks.i18n_fallback_on_blank } # or configure the fallback on blank behaviour
   #         duplicate: :dup, # behaviour of the field when the block is duplicated.
   #                          # It can be set to :dup (it executes the dup method),
   #                          # :nullify (it sets the field to nil) or :link (it
