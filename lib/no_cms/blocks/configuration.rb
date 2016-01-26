@@ -58,8 +58,8 @@ module NoCms
 
     self.database_serializer = Hash
 
-    self.i18n_fallbacks_enabled = true
-    self.i18n_fallback_on_blank = true
+    self.i18n_fallbacks_enabled = false
+    self.i18n_fallback_on_blank = false
     self.i18n_fallbacks = Globalize.fallbacks
 
     def self.templates_config
