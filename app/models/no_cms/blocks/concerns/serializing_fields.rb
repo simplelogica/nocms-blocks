@@ -215,15 +215,7 @@ module NoCms
                   translation.write_field(field, args.first)
                 else
                   read_value = translation.read_field(field.to_sym)
-                  # If we have disabled the fallbacks or the value is not blank
-                  # or the value is not nil and we have not enabled the
-                  # fallbacks.
-                  # Take into account that the only of the value being not nil,
-                  # but blank is that it's empty
-                  if !NoCms::Blocks.i18n_fallbacks_enabled ||
-                    !read_value.blank? ||
-                    (!read_value.nil? && !NoCms::Blocks.i18n_fallback_on_blank)
-
+                  if valid_read_value?(read_value)
                       read_value
                   else
 
@@ -244,10 +236,7 @@ module NoCms
 
                     fallback_locales.detect do |locale|
                       read_value = translation_for(locale).read_field(field.to_sym)
-                      # We check that the value fits into the rules with the fallback_on_blank configuration
-                      !read_value.blank? ||
-                        (!read_value.nil? && !NoCms::Blocks.i18n_fallback_on_blank)
-
+                      valid_read_value?(read_value)
                     end
                     read_value
                   end
@@ -259,6 +248,18 @@ module NoCms
               Rails.logger.error e.backtrace.join("\n")
               raise e
             end
+          end
+
+          ##
+          # A read value is valid (we must not use the fallback in other translation)
+          # when:
+          #  1. The fallback behaviour is disabled OR
+          #  2. The value is not blank
+          #  3. The value is blank (not nil) AND we have disabled the fallbacks on blank
+          private def valid_read_value? read_value
+            !NoCms::Blocks.i18n_fallbacks_enabled ||
+            !read_value.blank? ||
+            (read_value.blank? && !read_value.nil? && !NoCms::Blocks.i18n_fallback_on_blank)
           end
 
           ##
