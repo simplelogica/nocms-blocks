@@ -33,6 +33,20 @@ describe NoCms::Blocks::Block do
       I18n.with_locale(:en) { expect(subject.title).to eq block_title_en }
     end
 
+    context "when there's no text in the locale" do
+
+      before do
+        NoCms::Blocks.i18n_fallbacks_enabled = true
+      end
+
+      it "should retrieve the text on the default locale" do
+        NoCms::Blocks.i18n_fallbacks = :en
+        I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+      end
+
+    end
+
+
   end
 
   context "when we have some untranslated fields" do

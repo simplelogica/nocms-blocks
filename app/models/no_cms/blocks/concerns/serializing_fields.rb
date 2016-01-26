@@ -209,9 +209,37 @@ module NoCms
                 # field will work
                 translation.layout = self.layout
 
-                write_accessor ?
-                  translation.write_field(field, args.first) :
-                  translation.read_field(field.to_sym)
+                # If we are reading an i18n field we have to implement the whole
+                # fallback behaviour
+                if write_accessor
+                  translation.write_field(field, args.first)
+                else
+                  read_value = translation.read_field(field.to_sym)
+                  # If we have disabled the fallbacks or the vaule is not nil then
+                  if !NoCms::Blocks.i18n_fallbacks_enabled || !read_value.nil?
+                    read_value
+                  else
+
+                    # fallbacks can be a hash pointing to which locale shoud
+                    # each locale fallback. If it's a hash then we get the the
+                    # fallbacks from it, else we will trust it's directly the
+                    # locale itself
+                    fallback_locales = NoCms::Blocks.i18n_fallbacks.is_a?(Hash) ?
+                      NoCms::Blocks.i18n_fallbacks[Globalize.locale] :
+                      NoCms::Blocks.i18n_fallbacks
+
+                    # If we still have no locale, we use the default one
+                    fallback_locales ||= I18n.default_locale
+
+                    # Then we turn tle locales into an array and iterate through them to get a value
+                    fallback_locales = [ fallback_locales ] unless fallback_locales.is_a? Array
+
+                    fallback_locales.detect do |locale|
+                      read_value = translation_for(locale).read_field(field.to_sym)
+                    end
+                    read_value
+                  end
+                end
               end
             rescue StandardError => e
               Rails.logger.error "Error while accessing #{m}"
