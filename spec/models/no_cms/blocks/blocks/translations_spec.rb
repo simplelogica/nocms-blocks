@@ -8,7 +8,8 @@ describe NoCms::Blocks::Block do
     let!(:block) { NoCms::Blocks::Block.create! layout: 'title-long_text',
       translations_attributes: [
         { locale: 'es', title: block_title_es },
-        { locale: 'en', title: block_title_en }
+        { locale: 'en', title: block_title_en },
+        { locale: 'it', title: nil }
       ]
     }
 
@@ -41,12 +42,17 @@ describe NoCms::Blocks::Block do
 
       context "is nil" do
 
+        before do
+          NoCms::Blocks.i18n_fallback_on_blank = false
+        end
+
         context "and there's only a fallback locale" do
           before do
             NoCms::Blocks.i18n_fallbacks = :en
           end
           it "should retrieve the value on the fallback locale " do
             I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+            I18n.with_locale(:it) { expect(subject.title).to eq block_title_en }
           end
         end
 
@@ -59,6 +65,41 @@ describe NoCms::Blocks::Block do
             I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
             I18n.with_locale(:ca) { expect(subject.title).to eq block_title_es }
             I18n.with_locale(:fr) { expect(subject.title).to eq block_title_es }
+          end
+
+          it "should retrieve the value on the default locale if no fallback is available" do
+            I18n.with_locale(:pt) { expect(subject.title).to eq block_title_en }
+          end
+        end
+
+      end
+
+      context "is blank" do
+
+        let(:block_title_es) { "" }
+
+        before do
+          NoCms::Blocks.i18n_fallback_on_blank = true
+        end
+
+        context "and there's only a fallback locale" do
+          before do
+            NoCms::Blocks.i18n_fallbacks = :en
+          end
+          it "should retrieve the value on the fallback locale " do
+            I18n.with_locale(:es) { expect(subject.title).to eq block_title_en }
+          end
+        end
+
+        context "and there are various fallback locales" do
+          before do
+            NoCms::Blocks.i18n_fallbacks = { de: [:en], ca: [:es, :en], fr: [:ca, :es, :en] }
+            I18n.default_locale = :en
+          end
+          it "should retrieve the value on the first locale with a translation" do
+            I18n.with_locale(:de) { expect(subject.title).to eq block_title_en }
+            I18n.with_locale(:ca) { expect(subject.title).to eq block_title_en }
+            I18n.with_locale(:fr) { expect(subject.title).to eq block_title_en }
           end
 
           it "should retrieve the value on the default locale if no fallback is available" do

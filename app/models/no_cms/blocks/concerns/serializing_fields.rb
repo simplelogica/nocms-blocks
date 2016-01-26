@@ -215,9 +215,16 @@ module NoCms
                   translation.write_field(field, args.first)
                 else
                   read_value = translation.read_field(field.to_sym)
-                  # If we have disabled the fallbacks or the vaule is not nil then
-                  if !NoCms::Blocks.i18n_fallbacks_enabled || !read_value.nil?
-                    read_value
+                  # If we have disabled the fallbacks or the value is not blank
+                  # or the value is not nil and we have not enabled the
+                  # fallbacks.
+                  # Take into account that the only of the value being not nil,
+                  # but blank is that it's empty
+                  if !NoCms::Blocks.i18n_fallbacks_enabled ||
+                    !read_value.blank? ||
+                    (!read_value.nil? && !NoCms::Blocks.i18n_fallback_on_blank)
+
+                      read_value
                   else
 
                     # fallbacks can be a hash pointing to which locale shoud
@@ -231,11 +238,16 @@ module NoCms
                     # If we still have no locale, we use the default one
                     fallback_locales ||= I18n.default_locale
 
-                    # Then we turn tle locales into an array and iterate through them to get a value
+                    # Then we turn tle locales into an array and iterate through
+                    # them to get a value
                     fallback_locales = [ fallback_locales ] unless fallback_locales.is_a? Array
 
                     fallback_locales.detect do |locale|
                       read_value = translation_for(locale).read_field(field.to_sym)
+                      # We check that the value fits into the rules with the fallback_on_blank configuration
+                      !read_value.blank? ||
+                        (!read_value.nil? && !NoCms::Blocks.i18n_fallback_on_blank)
+
                     end
                     read_value
                   end
