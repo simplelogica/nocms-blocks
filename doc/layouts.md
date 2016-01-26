@@ -81,6 +81,52 @@ The layout has the following options:
   use the global cache setting specified in the `NoCms::Blocks.cache_enabled`
   variable.
 
+#### How to configure a field
+
+Fields admit a simple configuration and a more detailed one.
+
+In the simple configuration you only have to set the field type. This field type
+can be a symbol or a class. When an ActiveRecord or ActiveResource is configured
+as a type you are configuring a relationship with that model (see more
+information in the `Models in the fields` section).
+
+```ruby
+  'logo-caption' => {
+    template: 'logo_caption',
+    fields: {
+      caption: :string,
+      logo: TestImage
+    }
+  }
+```
+
+In the more complex configuration you set up a Hash with the following options:
+
+* type: This is what you set in the simple configuration, as seen above.
+* translated: This configuration allows you to configure how this block should
+  behave concerning to translations (more info later).
+* duplicate: This configuration allows to specify how the field is behaving when
+  the block is duplicated. It can be set to :dup (it executes the dup method),
+  nullify (it sets the field to nil) or :link (it uses the same exact object)
+* multiple: It tells us if the field is storing multiple values or not.
+
+By default, every field is translated, when duplicated executes the dup method
+and stores a single value.
+
+#### Translated fields
+
+Fields can be translated and then will be stored in the translations.
+
+The translated option can be false (which will disable the translations), true
+(which will enable it) or a hash (that will enable it and allow for further
+configuration).
+
+The configuration hash has the following options:
+
+* fallback_on_blank: It allows us to configure the fallback behaviour when the
+  field is blank, not nil, just like `fallbacks_for_empty_translations` in
+  globalize. When true, it will search a fallback when the field is blank.
+
 #### Models in the fields
 
 Notice that fields doesn't have to be only strings, integers or other "simple"

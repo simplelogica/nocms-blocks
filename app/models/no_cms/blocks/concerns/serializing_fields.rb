@@ -209,9 +209,38 @@ module NoCms
                 # field will work
                 translation.layout = self.layout
 
-                write_accessor ?
-                  translation.write_field(field, args.first) :
-                  translation.read_field(field.to_sym)
+                # If we are reading an i18n field we have to implement the whole
+                # fallback behaviour
+                if write_accessor
+                  translation.write_field(field, args.first)
+                else
+                  read_value = translation.read_field(field.to_sym)
+                  if valid_read_value?(read_value, layout_config.field(field))
+                      read_value
+                  else
+
+                    # fallbacks can be a hash pointing to which locale shoud
+                    # each locale fallback. If it's a hash then we get the the
+                    # fallbacks from it, else we will trust it's directly the
+                    # locale itself
+                    fallback_locales = NoCms::Blocks.i18n_fallbacks.is_a?(Hash) ?
+                      NoCms::Blocks.i18n_fallbacks[Globalize.locale] :
+                      NoCms::Blocks.i18n_fallbacks
+
+                    # If we still have no locale, we use the default one
+                    fallback_locales ||= I18n.default_locale
+
+                    # Then we turn tle locales into an array and iterate through
+                    # them to get a value
+                    fallback_locales = [ fallback_locales ] unless fallback_locales.is_a? Array
+
+                    fallback_locales.detect do |locale|
+                      read_value = translation_for(locale).read_field(field.to_sym)
+                      valid_read_value?(read_value, layout_config.field(field))
+                    end
+                    read_value
+                  end
+                end
               end
             rescue StandardError => e
               Rails.logger.error "Error while accessing #{m}"
@@ -219,6 +248,20 @@ module NoCms
               Rails.logger.error e.backtrace.join("\n")
               raise e
             end
+          end
+
+          ##
+          # A read value is valid (we must not use the fallback in other translation)
+          # when:
+          #  1. The fallback behaviour is disabled OR
+          #  2. The value is not blank
+          #  3. The value is blank (not nil) AND we have disabled the fallbacks on blank
+          private def valid_read_value? read_value, field_configuration
+            fallback_on_blank = field_configuration[:translated][:fallback_on_blank] if field_configuration[:translated].is_a?(Hash)
+            fallback_on_blank = NoCms::Blocks.i18n_fallback_on_blank if fallback_on_blank.nil?
+            !NoCms::Blocks.i18n_fallbacks_enabled ||
+            !read_value.blank? ||
+            (read_value.blank? && !read_value.nil? && !fallback_on_blank)
           end
 
           ##
@@ -244,8 +287,10 @@ module NoCms
             # Now we filter those fields we must not manage because we are (or
             # not) in a translation. I.e: if we have a translated field, but we
             # are not in a translation then we let the translated field go and
-            # not manage it here
-            fields.select!{|k, _| layout_config.field(k)[:translated] == is_translation? }
+            # not manage it here.
+            # Notice that :translated can be a hash, not a boolean. That's why
+            # we perforn a double negation, to turn it into a boolean.
+            fields.select!{|k, _| !!layout_config.field(k)[:translated] == is_translation? }
 
             # We purge the fields from the attributes
             new_attributes.reject!{|k, _| fields.has_key? k }
@@ -319,7 +364,7 @@ module NoCms
           # nullfied we will return the field here and the duplicate_field will
           # manage it properly.
           def fields_to_duplicate
-            fields_configuration.select{|k, config| config[:translated] == is_translation? }
+            fields_configuration.select{|k, config| !!config[:translated] == is_translation? }
           end
 
           ##

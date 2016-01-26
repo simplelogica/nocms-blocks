@@ -8,13 +8,32 @@ NoCms::Blocks.configure do |config|
 
   # Option used in the blocks model for serializing all the fields info.
   #
-  # Exceppt when :hstore is set, it will be used as the second option in the
+  # Except when :hstore is set, it will be used as the second option in the
   # serialize method from Active Record as seen in
   # http://api.rubyonrails.org/classes/ActiveRecord/AttributeMethods/Serialization/ClassMethods.html#method-i-serialize
   #
-  # Right now, Hash, JSON and :hstore are the only valid options with hash as
+  # Right now, Hash, JSON and :hstore are the only valid options with Hash as
   # the default value.
   # config.database_serializer = Hash
+
+  # Option for enable i18n fallbacks in the blocks. By default it's enabled.
+  #
+  # The behaviour is the same as in Globalize. If any translated field is set to
+  # nil it will search in the corresponding translation and return that value
+  # config.i18n_fallbacks_enabled = true
+
+  # The fallback translation usually only works with nil values, but in the
+  # blocks scenario it seems interesting to do it also with blank fields. This
+  # options controls this behaviour and it's enabled by default.
+  #
+  # You can configure it later for each block when defining the block layout
+  # (see the layouts initializer).
+  # config.i18n_fallback_on_blank = true
+
+  # Option for defining i18n fallback rules
+  #
+  # By default the rules are the same than in Globalize
+  # config.i18n_fallbacks = Globalize.fallbacks
 
   # Route inside your app/views/ folder where the block partial files will be
   # located.
@@ -45,9 +64,13 @@ NoCms::Blocks.configure do |config|
   #                # the type of the field. If you use the "quick" configuration
   #                # all other settings will get the default value
   #         type: :text, # The type of the field, just as explained before
-  #         translated: true # If the field must store different values for
-  #                           # each translation. By default every field is
-  #                           # translated
+  #         translated: # If the field must store different values for each
+  #                     # translation.
+  #                     true # By default every field is translated
+  #                     false # But you can disable it.
+  #                     { fallback_on_blank: NoCms::Blocks.i18n_fallback_on_blank } # or configure the fallback on blank behaviour
+  #
+  #
   #         duplicate: :dup, # behaviour of the field when the block is duplicated.
   #                          # It can be set to :dup (it executes the dup method),
   #                          # :nullify (it sets the field to nil) or :link (it

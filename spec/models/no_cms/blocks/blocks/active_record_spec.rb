@@ -161,7 +161,7 @@ describe NoCms::Blocks::Block do
           end
 
           it("should get those modifications") do
-            expect(subject.reload.slides.first.name).to eq new_testing_name
+            expect(subject.reload.slides.order(id: :asc).first.name).to eq new_testing_name
           end
 
           it("should not overwrite those modifications") do
