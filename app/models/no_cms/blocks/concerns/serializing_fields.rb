@@ -215,7 +215,7 @@ module NoCms
                   translation.write_field(field, args.first)
                 else
                   read_value = translation.read_field(field.to_sym)
-                  if valid_read_value?(read_value)
+                  if valid_read_value?(read_value, layout_config.field(field))
                       read_value
                   else
 
@@ -236,7 +236,7 @@ module NoCms
 
                     fallback_locales.detect do |locale|
                       read_value = translation_for(locale).read_field(field.to_sym)
-                      valid_read_value?(read_value)
+                      valid_read_value?(read_value, layout_config.field(field))
                     end
                     read_value
                   end
@@ -256,10 +256,12 @@ module NoCms
           #  1. The fallback behaviour is disabled OR
           #  2. The value is not blank
           #  3. The value is blank (not nil) AND we have disabled the fallbacks on blank
-          private def valid_read_value? read_value
+          private def valid_read_value? read_value, field_configuration
+            fallback_on_blank = field_configuration[:translated][:fallback_on_blank] if field_configuration[:translated].is_a?(Hash)
+            fallback_on_blank = NoCms::Blocks.i18n_fallback_on_blank if fallback_on_blank.nil?
             !NoCms::Blocks.i18n_fallbacks_enabled ||
             !read_value.blank? ||
-            (read_value.blank? && !read_value.nil? && !NoCms::Blocks.i18n_fallback_on_blank)
+            (read_value.blank? && !read_value.nil? && !fallback_on_blank)
           end
 
           ##
