@@ -1,7 +1,7 @@
 module NoCms::Blocks
   class BlockSlot < ActiveRecord::Base
 
-    acts_as_nested_set
+    acts_as_nested_set scope: [:container_type, :container_id]
 
     belongs_to :container, polymorphic: true
     belongs_to :block, class_name: "NoCms::Blocks::Block"
