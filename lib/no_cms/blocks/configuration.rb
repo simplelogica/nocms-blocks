@@ -69,7 +69,7 @@ module NoCms
     end
 
     def self.installed_db_gem
-      installed_db_gem  = ['mysql2', 'pg'].detect do |db_gem|
+      installed_db_gem  = ['mysql2', 'pg', 'sqlite3'].detect do |db_gem|
         begin
           Gem::Specification.find_by_name(db_gem)
         rescue Gem::LoadError
@@ -79,7 +79,7 @@ module NoCms
         end
       end
 
-      raise 'Neither mysql2 nor pg gems have been detected' unless installed_db_gem
+      raise 'Neither mysql2, pg nor sqlite3 gems have been detected' unless installed_db_gem
 
       installed_db_gem
 
