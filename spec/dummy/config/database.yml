@@ -35,6 +35,11 @@ test_pg: &test_pg
   host: localhost
   encoding: utf8
 
+test_sqlite3: &test_sqlite3
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
+
 test:
   database: nocms_blocks_test<%= "_hstore" if ENV["SERIALIZER"] == "hstore" %>
   <<: *test_<%= NoCms::Blocks.installed_db_gem %>
