@@ -18,6 +18,10 @@ Edge
     PostgreSQL's hstore serialization.
   - Fallback behaviour on translations.
 
+1.1.3
+
+  - Fixed bugs on block's translations
+
 1.1.2
 
   - Fixed bugs when assigning ActiveRecord fields to blocks

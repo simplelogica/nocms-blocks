@@ -208,7 +208,6 @@ module NoCms
                 # and we need to fill the layout. Otherwise no write or read
                 # field will work
                 translation.layout = self.layout
-
                 # If we are reading an i18n field we have to implement the whole
                 # fallback behaviour
                 if write_accessor
@@ -241,6 +240,13 @@ module NoCms
                     read_value
                   end
                 end
+              # If it's translated and we are in the translation
+              elsif self.is_translation? &&
+                  layout_config.field(field)[:translated]
+                # Write or read field will work
+                write_accessor ?
+                  write_field(field, args.first) :
+                  read_field(field.to_sym)
               end
             rescue StandardError => e
               Rails.logger.error "Error while accessing #{m}"
@@ -301,7 +307,11 @@ module NoCms
             # but we can afford to send the layout always to the translations
             if new_attributes.has_key? :translations_attributes
               new_attributes[:translations_attributes].each do |translation|
-                translation[:layout] = self.layout
+                if translation.is_a? Array
+                  translation.last[:layout] = self.layout
+                else
+                  translation[:layout] = self.layout
+                end
               end
             end
 
