@@ -34,7 +34,7 @@ appraise "rails-4-0-sqlite" do
 end
 
 appraise "rails-4-1-sqlite" do
-  gem "sqlite3", "~> 0.3.13"
+  gem "sqlite3"
   gem "rails", "4.1.14"
 end
 
