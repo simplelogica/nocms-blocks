@@ -2,7 +2,8 @@
 
 FactoryGirl.define do
   factory :block_slot, class: NoCms::Blocks::BlockSlot do
-    block { FactoryGirl.create :block }
+    block { create :block }
     template_zone 'header'
+    container { create :slotted_page }
   end
 end

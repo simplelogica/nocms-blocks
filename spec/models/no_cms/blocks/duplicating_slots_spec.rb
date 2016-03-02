@@ -2,28 +2,24 @@ require 'spec_helper'
 
 describe NoCms::Blocks::BlockSlot do
 
-    before(:all) do
-      NoCms::Blocks.configure do |config|
-        config.block_layouts = {
-          'title-long_text' => {
-            template: 'title-long_text',
-            fields: {
-              title: :string,
-              body: :text
-            }
+  before(:all) do
+    NoCms::Blocks.configure do |config|
+      config.block_layouts = {
+        'body' => {
+          template: 'body',
+          fields: {
+            title: :string,
+            body: :text
           }
         }
-      end
+      }
     end
+  end
 
-    let(:block_title) { Faker::Lorem.sentence }
-    let(:block_body) { Faker::Lorem.paragraph }
-
-    let(:slot) { create :block_slot, block: create(:block,
-      layout: 'title-long_text',
-      title: block_title,
-      body: block_body)
-    }
+  let(:block_title) { Faker::Lorem.sentence }
+  let(:block_body) { Faker::Lorem.paragraph }
+  let(:block) { create :block, layout: 'body', title: block_title, body: block_body }
+  let(:slot) { create :block_slot, template_zone: 'body', block: block }
 
   context "when duplicating a slot and its block" do
 
