@@ -11,7 +11,8 @@ module NoCms::Blocks
 
     scope :for_template_zone, -> (template_zone) { where(template_zone: template_zone) }
 
-    validates :template_zone, presence: true
+    # The awesome nested set has a scope on container, so we need to validate the presence
+    validates :template_zone, :container, presence: true
 
     def template_zone_config
       if container && container.class.include?(NoCms::Blocks::Concerns::ModelWithTemplate)
