@@ -5,5 +5,9 @@ FactoryGirl.define do
     block { create :block }
     template_zone 'header'
     container { create :slotted_page }
+
+    factory :block_slot_without_contaier do
+      container { nil }
+    end
   end
 end

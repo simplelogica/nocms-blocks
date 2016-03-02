@@ -88,7 +88,7 @@ NoCms::Blocks.configure do |config|
   # By default there's one template with three zones defined.
   config.templates = {
     'default' => {
-      blocks: [:general1, :general2],
+      blocks: [:default, :general1, :general2],
       zones: {
         header: {
           blocks: [:header1, :header2]

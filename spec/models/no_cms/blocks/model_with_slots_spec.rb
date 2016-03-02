@@ -22,7 +22,8 @@ describe NoCms::Blocks::Concerns::ModelWithSlots do
   it_behaves_like "model with has many through belongs to relationship",
     :slotted_page, :block_slot, :block, :block_slots, :block, :blocks
 
-  it_behaves_like "model with has many relationship", :block_slot, :block_slot, :children, :parent
+  # The child slot needs the container empty and will get the paren container with a before_validation
+  it_behaves_like "model with has many relationship", :block_slot, :block_slot_without_contaier, :children, :parent
 
   context "when duplicating the model but not its block" do
 
