@@ -22,6 +22,12 @@ module NoCms::Blocks
 
     validate :validate_block_layout
 
+    before_validation :ensure_container
+
+    def ensure_container
+      self.container = parent.container if container.blank? && parent
+    end
+
     ##
     # If the container has template restrictions we should take them into
     # account to check that the block layout is actually allowed in the current
@@ -69,10 +75,8 @@ module NoCms::Blocks
     # `dup_block_when_duping_slot` virtual attribute and then dup the block
     # instead of linking to the same instance.
     def dup
-      dupped = super()
-      if dup_block_when_duping_slot
-        dupped.block = block.dup
-      end
+      dupped = super
+      (dupped.block = block.dup) if dup_block_when_duping_slot
       dupped
     end
 
