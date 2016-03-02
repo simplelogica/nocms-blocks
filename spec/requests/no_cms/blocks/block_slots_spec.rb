@@ -9,11 +9,9 @@ describe NoCms::Blocks::BlockSlot do
     let(:block_3_columns_layout) { create :block, layout: 'title-3_columns', title: Faker::Lorem.sentence, column_1: Faker::Lorem.paragraph, column_2: Faker::Lorem.paragraph, column_3: Faker::Lorem.paragraph }
     let(:block_logo) { create :block, layout: 'logo-caption', caption: Faker::Lorem.sentence, logo: image_attributes }
     let(:block_draft) { create :block, layout: 'default', title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph, draft: true }
-    let(:slotted_page) { create :slotted_page }
+    let(:slotted_page) { create :slotted_page, template: 'three_column' }
     let(:nestable_container_block) { create :block, layout: 'nestable_container', title: Faker::Lorem.sentence }
-    let(:nestable_container_block_slot) { create :block_slot, block: nestable_container_block }
-    let(:nested_block) { create :block, layout: 'default', title: nested_title, body: Faker::Lorem.paragraph }
-    let(:nested_block_slot) { create :block_slot, block: nested_block, parent: nestable_container_block_slot }
+    let(:nested_block) { create :block, layout: 'default', title: nested_title }
     let(:nested_title) { "#{Faker::Lorem.sentence}-#{Time.now.to_i}" }
 
     before do
@@ -48,18 +46,17 @@ describe NoCms::Blocks::BlockSlot do
               title: :string,
             },
             allow_nested_blocks: true
-          },
-
+          }
         }
-
       end
 
-      slotted_page.block_slots << create(:block_slot, block: block_default_layout)
-      slotted_page.block_slots << create(:block_slot, block: block_3_columns_layout)
-      slotted_page.block_slots << create(:block_slot, block: block_logo)
-      slotted_page.block_slots << create(:block_slot, block: block_draft)
-      slotted_page.block_slots << nestable_container_block_slot
-      slotted_page.block_slots << nested_block_slot
+      # Create blocks and slots after configuration
+      create(:block_slot, block: block_default_layout, container: slotted_page)
+      create(:block_slot, block: block_3_columns_layout, container: slotted_page)
+      create(:block_slot, block: block_logo, container: slotted_page)
+      create(:block_slot, block: block_draft, container: slotted_page)
+      nestable_container_block_slot = create(:block_slot, block: nestable_container_block, container: slotted_page, template_zone: 'body')
+      create(:block_slot, block: nested_block, parent: nestable_container_block_slot, container: slotted_page, template_zone: 'body')
 
       visit Dummy::Application.routes.url_helpers.slotted_page_path(slotted_page)
 
