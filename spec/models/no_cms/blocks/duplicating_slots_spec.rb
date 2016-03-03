@@ -40,6 +40,30 @@ describe NoCms::Blocks::BlockSlot do
       expect(subject.block).to_not eq slot.block
     end
 
+    context "and have nested slot" do
+      let(:nested_block) { create :block, layout: 'body' }
+      let!(:nested_slot) { create(:block_slot, block: nested_block, parent: slot, template_zone: 'body', dup_block_when_duping_slot: true) }
+
+      subject { dupped_slot.children.first }
+
+      it "should have different slot" do
+        expect(subject).to_not eq nested_slot
+      end
+
+      it "should have the dupped parent" do
+        expect(subject.parent).to eq dupped_slot
+      end
+
+      it "should have the same info" do
+        expect(subject.template_zone).to eq nested_slot.template_zone
+      end
+
+      it "should not have the same block" do
+        expect(subject.block).to_not eq nested_slot.block
+      end
+
+    end
+
   end
 
   context "when duplicating a slot but not its block" do
@@ -52,6 +76,28 @@ describe NoCms::Blocks::BlockSlot do
       expect(subject.block).to eq slot.block
     end
 
-  end
+    context "and have nested slot" do
+      let(:nested_block) { create :block, layout: 'body' }
+      let!(:nested_slot) { create(:block_slot, block: nested_block, parent: slot, template_zone: 'body') }
 
+      subject { dupped_slot.children.first }
+
+      it "should have different slot" do
+        expect(subject).to_not eq nested_slot
+      end
+
+      it "should have the dupped parent" do
+        expect(subject.parent).to eq dupped_slot
+      end
+
+      it "should have the same info" do
+        expect(subject.template_zone).to eq nested_slot.template_zone
+      end
+
+      it "should have the same block" do
+        expect(subject.block).to eq nested_slot.block
+      end
+    end
+
+  end
 end
