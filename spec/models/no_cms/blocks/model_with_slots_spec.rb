@@ -53,5 +53,28 @@ describe NoCms::Blocks::Concerns::ModelWithSlots do
 
   end
 
+  context "when duplicating with nested slots" do
+    let(:block) { create(:block, layout: 'default') }
+    let(:slot) { create :block_slot, block: block, container: page }
+    let!(:nested_slot) { create :block_slot, block: block, parent: slot }
+    let(:page) { create :slotted_page }
+    let(:dupped_page) { page.dup }
+
+    subject { dupped_page }
+
+    it {expect(subject.block_slots).to_not include slot }
+    it {expect(subject.block_slots).to_not include nested_slot }
+
+    context "and save" do
+      before { dupped_page.save }
+
+      it { is_expected.to be_valid }
+      it { expect(subject.block_slots.count).to eq 2 }
+      it {expect(subject.block_slots).to_not include slot }
+      it {expect(subject.block_slots).to_not include nested_slot }
+    end
+
+  end
+
 
 end
