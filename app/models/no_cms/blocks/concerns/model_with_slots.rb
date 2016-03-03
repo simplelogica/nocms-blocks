@@ -25,33 +25,13 @@ module NoCms::Blocks::Concerns
       # virtual attribute of the slot with the same value than the attribute
       # from this model. This way we propagate the configuration.
       def dup_with_slots options = {}
-        options.reverse_merge!({ dup_blocks: true })
-
         duplicated = dup_without_slots
-
-        slot_dups = {}
-        # Order by depth to avoid between children and parents dups
-        slots = block_slots.order(:depth)
-        slots.each do |slot|
+        # We just need to dub root slots, if there are nested slots
+        # will be dupped in each slot
+        block_slots.roots.each do |slot|
           slot.dup_block_when_duping_slot = dup_block_when_duping_slots
-          slot_dups[slot] = slot.dup
+          duplicated.block_slots << slot.dup
         end
-
-        # Resolve relations
-        slots.each do |slot|
-          slot_dup = slot_dups[slot]
-          slot_dup.container = duplicated
-          slot_parent = slot_dups[slot.parent]
-          if slot_parent
-            slot_dup.parent = slot_parent
-            slot_parent.children << slot_dup
-          end
-        end
-
-        slot_dups.each do |_, slot_dup|
-          duplicated.block_slots << slot_dup
-        end
-
         duplicated
       end
       alias_method_chain :dup, :slots
