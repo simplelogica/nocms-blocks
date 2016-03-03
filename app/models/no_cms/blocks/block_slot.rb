@@ -77,6 +77,12 @@ module NoCms::Blocks
     def dup
       dupped = super
       (dupped.block = block.dup) if dup_block_when_duping_slot
+      children.each do |child|
+        # The child dup with children asign, will change the child parent
+        # and the ensure_container callback, will set the right container
+        child.dup_block_when_duping_slot = dup_block_when_duping_slot
+        dupped.children << child.dup
+      end
       dupped
     end
 
