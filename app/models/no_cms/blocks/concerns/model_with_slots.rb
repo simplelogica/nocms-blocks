@@ -30,7 +30,9 @@ module NoCms::Blocks::Concerns
         # will be dupped in each slot
         block_slots.roots.each do |slot|
           slot.dup_block_when_duping_slot = dup_block_when_duping_slots
-          duplicated.block_slots << slot.dup
+          slot_dup = slot.dup
+          slot_dup.container = duplicated
+          duplicated.block_slots << slot_dup
         end
         duplicated
       end
