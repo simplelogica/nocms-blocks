@@ -46,6 +46,10 @@ describe NoCms::Blocks::BlockSlot do
 
       subject { dupped_slot.children.first }
 
+      it "should save" do
+        expect(subject.save).to be_truthy
+      end
+
       it "should have different slot" do
         expect(subject).to_not eq nested_slot
       end
@@ -81,6 +85,10 @@ describe NoCms::Blocks::BlockSlot do
       let!(:nested_slot) { create(:block_slot, block: nested_block, parent: slot, template_zone: 'body') }
 
       subject { dupped_slot.children.first }
+
+      it "should save" do
+        expect(subject.save).to be_truthy
+      end
 
       it "should have different slot" do
         expect(subject).to_not eq nested_slot
