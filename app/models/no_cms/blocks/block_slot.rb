@@ -25,7 +25,7 @@ module NoCms::Blocks
     before_validation :ensure_container
 
     def ensure_container
-      self.container = parent.container if container.blank? && parent
+      self.container = parent.container if parent
     end
 
     ##
