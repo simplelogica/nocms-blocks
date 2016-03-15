@@ -17,6 +17,7 @@ Edge
   - Configurable database serializer: :hstore. THis includes support for
     PostgreSQL's hstore serialization.
   - Fallback behaviour on translations.
+  - Added template_layout parameter in block configuration.
 
 1.1.3
 

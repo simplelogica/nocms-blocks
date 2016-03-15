@@ -29,6 +29,12 @@ module NoCms
         options[:cache_enabled] = block.cache_enabled unless options.has_key? :cache_enabled
 
         block_template = block.to_partial_path
+        options[:template_layout] = (block.layout_config.config[:template_layout] || "block" rescue "block")
+
+        # We search for the partial. In order to set default if render do not exists
+        unless lookup_context.exists?("/layouts/no_cms/blocks/_#{options[:template_layout]}")
+          options[:template_layout] = "block"
+        end
 
         locals = options[:locals] || {}
         locals[:block] = block
@@ -36,16 +42,16 @@ module NoCms
         # And now decide if we use cache or not
         if options[:cache_enabled]
           Rails.cache.fetch cache_key_for_blocks(block, block_template, options) do
-            render block_template, locals
+            render partial: block_template, layout: "/layouts/no_cms/blocks/#{options[:template_layout]}", locals: locals
           end
         else
-          render block_template, locals
+          render partial: block_template, layout: "/layouts/no_cms/blocks/#{options[:template_layout]}", locals: locals
         end
 
       end
 
       def cache_key_for_blocks block, block_template, options = {}
-        "#{block_template}/#{block.id}/#{block.updated_at.to_i}#{"/#{options[:initial_cache_key]}" if options[:initial_cache_key] }"
+        "#{options[:template_layout]}/#{block_template}/#{block.id}/#{block.updated_at.to_i}#{"/#{options[:initial_cache_key]}" if options[:initial_cache_key] }"
       end
 
     end
