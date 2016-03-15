@@ -28,6 +28,7 @@ NoCms::Blocks.configure do |config|
   config.block_layouts = {
     'default' => {
       template: 'default',
+      template_layout: "with_admin_actions"
       fields: {
         title: :string,
         body: :text
@@ -35,6 +36,7 @@ NoCms::Blocks.configure do |config|
     },
     'title-3_columns' => {
       template: 'title_3_columns',
+      template_layout: "with_custom_header"
       fields: {
         title: :string,
         column_1: :text,
@@ -64,6 +66,8 @@ The layout has the following options:
 
 * template: This is the name of partial that will be used to render the block.
   You can see more details in the rendering section.
+
+* template_layout: This is the name of partial that will be used as layout to render the template inside. (By default: 'block')
 
 * fields: All the fields that will be declared in the block. More details later.
 

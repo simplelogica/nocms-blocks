@@ -4,6 +4,8 @@ NoCms::Blocks.configure do |config|
     template: '<%= name %>', # This is the template of this block,
                                     # used as a partial both in the front
                                     # and the admin (if you use the nocms-admin gem)
+    template_layout: 'block' # This is the partial used as layout
+                             # the template is rendered inside this template_layout
     fields: { # This is the list of fields a block with this layout would have
       text: :string,
   #   long_text: :text,
