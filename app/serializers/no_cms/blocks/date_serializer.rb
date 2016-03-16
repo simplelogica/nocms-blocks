@@ -16,7 +16,7 @@ module NoCms::Blocks
     ##
     # It stores the value in the fields_info hash
     def write_field value
-      if value.nil?
+      if value.blank?
         self.container.fields_info[self.field] = value
       elsif value.is_a?(String)
         value = self.field_config[:type].parse(value)
