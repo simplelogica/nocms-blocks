@@ -15,6 +15,8 @@ module NoCms::Blocks
     translates :draft
     include  NoCms::Blocks::Concerns::SerializingFields
 
+    after_save :touch_slots
+
     ##
     # In the block we get all the fields so it can accept all of them
     def fields_configuration
@@ -89,6 +91,13 @@ module NoCms::Blocks
     def to_admin_partial_path
       "#{NoCms::Blocks.admin_partials_folder}/#{self.template}"
     end
+
+    ##
+    # Notifies the block slots that the block has changed.
+    def touch_slots
+      slots.update_all(updated_at: Time.now)
+    end
+    private :touch_slots
   end
 
 end
