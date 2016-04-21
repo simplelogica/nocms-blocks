@@ -130,5 +130,58 @@ module NoCms::Blocks
       self.container.fields_info["#{field}_ids".to_sym] = self.container.cached_objects[field.to_sym].map(&:id)
 
     end
+
+    ##
+    # Standard duplicate behaviour. It uses the read and write implementations to
+    # read and write the new duplicated value.
+    #
+    # It takes into account that the field may be an AR object and updates
+    # the cached objects.
+    #
+    # We have different options of duplication depending on the field's
+    # configuration:
+    #
+    #  * duplication: It's the default behaviour. It just performs a dup
+    #    of the field and expects the attached object to implement dup in
+    #    a proper way.
+    #
+    #  * nullify: It doesn't dup the field, it empties it. It's useful for
+    #    objects we don't want to duplicate, like images in S3 (it can
+    #    raise a timeout exception when duplicating).
+    #
+    #  * link: It doesn't dup the field but stores the same object. It's
+    #    useful in Active Record fields so we can store the same id and
+    #    not creating a duplicate of the object (e.g. if we have a block
+    #    with a related post we don't want the post to be duplicated)
+    def duplicate
+      dupped_value = case field_config[:duplicate]
+        # When dupping we just dup the object and expect it has the right
+        # behaviour. If it's nil we save nil (you can't dup NilClass)
+        when :dup
+          field_value = read
+          field_value.nil? ? nil : field_value.dup
+        # When nullifying we return nil
+        when :nullify
+          nil
+        # when linking we return the same object
+        when :link
+          if field_config[:multiple]
+            field_to_read = "#{field}_ids".to_sym
+            field_ids = self.container.fields_info.symbolize_keys[field_to_read]
+            field_ids.map{|id| field_config[:type].new(id: id)}
+          else
+            field_to_read = "#{field}_id".to_sym
+            self.container.fields_info.symbolize_keys[field_to_read]
+          end
+      end
+      write dupped_value
+
+      # We need to clear cached objects when duplicate block because when it saves
+      # it tries to save the cached objects. And we don't want this functionality when dup
+      # in active record, because there is nothing to save
+
+      self.container.cached_objects.clear
+      true
+    end
   end
 end

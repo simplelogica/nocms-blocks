@@ -16,6 +16,13 @@ describe NoCms::Blocks::Block do
         header: attributes_for(:test_image)
     end
 
+    let(:block_with_ar) do
+      NoCms::Blocks::Block.create layout: 'with_country',
+        title: block_title,
+        country_id: 66,
+        countries_ids: [4, 87, 666]
+    end
+
 
     let(:dupped_block) { block.dup }
 
@@ -33,6 +40,14 @@ describe NoCms::Blocks::Block do
               background: { type: TestImage, translated: false, duplicate: :nil },
               header: { type: TestImage, translated: false, duplicate: :link }
             }
+          },
+          'with_country' => {
+            template: 'with_country',
+            fields: {
+              title: { type: :string, translated: false },
+              country: { type: Country, translated: false, duplicate: :link },
+              countries: { type: Country, translated: false, duplicate: :link, multiple: true }
+            }
           }
         }
       end
@@ -41,6 +56,20 @@ describe NoCms::Blocks::Block do
     before { dupped_block.save! }
 
     subject { NoCms::Blocks::Block.find dupped_block.id }
+
+    it "should save block with Active Resource field non multiple" do
+      dupped = block_with_ar.dup
+      dupped.save!
+
+      expect(dupped.country_id).to eq 66
+    end
+
+    it "should save block with Active Resource field multiple" do
+      dupped = block_with_ar.dup
+      dupped.save!
+
+      expect(dupped.countries_ids).to eq [4, 87, 666]
+    end
 
     it "should have the same layout" do
       expect(subject.layout).to eq block.layout
