@@ -132,27 +132,10 @@ module NoCms::Blocks
     end
 
     ##
-    # Standard duplicate behaviour. It uses the read and write implementations to
-    # read and write the new duplicated value.
-    #
-    # It takes into account that the field may be an AR object and updates
-    # the cached objects.
-    #
-    # We have different options of duplication depending on the field's
-    # configuration:
-    #
-    #  * duplication: It's the default behaviour. It just performs a dup
-    #    of the field and expects the attached object to implement dup in
-    #    a proper way.
-    #
-    #  * nullify: It doesn't dup the field, it empties it. It's useful for
-    #    objects we don't want to duplicate, like images in S3 (it can
-    #    raise a timeout exception when duplicating).
-    #
-    #  * link: It doesn't dup the field but stores the same object. It's
-    #    useful in Active Record fields so we can store the same id and
-    #    not creating a duplicate of the object (e.g. if we have a block
-    #    with a related post we don't want the post to be duplicated)
+    # We need to override this method for active resource in order to
+    # not find and save AR fields in blocks. When the field type is an
+    # ActiveRecord, it doesn't matter, but with ActiveResource we have
+    # multiple errors in duplication time
     def duplicate
       dupped_value = case field_config[:duplicate]
         # When dupping we just dup the object and expect it has the right
@@ -181,7 +164,6 @@ module NoCms::Blocks
       # in active record, because there is nothing to save
 
       self.container.cached_objects.clear
-      true
     end
   end
 end
