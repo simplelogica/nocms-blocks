@@ -57,18 +57,23 @@ describe NoCms::Blocks::Block do
 
     subject { NoCms::Blocks::Block.find dupped_block.id }
 
-    it "should save block with Active Resource field non multiple" do
-      dupped = block_with_ar.dup
-      dupped.save!
+    context "duplicate with :link" do
 
-      expect(dupped.country_id).to eq 66
-    end
+      before(:each) do
+        dupped.save!
+      end
 
-    it "should save block with Active Resource field multiple" do
-      dupped = block_with_ar.dup
-      dupped.save!
+      let(:dupped) do
+        block_with_ar.dup
+      end
 
-      expect(dupped.countries_ids).to eq [4, 87, 666]
+      it "should save block with Active Resource field non multiple" do
+        expect(dupped.country_id).to eq 66
+      end
+
+      it "should save block with Active Resource field multiple" do
+        expect(dupped.countries_ids).to eq [4, 87, 666]
+      end
     end
 
     it "should have the same layout" do
