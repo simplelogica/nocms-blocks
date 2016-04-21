@@ -130,5 +130,40 @@ module NoCms::Blocks
       self.container.fields_info["#{field}_ids".to_sym] = self.container.cached_objects[field.to_sym].map(&:id)
 
     end
+
+    ##
+    # We need to override this method for active resource in order to
+    # not find and save AR fields in blocks. When the field type is an
+    # ActiveRecord, it doesn't matter, but with ActiveResource we have
+    # multiple errors in duplication time
+    def duplicate
+      dupped_value = case field_config[:duplicate]
+        # When dupping we just dup the object and expect it has the right
+        # behaviour. If it's nil we save nil (you can't dup NilClass)
+        when :dup
+          field_value = read
+          field_value.nil? ? nil : field_value.dup
+        # When nullifying we return nil
+        when :nullify
+          nil
+        # when linking we return the same object
+        when :link
+          if field_config[:multiple]
+            field_to_read = "#{field}_ids".to_sym
+            field_ids = self.container.fields_info.symbolize_keys[field_to_read]
+            field_ids.map{|id| field_config[:type].new(id: id)}
+          else
+            field_to_read = "#{field}_id".to_sym
+            self.container.fields_info.symbolize_keys[field_to_read]
+          end
+      end
+      write dupped_value
+
+      # We need to clear cached objects when duplicate block because when it saves
+      # it tries to save the cached objects. And we don't want this functionality when dup
+      # in active record, because there is nothing to save
+
+      self.container.cached_objects.clear
+    end
   end
 end
