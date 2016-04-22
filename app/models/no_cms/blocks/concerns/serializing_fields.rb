@@ -266,8 +266,8 @@ module NoCms
             fallback_on_blank = field_configuration[:translated][:fallback_on_blank] if field_configuration[:translated].is_a?(Hash)
             fallback_on_blank = NoCms::Blocks.i18n_fallback_on_blank if fallback_on_blank.nil?
             !NoCms::Blocks.i18n_fallbacks_enabled ||
-            !read_value.blank? ||
-            (read_value.blank? && !read_value.nil? && !fallback_on_blank)
+            !read_value.blank? && (!read_value.id.nil? rescue true) ||
+            (read_value.blank? && !read_value.nil? && !fallback_on_blank && (!read_value.id.nil? rescue true))
           end
 
           ##

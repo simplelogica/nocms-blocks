@@ -288,21 +288,29 @@ describe NoCms::Blocks::Block do
     let(:block_title) { Faker::Lorem.sentence }
     let(:block_body_es) { Faker::Lorem.paragraph }
     let(:block_body_en) { Faker::Lorem.paragraph }
+    let(:block_body_fr) { Faker::Lorem.paragraph }
 
     let(:logo_attributes) { attributes_for(:test_image) }
     let(:background_attributes_es) { attributes_for(:test_image) }
     let(:background_attributes_en) { attributes_for(:test_image) }
+    let(:background_attributes_fr) { nil }
 
     let!(:block) { NoCms::Blocks::Block.create! title: block_title,
       logo: logo_attributes,
       layout: 'title-long_text',
       translations_attributes: [
         { locale: 'es', body: block_body_es, background: background_attributes_es },
-        { locale: 'en', body: block_body_en, background: background_attributes_en }
+        { locale: 'en', body: block_body_en, background: background_attributes_en },
+        { locale: 'fr', body: block_body_en, background: background_attributes_fr }
       ]
     }
 
+    before do
+      NoCms::Blocks.i18n_fallbacks_enabled = true
+    end
+
     before(:all) do
+
       NoCms::Blocks.configure do |config|
         config.block_layouts = {
           'title-long_text' => {
@@ -311,7 +319,7 @@ describe NoCms::Blocks::Block do
               title: { type: :string, translated: false },
               body: :text,
               logo:  { type: TestImage, translated: false },
-              background:  { type: TestImage, translated: true },
+              background:  { type: TestImage, translated: { fallback_on_blank: true } },
             }
           }
         }
@@ -319,6 +327,11 @@ describe NoCms::Blocks::Block do
     end
 
     subject { NoCms::Blocks::Block.find block.id }
+
+    it "should fallback to an image with id when locale has no image, not build an empty one" do
+      background_fr = I18n.with_locale(:fr) { subject.background }
+      expect(background_fr.id).to_not be_nil
+    end
 
     it "should retrieve the same unstranslated attribute for each language" do
       I18n.with_locale(:es) { expect(subject.title).to eq block_title }
