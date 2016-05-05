@@ -1,5 +1,9 @@
 # NoCMS Blocks
 
+`master` branch tests: [![Circle CI](https://circleci.com/gh/simplelogica/nocms-blocks.svg?style=svg)](https://circleci.com/gh/simplelogica/nocms-blocks)
+
+`edge` branch tests: [![Circle CI](https://circleci.com/gh/simplelogica/nocms-blocks/tree/edge.svg?style=svg)](https://circleci.com/gh/simplelogica/nocms-blocks/tree/edge)
+
 ## What's this?
 
 This is a Rails engine with a basic functionality of customizable blocks of
