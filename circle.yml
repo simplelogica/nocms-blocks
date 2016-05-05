@@ -5,9 +5,12 @@ general:
       - master
       - edge
 # Copy secrets for testing
+dependency:
+  post:
+    - bundle exec appraisal install
 test:
   pre:
-    - bundle exec appraisal install
+    - bundle exec appraisal rake db:create
     - bundle exec appraisal rake db:migrate
   override:
     - bundle exec appraisal rspec
