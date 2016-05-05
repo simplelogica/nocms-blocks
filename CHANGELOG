@@ -18,6 +18,7 @@ Edge
     PostgreSQL's hstore serialization.
   - Fallback behaviour on translations.
   - Added template_layout parameter in block configuration.
+  - Added circleci support
 
 1.1.3
 
