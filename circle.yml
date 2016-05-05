@@ -1,0 +1,20 @@
+# Only run tests on master and edge (and it's pull requests)
+general:
+  branches:
+    only:
+      - master
+      - edge
+# Copy secrets for testing
+test:
+  pre:
+    - bundle exec appraisal install
+    - bundle exec appraisal rake db:migrate
+  override:
+    - bundle exec appraisal rspec
+
+# Customize the test machine
+machine:
+  # Version of ruby to use
+  ruby:
+    version:
+      2.3.0
