@@ -5,7 +5,7 @@ general:
       - master
       - edge
 # Copy secrets for testing
-dependency:
+dependencies:
   post:
     - bundle exec appraisal install
 test:
