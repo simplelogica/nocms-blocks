@@ -289,6 +289,7 @@ module NoCms
               " in #{self.layout} layout #{is_translation? ? 'translation' : ''}"
 
             # And now separate fields and attributes
+            debugger
             fields = new_attributes.select{|k, _| has_field? k }.symbolize_keys
             # Now we filter those fields we must not manage because we are (or
             # not) in a translation. I.e: if we have a translated field, but we

@@ -49,6 +49,7 @@ GEM
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.1.4)
+    byebug (9.0.5)
     capybara (2.5.0)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -98,6 +99,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-byebug (3.4.0)
+      byebug (~> 9.0)
+      pry (~> 0.10)
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
     pry-rails (0.3.4)
@@ -181,6 +185,7 @@ DEPENDENCIES
   generator_spec
   nocms-blocks!
   pg
+  pry-byebug
   pry-nav
   pry-rails
   pry-remote

@@ -15,6 +15,7 @@ gemspec
 
 group :development, :test do
   gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'pry-nav'
   gem 'pry-remote'
   gem 'pry-stack_explorer'
