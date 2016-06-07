@@ -55,7 +55,28 @@ module NoCms::Blocks
       ##
       # If we don't have a globalized model yet we return our temporary layout
       def layout
-        globalized_model.nil? ? @layout : globalized_model.layout
+        # Since respond_to_missing? has been reimplemented in
+        # NoCms::Blocks::Concerns::SerializingFields we need to first check that
+        # we have the foreign key to access the globalized_model association
+        #
+        # This is due to the empty translations Globalize creates sometimes that
+        # only have locale.
+        #
+        # If we don't check then we will throw a non defined attribute
+        # exception.
+
+        # First we check wether we don't respond to the foreign key of the
+        # globalize model association
+        if !respond_to?(self.class.reflections.symbolize_keys[:globalized_model].foreign_key) ||
+          globalized_model.nil? # and then that the globalized model is nil
+
+          # In any of these cases we return our stored layout
+          @layout
+        else
+          # If we can access to the globalized_model, then we return its
+          # information
+          globalized_model.layout
+        end
       end
 
       include  NoCms::Blocks::Concerns::SerializingFields
