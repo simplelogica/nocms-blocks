@@ -47,7 +47,7 @@ describe NoCms::Blocks::Block do
         # We mock the Country model so we don't have to query any API
         before do
           allow(Country).to receive(:build).and_return(build(:country))
-          expect_any_instance_of(Country).to receive(:save).exactly(2).times.and_return(true)
+          expect_any_instance_of(Country).to receive(:save).at_least(:once).and_return(true)
         end
 
         let(:country_attributes) { attributes_for(:country) }
