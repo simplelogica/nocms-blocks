@@ -25,9 +25,9 @@ module NoCms::Blocks
 
       # Hstore serializes every field as a string, so we have to turn it into an
       # integer
-      field_id = field_id.to_i if field_id && NoCms::Blocks.database_serializer == :hstore
+      field_id = field_id.to_i if field_id.present? && NoCms::Blocks.database_serializer == :hstore
 
-      value = field_config[:type].find(field_id) unless field_id.nil?
+      value = field_config[:type].find(field_id) unless field_id.blank?
 
       # If we still don't have any object then we build a new one
       value = field_config[:type].new if value.nil?
