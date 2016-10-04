@@ -130,5 +130,25 @@ module NoCms::Blocks
       self.container.fields_info[id_field] = self.container.cached_objects[field.to_sym].map(&:id)
 
     end
+
+    ##
+    # Active Record duplicate behaviour.
+    #
+    # If the field value is empty in the original block we just leave it empty
+    # in this block. Otherwise we fall to the default behaviour.
+    #
+    # This is due to the bug that caused the creation of new objects from nil
+    # records in the original block.
+    def duplicate
+
+      # We look for the _id or _ids field and also check wether we have the
+      # object in the cached obects (in case one has been initialized in the
+      # original block but not yet saved)
+      if !self.container.fields_info[id_field].blank? ||
+        !self.container.cached_objects[field.to_sym].blank?
+        super
+      end
+    end
+
   end
 end

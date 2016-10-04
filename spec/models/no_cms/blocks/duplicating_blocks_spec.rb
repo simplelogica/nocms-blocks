@@ -115,6 +115,10 @@ describe NoCms::Blocks::Block do
         expect(subject.slides).to_not match_array block.slides
       end
 
+      it "should not create an Active Record object when the original was nil" do
+        expect(subject.headline).to be_new_record
+      end
+
       it "should not create any Active Record object when the original was nil in a multiple field" do
         expect(subject.optional_slides).to be_a ActiveRecord::Relation
         expect(subject.optional_slides).to be_empty
