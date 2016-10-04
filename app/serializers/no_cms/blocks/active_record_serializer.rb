@@ -58,7 +58,7 @@ module NoCms::Blocks
 
       # If there's any id we try to get them from the database
       if field_ids.blank?
-        []
+        field_config[:type].none
       else
         values = field_config[:type].where(id: field_ids)
         self.container.cached_objects[field.to_sym] = values

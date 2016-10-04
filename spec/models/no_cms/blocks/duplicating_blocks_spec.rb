@@ -36,7 +36,9 @@ describe NoCms::Blocks::Block do
               title: { type: :string, translated: false },
               body: { type: :text, translated: false, duplicate: :nullify },
               logo: { type: TestImage, translated: false, duplicate: :dup },
+              headline: { type: NewsItem, translated: false, duplicate: :dup },
               slides: { type: TestImage, translated: false, duplicate: :dup, multiple: true },
+              optional_slides: { type: TestImage, translated: false, duplicate: :dup, multiple: true },
               background: { type: TestImage, translated: false, duplicate: :nil },
               header: { type: TestImage, translated: false, duplicate: :link }
             }
@@ -111,6 +113,11 @@ describe NoCms::Blocks::Block do
       it "should duplicate a multiple Active Record field configured to be duplicated" do
         expect(subject.slides).to be_a ActiveRecord::Relation
         expect(subject.slides).to_not match_array block.slides
+      end
+
+      it "should not create any Active Record object when the original was nil in a multiple field" do
+        expect(subject.optional_slides).to be_a ActiveRecord::Relation
+        expect(subject.optional_slides).to be_empty
       end
 
     end
