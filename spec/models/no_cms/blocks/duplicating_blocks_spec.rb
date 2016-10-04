@@ -74,6 +74,11 @@ describe NoCms::Blocks::Block do
       it "should save block with Active Resource field multiple" do
         expect(dupped.countries_ids).to eq [4, 87, 666]
       end
+
+      it "should link an Active Record field configured to be linked" do
+        expect(subject.header).to eq block.header
+      end
+
     end
 
     it "should have the same layout" do
@@ -84,25 +89,30 @@ describe NoCms::Blocks::Block do
       expect(subject.title).to eq block_title
     end
 
-    it "should nullify the field configured to be nullified" do
-      expect(subject.body).to be_nil
+    context "duplicate with :nullify" do
+
+      it "should nullify the field configured to be nullified" do
+        expect(subject.body).to be_nil
+      end
+
+      it "should return a new record when an AR field is configured to nullify" do
+        expect(subject.background).to be_new_record
+      end
+
     end
 
-    it "should duplicate an Active Record field configured to be duplicated" do
-      expect(subject.logo).to_not be_new_record
-      expect(subject.logo).to_not eq block.logo
-    end
-    it "should duplicate a multiple Active Record field configured to be duplicated" do
-      expect(subject.slides).to be_a ActiveRecord::Relation
-      expect(subject.slides).to_not match_array block.slides
-    end
+    context "duplicate with :dup" do
 
-    it "should return a new record when an AR field is configured to nullify" do
-      expect(subject.background).to be_new_record
-    end
+      it "should duplicate an Active Record field configured to be duplicated" do
+        expect(subject.logo).to_not be_new_record
+        expect(subject.logo).to_not eq block.logo
+      end
 
-    it "should link an Active Record field configured to be linked" do
-      expect(subject.header).to eq block.header
+      it "should duplicate a multiple Active Record field configured to be duplicated" do
+        expect(subject.slides).to be_a ActiveRecord::Relation
+        expect(subject.slides).to_not match_array block.slides
+      end
+
     end
 
   end
