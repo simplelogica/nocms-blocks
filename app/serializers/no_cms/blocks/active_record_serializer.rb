@@ -7,6 +7,10 @@ module NoCms::Blocks
   # update the _id field.
   class ActiveRecordSerializer < BaseMultipleSerializer
 
+    def id_field
+      field_config[:multiple] ? "#{field}_ids".to_sym : "#{field}_id".to_sym
+    end
+
     ##
     # If the field is not present in our objects cache we fetch it from the
     # database using the id stored in the #{field}_id field.
@@ -21,7 +25,7 @@ module NoCms::Blocks
 
       # If there was nothing in the cache then we try to get the object id and
       # find the object in the database
-      field_id = self.container.fields_info.symbolize_keys["#{field}_id".to_sym]
+      field_id = self.container.fields_info.symbolize_keys[id_field]
 
       # Hstore serializes every field as a string, so we have to turn it into an
       # integer
@@ -48,7 +52,7 @@ module NoCms::Blocks
       return values if values
 
       # If there was nothing in the cache then we try to get the object ids
-      field_ids = self.container.fields_info.symbolize_keys["#{field}_ids".to_sym]
+      field_ids = self.container.fields_info.symbolize_keys[id_field]
 
       # Hstore serializes every field as a string, so we have to turn "[1, 2]"
       # to an actual array of integers
@@ -83,7 +87,7 @@ module NoCms::Blocks
         # We save in the objects cache the new value
         self.container.cached_objects[field.to_sym] = value
         # and then we store the new id in the fields_info hash
-        self.container.fields_info["#{field}_id".to_sym] = value.nil? ? nil : value.id
+        self.container.fields_info[id_field] = value.nil? ? nil : value.id
       else
         raise ArgumentError.new "Hash, ActiveRecord or nil expected for #{field} attribute"
       end
@@ -123,7 +127,7 @@ module NoCms::Blocks
         end
       end
 
-      self.container.fields_info["#{field}_ids".to_sym] = self.container.cached_objects[field.to_sym].map(&:id)
+      self.container.fields_info[id_field] = self.container.cached_objects[field.to_sym].map(&:id)
 
     end
   end
