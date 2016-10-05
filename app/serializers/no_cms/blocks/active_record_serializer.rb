@@ -7,10 +7,6 @@ module NoCms::Blocks
   # update the _id field.
   class ActiveRecordSerializer < BaseMultipleSerializer
 
-    def id_field
-      field_config[:multiple] ? "#{field}_ids".to_sym : "#{field}_id".to_sym
-    end
-
     ##
     # If the field is not present in our objects cache we fetch it from the
     # database using the id stored in the #{field}_id field.

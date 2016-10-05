@@ -9,6 +9,9 @@ module NoCms::Blocks
   # the read and write methods.
   class BaseMultipleSerializer < BaseSerializer
 
+    def id_field
+      field_config[:multiple] ? "#{field}_ids".to_sym : "#{field}_id".to_sym
+    end
 
     ##
     # This method is the "read" implementation for the serializer.
