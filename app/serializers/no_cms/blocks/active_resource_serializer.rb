@@ -22,7 +22,7 @@ module NoCms::Blocks
 
       # If there was nothing in the cache then we try to get the object id and
       # find the object in the database
-      field_id = self.container.fields_info.symbolize_keys["#{field}_id".to_sym]
+      field_id = self.container.fields_info.symbolize_keys[id_field]
 
       # Hstore serializes every field as a string, so we have to turn it into an
       # integer
@@ -49,7 +49,7 @@ module NoCms::Blocks
       return values if values
 
       # If there was nothing in the cache then we try to get the object ids
-      field_ids = self.container.fields_info.symbolize_keys["#{field}_ids".to_sym]
+      field_ids = self.container.fields_info.symbolize_keys[id_field]
 
       # Hstore serializes every field as a string, so we have to turn "[1, 2]"
       # to an actual array of integers
@@ -86,7 +86,7 @@ module NoCms::Blocks
         # We save in the objects cache the new value
         self.container.cached_objects[field.to_sym] = value
         # and then we store the new id in the fields_info hash
-        self.container.fields_info["#{field}_id".to_sym] = value.nil? ? nil : value.id
+        self.container.fields_info[id_field] = value.nil? ? nil : value.id
       end
 
       value
@@ -125,45 +125,54 @@ module NoCms::Blocks
         end
       end
 
-
-
-      self.container.fields_info["#{field}_ids".to_sym] = self.container.cached_objects[field.to_sym].map(&:id)
+      self.container.fields_info[id_field] = self.container.cached_objects[field.to_sym].map(&:id)
 
     end
 
     ##
-    # We need to override this method for active resource in order to
-    # not find and save AR fields in blocks. When the field type is an
-    # ActiveRecord, it doesn't matter, but with ActiveResource we have
-    # multiple errors in duplication time
+    # We need to override the link behaviour this method for active resource in
+    # order to not find and save AR fields in blocks. When the field type is an
+    # ActiveRecord, it doesn't matter, but with ActiveResource we have multiple
+    # errors in duplication time
+    #
+    # And we also control the behaviour when the field value is empty in the
+    # original block. We just leave it empty in this block. Otherwise we fall to
+    # the default behaviour.
+    #
+    # This is due to the bug that caused the creation of new objects from nil
+    # records in the original block.
     def duplicate
-      dupped_value = case field_config[:duplicate]
-        # When dupping we just dup the object and expect it has the right
-        # behaviour. If it's nil we save nil (you can't dup NilClass)
-        when :dup
-          field_value = read
-          field_value.nil? ? nil : field_value.dup
-        # When nullifying we return nil
-        when :nullify
-          nil
-        # when linking we return the same object
-        when :link
-          if field_config[:multiple]
-            field_to_read = "#{field}_ids".to_sym
-            field_ids = self.container.fields_info.symbolize_keys[field_to_read]
-            field_ids.map{|id| field_config[:type].new(id: id)}
-          else
-            field_to_read = "#{field}_id".to_sym
-            self.container.fields_info.symbolize_keys[field_to_read]
-          end
+
+      # We look for the _id or _ids field and also check wether we have the
+      # object in the cached obects (in case one has been initialized in the
+      # original block but not yet saved)
+      if self.container.fields_info[id_field] ||
+        self.container.cached_objects[field.to_sym]
+
+
+        if field_config[:duplicate] == :link
+          dupped_value = if field_config[:multiple]
+
+              # when linking we use the exact same objects if we already have
+              # them in the cached objects
+              if self.container.cached_objects[field.to_sym]
+                self.container.cached_objects[field.to_sym]
+              else
+                # Id we don't have them we save API calls by just creating
+                # persisted active resource objects with the right id
+                field_ids = self.container.fields_info.symbolize_keys[id_field]
+                field_ids.map{|id| field_config[:type].new({ id: id }, true )}
+              end
+            else
+              self.container.fields_info[id_field]
+            end
+
+          write dupped_value
+
+        else
+          super
+        end
       end
-      write dupped_value
-
-      # We need to clear cached objects when duplicate block because when it saves
-      # it tries to save the cached objects. And we don't want this functionality when dup
-      # in active record, because there is nothing to save
-
-      self.container.cached_objects.clear
     end
   end
 end

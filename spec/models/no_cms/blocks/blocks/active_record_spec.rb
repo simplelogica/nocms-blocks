@@ -14,7 +14,8 @@ describe NoCms::Blocks::Block do
               fields: {
                 caption: :string,
                 logo: TestImage,
-                slides: { type: TestImage, multiple: true }
+                slides: { type: TestImage, multiple: true },
+                optional_slides: { type: TestImage, multiple: true }
               }
             }
           }
@@ -44,31 +45,20 @@ describe NoCms::Blocks::Block do
         expect{subject.slide_ids}.to_not raise_error
       end
 
-      it("should return objects") do
-        expect(subject.logo).to be_a(TestImage)
-      end
-
-      it("should return arrays of objects") do
-        expect(subject.slides).to be_a(ActiveRecord::Relation)
-        expect(subject.slides.first).to be_a(TestImage)
-      end
-
-      it("should return objects with the right value") do
-        expect(subject.logo.name).to eq image_attributes[:name]
-      end
-
-      it("should return objects with the right value") do
-        expect(subject.logo.name).to eq image_attributes[:name]
-        expect(subject.slides.first.name).to eq slide_attributes_1[:name]
-        expect(subject.slides.second.name).to eq slide_attributes_2[:name]
-      end
-
-      it("should save related objects") do
-        expect(TestImage.first).to_not be_nil
-      end
-
-
       context "concerning single active record fields" do
+
+        it("should return objects") do
+          expect(subject.logo).to be_a(TestImage)
+        end
+
+        it("should return objects with the right value") do
+          expect(subject.logo.name).to eq image_attributes[:name]
+        end
+
+        it("should save related objects") do
+          expect(TestImage.first).to_not be_nil
+        end
+
 
         context "when related objects are modified outside" do
 
@@ -149,6 +139,22 @@ describe NoCms::Blocks::Block do
       end
 
       context "concerning multiple active record fields" do
+
+        it("should return arrays of objects") do
+          expect(subject.slides).to be_a(ActiveRecord::Relation)
+          expect(subject.slides.first).to be_a(TestImage)
+        end
+
+        it("should return an empty relation when no objects are related") do
+          expect(subject.optional_slides).to be_a(ActiveRecord::Relation)
+          expect(subject.optional_slides).to be_empty
+        end
+
+        it("should return objects with the right value") do
+          expect(subject.slides.first.name).to eq slide_attributes_1[:name]
+          expect(subject.slides.second.name).to eq slide_attributes_2[:name]
+        end
+
 
         context "when related objects are modified outside" do
 

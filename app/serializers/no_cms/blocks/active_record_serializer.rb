@@ -21,7 +21,7 @@ module NoCms::Blocks
 
       # If there was nothing in the cache then we try to get the object id and
       # find the object in the database
-      field_id = self.container.fields_info.symbolize_keys["#{field}_id".to_sym]
+      field_id = self.container.fields_info.symbolize_keys[id_field]
 
       # Hstore serializes every field as a string, so we have to turn it into an
       # integer
@@ -48,7 +48,7 @@ module NoCms::Blocks
       return values if values
 
       # If there was nothing in the cache then we try to get the object ids
-      field_ids = self.container.fields_info.symbolize_keys["#{field}_ids".to_sym]
+      field_ids = self.container.fields_info.symbolize_keys[id_field]
 
       # Hstore serializes every field as a string, so we have to turn "[1, 2]"
       # to an actual array of integers
@@ -58,7 +58,7 @@ module NoCms::Blocks
 
       # If there's any id we try to get them from the database
       if field_ids.blank?
-        []
+        field_config[:type].none
       else
         values = field_config[:type].where(id: field_ids)
         self.container.cached_objects[field.to_sym] = values
@@ -83,7 +83,7 @@ module NoCms::Blocks
         # We save in the objects cache the new value
         self.container.cached_objects[field.to_sym] = value
         # and then we store the new id in the fields_info hash
-        self.container.fields_info["#{field}_id".to_sym] = value.nil? ? nil : value.id
+        self.container.fields_info[id_field] = value.nil? ? nil : value.id
       else
         raise ArgumentError.new "Hash, ActiveRecord or nil expected for #{field} attribute"
       end
@@ -123,8 +123,28 @@ module NoCms::Blocks
         end
       end
 
-      self.container.fields_info["#{field}_ids".to_sym] = self.container.cached_objects[field.to_sym].map(&:id)
+      self.container.fields_info[id_field] = self.container.cached_objects[field.to_sym].map(&:id)
 
     end
+
+    ##
+    # Active Record duplicate behaviour.
+    #
+    # If the field value is empty in the original block we just leave it empty
+    # in this block. Otherwise we fall to the default behaviour.
+    #
+    # This is due to the bug that caused the creation of new objects from nil
+    # records in the original block.
+    def duplicate
+
+      # We look for the _id or _ids field and also check wether we have the
+      # object in the cached obects (in case one has been initialized in the
+      # original block but not yet saved)
+      if !self.container.fields_info[id_field].blank? ||
+        !self.container.cached_objects[field.to_sym].blank?
+        super
+      end
+    end
+
   end
 end
