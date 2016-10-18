@@ -26,7 +26,16 @@ And creating the relationship in your model:
 
 ```ruby
 class Page
-   has_many :blocks, class_name: "NoCms::Blocks::Block
+   has_many :blocks, class_name: "NoCms::Blocks::Block"
+end
+```
+
+Also, if you plan to use `fields_for` to manage your blocks from your model's edit form (or you are going to use the admin helper provided by this gem) you are going to need to accept nested attributes by adding:
+
+```ruby
+class Page
+   has_many :blocks, class_name: "NoCms::Blocks::Block"
+   accepts_nested_attributes_for :blocks
 end
 ```
 
