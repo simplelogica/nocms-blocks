@@ -23,8 +23,16 @@ describe NoCms::Blocks::Block do
         countries_ids: [4, 87, 666]
     end
 
+    let(:block_with_blank_id_field) do
+      NoCms::Blocks::Block.create layout: 'title-long_text',
+        title: block_title,
+        body: Faker::Lorem.paragraph,
+        logo_id: ""
+    end
 
     let(:dupped_block) { block.dup }
+
+    let(:dupped_block_with_blank_id_field) { block_with_blank_id_field.dup }
 
 
     before(:all) do
@@ -86,6 +94,10 @@ describe NoCms::Blocks::Block do
 
     it "should nullify the field configured to be nullified" do
       expect(subject.body).to be_nil
+    end
+
+    it "should not crash when duplicating an Active Record with a nil id" do
+      expect(dupped_block_with_blank_id_field.logo).to be_new_record
     end
 
     it "should duplicate an Active Record field configured to be duplicated" do
