@@ -24,8 +24,8 @@ module NoCms::Blocks::Concerns
       # In the dup implementation we configure the `dup_block_when_duping_slot`
       # virtual attribute of the slot with the same value than the attribute
       # from this model. This way we propagate the configuration.
-      def dup_with_slots options = {}
-        duplicated = dup_without_slots
+      def dup
+        duplicated = super
         # We just need to dub root slots, if there are nested slots
         # will be dupped in each slot
         block_slots.roots.each do |slot|
@@ -36,8 +36,6 @@ module NoCms::Blocks::Concerns
         end
         duplicated
       end
-      alias_method_chain :dup, :slots
-
     end
 
   end

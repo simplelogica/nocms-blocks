@@ -177,6 +177,19 @@ module NoCms
           end
 
           ##
+          # Implementing the respond_to_missing? so respond_to? also check for
+          # the methods responded via the method_missing.
+          # This also solves an issue with attributes not assigned in rails 5.
+          #
+          # We just check that there's a field. If there's not then we delegate
+          # in the super implementation.
+          def respond_to_missing? method_name, include_private = false
+            # We get the name of the field stripping out the '=' for writers
+            field = method_name.to_s.gsub(/\=$/, '')
+            has_field?(field) || super
+          end
+
+          ##
           # In this missing method we check wether we're asking for one field
           # in which case we will read or write it.
           #
