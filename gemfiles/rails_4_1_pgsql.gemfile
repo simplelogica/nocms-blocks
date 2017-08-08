@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 gem "pg"
-gem "rails", "4.1.14"
+gem "rails", "4.1.16"
 
 group :development, :test do
   gem "pry-rails"
@@ -27,4 +27,4 @@ group :test do
   gem "generator_spec"
 end
 
-gemspec :path => "../"
+gemspec path: "../"

@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "CHANGELOG", "LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", ">= 4.0.0", '< 5.1'
-  s.add_dependency "activeresource", ">= 4.0.0", '< 5.1'
+  s.add_dependency "rails", ">= 4.0.0", '< 5.2'
+  s.add_dependency "activeresource", ">= 4.0.0", '< 5.2'
   s.add_dependency "globalize", '>= 4.0.0', '< 5.2'
   s.add_dependency "awesome_nested_set", '>= 3.0.0', '< 3.2'
 

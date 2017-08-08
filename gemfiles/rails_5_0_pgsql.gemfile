@@ -3,11 +3,10 @@
 source "https://rubygems.org"
 
 gem "pg"
-gem "rails", "5.0.0"
-gem "globalize", :git => "git@github.com:globalize/globalize.git", :branch => "master"
-gem "rails-observers", :github => "rails/rails-observers"
-gem "activeresource", :github => "rails/activeresource"
-gem "activesupport", "~> 5.0.0"
+gem "rails", "5.0.5"
+gem "globalize", git: "git@github.com:globalize/globalize.git", branch: "master"
+gem "rails-observers", github: "rails/rails-observers"
+gem "activeresource", github: "rails/activeresource"
 gem "awesome_nested_set", "~> 3.1.1"
 
 group :development, :test do
@@ -32,4 +31,4 @@ group :test do
   gem "generator_spec"
 end
 
-gemspec :path => "../"
+gemspec path: "../"
