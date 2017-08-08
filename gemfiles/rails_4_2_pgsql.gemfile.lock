@@ -2,10 +2,10 @@ PATH
   remote: ../
   specs:
     nocms-blocks (1.1.4)
-      activeresource (>= 4.0.0, < 5.1)
+      activeresource (>= 4.0.0, < 5.2)
       awesome_nested_set (>= 3.0.0, < 3.2)
       globalize (>= 4.0.0, < 5.2)
-      rails (>= 4.0.0, < 5.1)
+      rails (>= 4.0.0, < 5.2)
 
 GEM
   remote: https://rubygems.org/
