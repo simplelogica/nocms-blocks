@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "mysql2"
+gem "mysql2", "~> 0.3.10"
 gem "rails", "4.0.13"
 
 group :development, :test do
@@ -27,4 +27,4 @@ group :test do
   gem "generator_spec"
 end
 
-gemspec :path => "../"
+gemspec path: "../"

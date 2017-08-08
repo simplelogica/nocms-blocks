@@ -27,4 +27,4 @@ group :test do
   gem "generator_spec"
 end
 
-gemspec :path => "../"
+gemspec path: "../"
