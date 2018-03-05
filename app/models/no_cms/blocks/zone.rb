@@ -22,7 +22,7 @@ class NoCms::Blocks::Zone
   # We can also filter the layouts for a certain level
   def allowed_layouts nest_level = nil
 
-    @allowed_layouts = [config[:blocks], @template.allowed_layouts].compact.flatten.uniq
+    @allowed_layouts = [config[:blocks], config[:lazy_blocks], @template.allowed_layouts].compact.flatten.uniq
     @allowed_layouts = NoCms::Blocks.block_layouts.keys if @allowed_layouts.blank?
     @allowed_layouts = @allowed_layouts.select do |layout_name|
       layout = NoCms::Blocks.block_layouts[layout_name]
