@@ -19,6 +19,10 @@ module NoCms
         # We include the slot in the locals option
         options[:locals] ||= {}
         options[:locals][:slot] = block_slot
+        #check if block is lazy
+        options[:lazy_block] =  block_slot.template_zone_config.
+                                config[:lazy_blocks].
+                                include?(block_slot.block.template)
 
         render_block block_slot.block, options
       end
@@ -27,8 +31,7 @@ module NoCms
         return if block.draft && !options[:force_render_draft]
         # If we don't have any option about cache enabled then we ask the block
         options[:cache_enabled] = block.cache_enabled unless options.has_key? :cache_enabled
-
-        block_template = block.to_partial_path
+        block_template = options[:lazy_block] ? block.to_skeleton_path : block.to_partial_path
         options[:template_layout] = (block.layout_config.config[:template_layout] || "block" rescue "block")
 
         # We search for the partial. In order to set default if render do not exists
@@ -38,7 +41,6 @@ module NoCms
 
         locals = options[:locals] || {}
         locals[:block] = block
-
         # And now decide if we use cache or not
         if options[:cache_enabled]
           Rails.cache.fetch cache_key_for_blocks(block, block_template, options) do

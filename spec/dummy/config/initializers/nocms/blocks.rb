@@ -28,6 +28,7 @@ NoCms::Blocks.configure do |config|
   # By default the no_cms/blocks/blocks folder will be used, but you can
   # customize it to fix better in your views structure (e.g: my_app/blocks)
   # config.front_partials_folder = 'no_cms/blocks/blocks'
+  # config.front_skeletons_folder = 'no_cms/blocks/blocks/skeletons'
 
   # Route inside your app/views/ folder where the block partial files for
   # amdinistration will be located.

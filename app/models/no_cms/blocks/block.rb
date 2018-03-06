@@ -113,6 +113,16 @@ module NoCms::Blocks
       "#{NoCms::Blocks.admin_partials_folder}/#{self.template}"
     end
 
+
+    ##
+    # Method that will define skeleton path in the public views
+    # It uses the engine configuration to read the partials folder and
+    # then add the skeleton template
+    def to_skeleton_path
+      skeleton_template = self.respond_to?(:skeleton_template) ? self.skeleton_template : "default"
+      "#{NoCms::Blocks.front_skeletons_folder}/#{skeleton_template}"
+    end
+
     ##
     # Notifies the block slots that the block has changed.
     def touch_slots
