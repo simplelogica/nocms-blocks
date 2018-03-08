@@ -9,7 +9,6 @@ module NoCms
       # the object container of the slot.
       def render_block_slot block_slot, options= {}
         return '' if block_slot.block.nil?
-
         # if the initial_cache_key param is blank we use the blockslot cache
         # key. Othwersise we combine the blockslot cache key with the param
         options[:initial_cache_key] = options[:initial_cache_key].blank? ?
@@ -20,7 +19,7 @@ module NoCms
         options[:locals] ||= {}
         options[:locals][:slot] = block_slot
         #check if block is lazy
-        options[:lazy_block] =  block_slot.template_zone_config.
+        options[:lazy_block] = !options[:lazy_block].nil? ? options[:lazy_block] : block_slot.template_zone_config.
                                 config[:lazy_blocks].
                                 include?(block_slot.block.template)
 
