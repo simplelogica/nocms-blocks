@@ -77,6 +77,10 @@ class NoCms::Blocks::Layout
     config[:template]
   end
 
+  def css_templates
+    config[:css_templates]
+  end
+
   def allow_nested_blocks
     config.has_key?(:allow_nested_blocks) ?
       config[:allow_nested_blocks] :
