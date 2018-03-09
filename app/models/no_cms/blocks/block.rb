@@ -26,8 +26,8 @@ module NoCms::Blocks
     ##
     # Get CSS files relative path for the current block
     def css_files
-      self.css_templates.map do |css_template|
-        "#{NoCms::Blocks.css_blocks_folder}/#{self.css_template}"
+      layout_config.css_templates.map do |css_template|
+        "#{NoCms::Blocks.css_blocks_folder}/#{self.layout}/#{css_template}"
       end
     end
 
