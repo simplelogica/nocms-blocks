@@ -23,6 +23,15 @@ module NoCms::Blocks
       layout_config.fields
     end
 
+    ##
+    # Get CSS files relative path for the current block
+    def css_files
+      self.css_templates.map do |css_template|
+        "#{NoCms::Blocks.css_blocks_folder}/#{self.css_template}"
+      end
+    end
+
+
     validates :layout, presence: true
     validate :validate_block_layout
 
