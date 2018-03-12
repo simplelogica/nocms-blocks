@@ -21,7 +21,7 @@ module NoCms
         #check if block is lazy
         options[:lazy_block] = !options[:lazy_block].nil? ? options[:lazy_block] : block_slot.template_zone_config.
                                 config[:lazy_blocks].
-                                include?(block_slot.block.template)
+                                include?(block_slot.block.template) rescue false #Si no tenemos el atributo lazy block lanza excepción
 
         render_block block_slot.block, options
       end
