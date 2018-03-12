@@ -27,7 +27,8 @@ module NoCms::Blocks
     # Get CSS files relative path for the current block
     def css_files
       layout_config.css_templates.map do |css_template|
-        "#{NoCms::Blocks.css_blocks_folder}/#{self.layout}/#{css_template}"
+        media_type = css_template.split("_").last
+        ["#{NoCms::Blocks.css_blocks_folder}/#{self.layout}/#{css_template}", NoCms::Blocks.send("css_mediaquery_#{media_type}")]
       end
     end
 
