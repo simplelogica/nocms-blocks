@@ -22,8 +22,8 @@ module NoCms
         #Si no tenemos el atributo lazy block  en la configuración de bloqueslanza excepción
         ##Solo los bloques padre serán los que se muestren como bloques lazy
         options[:lazy_block] = (!options[:lazy_block].nil? ? options[:lazy_block] : block_slot.template_zone_config.
-                                config[:lazy_blocks].
-                                include?(block_slot.block.template) rescue false) if block_slot.depth == 0
+                                config[:lazy_blocks].map(&:to_s).
+                                include?(block_slot.block.layout) rescue false) if block_slot.depth == 0
 
         render_block block_slot.block, options
       end
