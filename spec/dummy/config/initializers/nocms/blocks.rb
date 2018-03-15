@@ -94,10 +94,11 @@ NoCms::Blocks.configure do |config|
       zones: {
         header: {
           blocks: [:header1],
-          lazy_blocks: [:header2]
+          lazy_blocks: [:header2, :mixed_lazy_block]
         },
         body: {
-          blocks: [:body]
+          blocks: [:body, :mixed_lazy_block],
+          lazy_blocks: [ ]
         },
         footer: {
         }

@@ -20,6 +20,10 @@ describe NoCms::Blocks::Block do
         'general2' => {
           template: 'general2',
           fields: { }
+        },
+        'mixed_lazy_block' => {
+          template: 'mixed_lazy_block',
+          fields: { }
         }
       }
     end
@@ -34,7 +38,7 @@ describe NoCms::Blocks::Block do
 
   shared_examples_for "recognizable lazy block" do
     it "should get recognized" do
-      expect(slot.template_zone_config.config[:lazy_blocks].include?(block.template)).to eq should_be_lazy
+      expect(slot.template_zone_config.config[:lazy_blocks].map(&:to_s).include?(block.template)).to eq should_be_lazy
     end
   end
 
@@ -68,6 +72,23 @@ describe NoCms::Blocks::Block do
   context "when a block in the whole template is lazy" do
     let(:layout) { 'general1' }
     let(:should_be_lazy) { false }
+
+    it_behaves_like "recognizable lazy block"
+
+  end
+
+  context "when a mixed block is in a zone where it's lazy" do
+    let(:layout) { 'mixed_lazy_block' }
+    let(:should_be_lazy) { true }
+
+    it_behaves_like "recognizable lazy block"
+
+  end
+
+  context "when a mixed block is in a zone where it's not lazy" do
+    let(:layout) { 'mixed_lazy_block' }
+    let(:should_be_lazy) { false }
+    let(:zone) { 'body' }
 
     it_behaves_like "recognizable lazy block"
 
