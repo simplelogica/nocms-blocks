@@ -28,7 +28,8 @@ module NoCms::Blocks
     def css_files
       layout_config.css_templates.map do |css_template|
         media_type = css_template.split("_").last
-        ["#{NoCms::Blocks.css_blocks_folder}/#{self.layout}/#{css_template}", NoCms::Blocks.send("css_mediaquery_#{media_type}")]
+        media_query = NoCms::Blocks.send("css_mediaquery_#{media_type}") if NoCms::Blocks.respond_to?("css_mediaquery_#{media_type}")
+        ["#{NoCms::Blocks.css_blocks_folder}/#{self.layout}/#{css_template}", media_query]
       end
     end
 
