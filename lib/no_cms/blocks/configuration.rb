@@ -11,6 +11,7 @@ module NoCms
     config_accessor :css_mediaquery_mobile
     config_accessor :css_mediaquery_tablet
     config_accessor :css_mediaquery_desktop
+    config_accessor :css_mediaquery_all
     config_accessor :admin_partials_folder
     config_accessor :serializers
     config_accessor :default_serializer
@@ -59,6 +60,7 @@ module NoCms
     self.css_mediaquery_mobile    = 'only screen and (max-width: 767px)'
     self.css_mediaquery_tablet    = 'only screen and (min-width: 768px) and (max-width: 1024px)'
     self.css_mediaquery_desktop   = 'only screen and (min-width: 1025px)'
+    self.css_mediaquery_all       = 'All'
 
     self.serializers = {
       "DateTime" => "NoCms::Blocks::DateSerializer",
