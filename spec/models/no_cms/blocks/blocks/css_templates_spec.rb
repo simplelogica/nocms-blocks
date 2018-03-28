@@ -35,6 +35,7 @@ describe NoCms::Blocks::Block do
         NoCms::Blocks.css_mediaquery_desktop,
         NoCms::Blocks.css_mediaquery_mobile,
         NoCms::Blocks.css_mediaquery_tablet,
+        NoCms::Blocks.css_mediaquery_all,
         nil,
         nil
       ]
