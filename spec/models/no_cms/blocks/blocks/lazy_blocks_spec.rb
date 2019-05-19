@@ -45,7 +45,7 @@ describe NoCms::Blocks::Block do
   end
 
 
-  context "when a block in the whole template is lazy" do
+  context "when a block in the whole template is not lazy" do
     let(:layout) { 'general1' }
     let(:should_be_lazy) { false }
 
