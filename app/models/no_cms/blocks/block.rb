@@ -131,8 +131,7 @@ module NoCms::Blocks
     # It uses the engine configuration to read the partials folder and
     # then add the skeleton template
     def to_skeleton_path
-      skeleton_template = self.respond_to?(:skeleton_template) ? self.skeleton_template : "default"
-      "#{NoCms::Blocks.front_skeletons_folder}/#{skeleton_template}"
+      "#{NoCms::Blocks.front_skeletons_folder}/#{layout_config.skeleton_template}"
     end
 
     ##
