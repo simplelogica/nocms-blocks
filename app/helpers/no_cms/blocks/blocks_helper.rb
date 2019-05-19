@@ -23,7 +23,7 @@ module NoCms
         unless options.has_key?(:lazy_block) ||
           block_slot.depth != 0 # If it's a child block it won't be lazy either
 
-          options[:lazy_block] = block_slot.template_zone_config.is_lazy_layout?.include?(block_slot.block.layout))
+          options[:lazy_block] = block_slot.template_zone_config.is_lazy_layout?(block_slot.block.layout)
         end
 
         render_block block_slot.block, options
