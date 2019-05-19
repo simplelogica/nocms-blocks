@@ -5,13 +5,13 @@ class NoCms::Blocks::Zone
   attr_reader :config
   attr_reader :name
 
-  DEFAULT_FIELD_CONFIGURATION = { translated: true, duplicate: :dup }
+  DEFAULT_ZONE_CONFIGURATION = { blocks: [ ], lazy_blocks: [ ] }
 
   ##
   # We receive a name, a zone configuration hash like the ones defined in the configuration
   # files and the template object associated
   def initialize name, config, template
-    @config = config
+    @config = DEFAULT_ZONE_CONFIGURATION.merge config
     @name = name
     @template = template
   end
