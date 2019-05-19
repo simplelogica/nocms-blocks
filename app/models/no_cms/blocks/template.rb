@@ -25,6 +25,13 @@ class NoCms::Blocks::Template
   end
 
   ##
+  # This method checks that the layout sent as param is configured as a lazy block in the whole template
+  def is_lazy_layout? layout
+    config[:lazy_blocks].map(&:to_s).include?(layout)
+  end
+
+
+  ##
   # This method returns an array of the zones contained by this template with
   # its configuration
   def zones
