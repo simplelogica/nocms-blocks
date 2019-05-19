@@ -25,6 +25,7 @@ describe NoCms::Blocks::Block do
         'title-long_text_desktop',
         'title-long_text_mobile',
         'title-long_text_tablet',
+        'title-long_text_all',
         'title-long_text_global', # this should test if there's no valid mediaquery name we don't break
         'title-global' # this should test if there's no mediaquery name we don't break
       ]
