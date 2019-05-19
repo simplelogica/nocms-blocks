@@ -18,12 +18,10 @@ module NoCms
         # We include the slot in the locals option
         options[:locals] ||= {}
         options[:locals][:slot] = block_slot
-        #check if block is lazy
-        #Si no tenemos el atributo lazy block  en la configuración de bloqueslanza excepción
+        # Check if block is lazy
         ##Solo los bloques padre serán los que se muestren como bloques lazy
         options[:lazy_block] = (!options[:lazy_block].nil? ? options[:lazy_block] : block_slot.template_zone_config.
-                                config[:lazy_blocks].map(&:to_s).
-                                include?(block_slot.block.layout) rescue false) if block_slot.depth == 0
+                                is_lazy_layout?.include?(block_slot.block.layout)) if block_slot.depth == 0
 
         render_block block_slot.block, options
       end

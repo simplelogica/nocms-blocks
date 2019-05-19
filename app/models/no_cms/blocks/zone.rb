@@ -32,6 +32,12 @@ class NoCms::Blocks::Zone
     @allowed_layouts
   end
 
+  ##
+  # This method checks that the layout sent as param is configured as a lazy block in this template
+  def is_lazy_layout? layout
+    config[:lazy_blocks].map(&:to_s).include? layout
+  end
+
   def to_param
     name
   end

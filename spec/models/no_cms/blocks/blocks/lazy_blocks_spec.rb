@@ -3,30 +3,6 @@ require 'spec_helper'
 describe NoCms::Blocks::Block do
 
   before do
-    NoCms::Blocks.configure do |config|
-      config.block_layouts = {
-        'header1' => {
-          template: 'header1',
-          fields: { }
-        },
-        'header2' => {
-          template: 'header2',
-          fields: { }
-        },
-        'general1' => {
-          template: 'general1',
-          fields: { }
-        },
-        'general2' => {
-          template: 'general2',
-          fields: { }
-        },
-        'mixed_lazy_block' => {
-          template: 'mixed_lazy_block',
-          fields: { }
-        }
-      }
-    end
   end
 
   let(:container) { create :slotted_page, template: 'default' }
@@ -38,7 +14,7 @@ describe NoCms::Blocks::Block do
 
   shared_examples_for "recognizable lazy block" do
     it "should get recognized" do
-      expect(slot.template_zone_config.config[:lazy_blocks].map(&:to_s).include?(block.template)).to eq should_be_lazy
+      expect(slot.template_zone_config.is_lazy_layout?(block.layout)).to eq should_be_lazy
     end
   end
 
