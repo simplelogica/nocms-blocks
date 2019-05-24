@@ -35,6 +35,7 @@ describe NoCms::Blocks::BlockSlot do
           },
           'general2' => {
             template: 'default',
+            skeleton_template: 'general2',
             fields: {
               title: :string
             }
@@ -64,7 +65,7 @@ describe NoCms::Blocks::BlockSlot do
       expect(page).to_not have_selector('.title', text: lazy_block_in_zone.title)
       expect(page).to have_selector(".skeleton.#{lazy_block_in_zone.layout}")
       expect(page).to_not have_selector('.title', text: lazy_block_in_general.title)
-      expect(page).to have_selector(".#{lazy_block_in_general.layout}")
+      expect(page).to have_selector(".skeleton-#{lazy_block_in_general.layout}")
       expect(page).to_not have_selector('.title', text: mixed_block_in_lazy_zone.title)
       expect(page).to have_selector(".skeleton.#{mixed_block_in_lazy_zone.layout}")
 
