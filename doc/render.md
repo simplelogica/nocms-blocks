@@ -67,7 +67,7 @@ english version and a `/no_cms/blocks/blocks/title_3_columns.es.html.erb` for
 the spanish one).
 
 
-#### Nested blocks
+### Nested blocks
 
 As seen before you can nest some blocks inside others.
 
@@ -91,3 +91,29 @@ A rather typical template would be:
   <% end -%>
 </div>
 ```
+
+### Lazy blocks
+
+As seen when we [defined templates and zones](./doc/templates.md) some blocks
+must be loaded not directly in the view but through some lazy loading technique,
+such as an ajax request and some front-end framework.
+
+That's why we must configure a different view for the lazy loading the block
+where we show an skeleton of the block or whatever conde is required to load it
+after the page is ready.
+
+The partial will be configured as the `skeleton_template` setting of the block
+configuration. This is not a mandatory attribute and if it's not defined it will
+take the value `default`.
+
+The folder for skeletons partials will ve configured also separately in the
+variable `NoCms::Blocks.front_skeletons_folder`. This way, you can completely
+separate your regular and your skeleton templates.
+
+The `render_block_slot` helper will check the block and template configurations
+to decide wether it must use the regular templates or the skeleton ones.
+
+You could also force it through the `render_block_slot` or the `render_block`
+helpers sending the `lazy_block` option as true.
+
+Once the skeleton is rendered, it's up to you how to manage it!
