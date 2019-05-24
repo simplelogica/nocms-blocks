@@ -33,10 +33,10 @@ describe NoCms::Blocks::Block do
 
     let(:css_mediaqueries) do
       [
-        NoCms::Blocks.css_mediaquery_desktop,
-        NoCms::Blocks.css_mediaquery_mobile,
-        NoCms::Blocks.css_mediaquery_tablet,
-        NoCms::Blocks.css_mediaquery_all,
+        NoCms::Blocks.css_mediaqueries[:desktop],
+        NoCms::Blocks.css_mediaqueries[:mobile],
+        NoCms::Blocks.css_mediaqueries[:tablet],
+        NoCms::Blocks.css_mediaqueries[:all],
         nil,
         nil
       ]
