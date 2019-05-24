@@ -58,6 +58,15 @@ module NoCms
         "#{options[:template_layout]}/#{block_template}/#{block.id}/#{block.updated_at.to_i}#{"/#{options[:initial_cache_key]}" if options[:initial_cache_key] }"
       end
 
+      ##
+      # This helper returns the stylesheet link tags for each css templates configured for the block
+      def stylesheet_link_tags_for_block block, options = {}
+        stylesheet_link_tags = block.css_files.map do |css_file, css_media|
+          stylesheet_link_tag(css_file, options.merge(media: css_media))
+        end.join('')
+
+        raw stylesheet_link_tags
+      end
     end
   end
 end

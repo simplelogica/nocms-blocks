@@ -14,7 +14,8 @@ class NoCms::Blocks::Layout
   }
 
   DEFAULT_BLOCK_CONFIGURATION = {
-    skeleton_template: 'default'
+    skeleton_template: 'default',
+    css_templates: ''
   }
 
   ##
