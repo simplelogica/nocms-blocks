@@ -11,6 +11,11 @@ class TemplateGenerator < Rails::Generators::NamedBase
     :default => "",
     :description => "Comma separated names of the layouts globally allowed in the template"
 
+  class_option :lazy_layouts,
+    :type => :string,
+    :default => "",
+    :description => "Comma separated names of the lazy_layouts globally allowed in the template"
+
   class_option :models,
     :type => :string,
     :default => "",
@@ -25,6 +30,7 @@ class TemplateGenerator < Rails::Generators::NamedBase
     end
 
     @layouts = options.layouts.split(',')
+    @lazy_layouts = options.lazy_layouts.split(',')
 
     @models = options.models.split(',')
 

@@ -6,6 +6,11 @@ NoCms::Blocks.configure do |config|
     <%- else -%>
     blocks: ["<%= @layouts.join('","')%>"],
     <%- end -%>
+    <%- if @lazy_layouts.blank? -%>
+    lazy_blocks: [],
+    <%- else -%>
+    lazy_blocks: ["<%= @lazy_layouts.join('","')%>"],
+    <%- end -%>
     <%- if @models.blank? -%>
     models: [],
     <%- else -%>
