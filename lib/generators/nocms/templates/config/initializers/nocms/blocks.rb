@@ -41,11 +41,31 @@ NoCms::Blocks.configure do |config|
   # customize it to fix better in your views structure (e.g: my_app/blocks)
   # config.front_partials_folder = 'no_cms/blocks/blocks'
 
+  # Route inside your app/views/ folder where the skeleton block partial (for
+  # lazy blocks) files will be located.
+  # By default the no_cms/blocks/blocks/skeletons folder will be used, but you can
+  # customize it to fix better in your views structure (e.g: my_app/blocks)
+  # config.front_skeletons_folder = 'no_cms/blocks/blocks/skeletons'
+
   # Route inside your app/views/ folder where the block partial files for
   # amdinistration will be located.
   # By default the no_cms/admin/blocks/blocks folder will be used, but you can
   # customize it to fix better in your views structure (e.g: my_app/blocks)
   # config.admin_partials_folder = 'no_cms/admin/blocks/blocks'
+
+
+  # Route inside the app/stylesheets folder where the CSS files for blocks will
+  # be stored
+  # self.css_blocks_folder = 'no_cms/blocks'
+
+  # Media queries configuration for the css files for blocks. This will allow
+  # you to use these suffixex in the css files names on a block and they will be
+  # instantly attached to the mediaqueries.
+  # self.css_mediaqueries = {
+  #   mobile: 'only screen and (max-width: 767px)',
+  #   tablet: 'only screen and (min-width: 768px) and (max-width: 1024px)',
+  #   desktop: 'only screen and (min-width: 1025px)', all: 'All'
+  # }
 
   # In this section we configure block layouts. It's just an array of layouts, each consisting on a hash.
   # Each layout has a series of options
