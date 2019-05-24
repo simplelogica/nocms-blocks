@@ -24,7 +24,8 @@ module NoCms::Blocks
     end
 
     ##
-    # Get CSS files relative path for the current block
+    # It returns an array of arrays with the css path and the mediaquery for
+    # each css template configured
     def css_files
       css_templates = layout_config.css_templates || []
       css_templates.map do |css_template|
