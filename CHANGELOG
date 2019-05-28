@@ -1,3 +1,27 @@
+1.2.0
+
+  - Support for rails 4.2.X, 4.1.X, 5.0.X and 5.1.X
+  - Slots for allowing to create multiple relationships between blocks and other
+    model.
+  - "locals" param for sending values from the container view to the partials
+  - Fixed bug with initial_cache_key option for render_block
+  - Templates and zones for container models and restrictions for block layouts
+    being used in the zones.
+  - Customizable folders for front and admin block partials
+  - Refactoring write/read operations in serializers
+  - Added ActiveResource support
+  - Added Date fields support
+  - Added multiple ActiveRecord/ActiveResource fields
+  - Added appraisals to test support with PostgreSQL
+  - Configurable database serializer: Hash and JSON.
+  - Configurable database serializer: :hstore. This includes support for
+    PostgreSQL's hstore serialization.
+  - Fallback behaviour on translations.
+  - Added template_layout parameter in block configuration.
+  - Added circleci support
+  - Added lazy block support (for loading block via Ajax)
+  - Added support for isolated CSS for the blocks
+
 1.1.3
 
   - Fixed bugs on block's translations

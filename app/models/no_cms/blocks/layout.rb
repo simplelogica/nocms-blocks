@@ -6,13 +6,23 @@ class NoCms::Blocks::Layout
 
   attr_reader :config
 
-  DEFAULT_FIELD_CONFIGURATION = { translated: true, duplicate: :dup }
+  DEFAULT_FIELD_CONFIGURATION = { translated: {
+      fallback_on_blank: NoCms::Blocks.i18n_fallback_on_blank
+    },
+    duplicate: :dup,
+    multiple: false
+  }
+
+  DEFAULT_BLOCK_CONFIGURATION = {
+    skeleton_template: 'default',
+    css_templates: ''
+  }
 
   ##
   # We receive a configuration hash like the ones defined in the configuration
   # files
   def initialize config
-    @config = config
+    @config = DEFAULT_BLOCK_CONFIGURATION.merge config
   end
 
   ##
@@ -46,8 +56,11 @@ class NoCms::Blocks::Layout
     field_name = field_name.to_sym
     if fields.has_key? field_name
       fields[field_name]
-    else
+    elsif field_name.to_s.ends_with? "_id"
       field_name = field_name.to_s.gsub(/\_id$/, '').to_sym
+      fields[field_name] if fields.has_key? field_name
+    elsif field_name.to_s.ends_with? "_ids"
+      field_name = field_name.to_s.gsub(/\_ids$/, '').pluralize.to_sym
       fields[field_name] if fields.has_key? field_name
     end
   end
@@ -67,6 +80,14 @@ class NoCms::Blocks::Layout
 
   def template
     config[:template]
+  end
+
+  def skeleton_template
+    config[:skeleton_template]
+  end
+
+  def css_templates
+    config[:css_templates]
   end
 
   def allow_nested_blocks

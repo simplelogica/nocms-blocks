@@ -1,0 +1,31 @@
+NoCms::Blocks.configure do |config|
+
+  config.templates[:<%= file_name %>] = {
+    <%- if @layouts.blank? -%>
+    blocks: [],
+    <%- else -%>
+    blocks: ["<%= @layouts.join('","')%>"],
+    <%- end -%>
+    <%- if @lazy_layouts.blank? -%>
+    lazy_blocks: [],
+    <%- else -%>
+    lazy_blocks: ["<%= @lazy_layouts.join('","')%>"],
+    <%- end -%>
+    <%- if @models.blank? -%>
+    models: [],
+    <%- else -%>
+    models: ["<%= @models.join('","')%>"],
+    <%- end -%>
+    zones: {
+      <%- @zones.each do |zone_name, layouts| -%>
+      <%= zone_name %>: {
+        <%- if layouts.blank? -%>
+        blocks: []
+        <%- else -%>
+        blocks: ["<%= layouts.join('","')%>"]
+        <%- end -%>
+      },
+      <%- end -%>
+    }
+  }
+end

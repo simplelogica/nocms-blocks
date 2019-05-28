@@ -4,10 +4,41 @@ NoCms::Blocks.configure do |config|
     template: '<%= name %>', # This is the template of this block,
                                     # used as a partial both in the front
                                     # and the admin (if you use the nocms-admin gem)
+    skeleton_template: '<%= name %>', # This is the skeleton template of this block,
+                                    # used as a partial when the lazy load
+                                    # option is enabled. If not set, the default
+                                    # value is 'default'
+    template_layout: 'block' # This is the partial used as layout
+                             # the template is rendered inside this template_layout
+    css_templates: [  # Custom css stylesheets for the block. You should crete them
+                      # and include them in the asset pipeline manually
+      # '<%= name %>_desktop', # CSS file for desktop
+      # '<%= name %>_mobile', # CSS file for mobile
+      # '<%= name %>_tablet', # CSS file for tablet
+      # '<%= name %>_all' # CSS file for all devices
+    ],
     fields: { # This is the list of fields a block with this layout would have
       text: :string,
   #   long_text: :text,
-  #   image: Image, # You may use another ActiveRecord classes of your own
+  #   image: Image, # You may use another ActiveRecord or ActiveResource classes
+  #                 # of your own
+  #   starts_at: Date, # You can also use Date / Time / DateTime classes
+  #   column: { # You can configure the block with more options than just
+  #                # the type of the field. If you use the "quick" configuration
+  #                # all other settings will get the default value
+  #         type: :text, # The type of the field, just as explained before
+  #         translated: # If the field must store different values for each
+  #                     # translation.
+  #                     true # By default every field is translated
+  #                     false # But you can disable it.
+  #                     { fallback_on_blank: NoCms::Blocks.i18n_fallback_on_blank } # or configure the fallback on blank behaviour
+  #         duplicate: :dup, # behaviour of the field when the block is duplicated.
+  #                          # It can be set to :dup (it executes the dup method),
+  #                          # :nullify (it sets the field to nil) or :link (it
+  #                          # uses the same exact object)
+  #         multiple: false # Configures whether the field stores only one
+  #                         # object or more than one.
+  #       }
     },
     allow_nested_blocks: true, # A block with this layout may include a list of nested blocks
                                # This setting is actually used by nocms-admin gem to show

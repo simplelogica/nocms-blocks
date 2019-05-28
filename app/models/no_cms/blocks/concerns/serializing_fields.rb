@@ -6,7 +6,11 @@ module NoCms
 
         self.included do
 
-          serialize :fields_info, Hash
+          # Since Rails 4.0 we don't need to 'serialize' the column when using
+          # hstore
+          unless NoCms::Blocks.database_serializer == :hstore
+            serialize :fields_info, NoCms::Blocks.database_serializer
+          end
 
           after_initialize :set_blank_fields
 
@@ -94,130 +98,58 @@ module NoCms
           end
 
           ##
-          # Returns the stored value of the field for this block.
+          # This method returns the field Serializer attached to the `field`
+          # passed as parameter.
           #
-          # If the field is not present in the layout configuration it returns
-          # nil.
-          #
-          # If the field is an Active Record object but it's not present on our
-          # objects cache we fetch it from the database using the id stored in
-          # the #{field}_id field.
-          #
-          # If it's an Active Record object but we don't have the #{field}_id
-          # field then it creates (with new, not with create) a new one and
-          # stores it in the objects cache. Later, if the block is saved, this
-          # object will be saved too.
-          def read_field field
-            raise  NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
+          # To avoid calculating the same several times we cache the results in
+          # a field_serializers variable, so the serializer is only calculated
+          # the first time.
+          def field_serializer field
+            # We try if the serializer is already cachd
+            @field_serializers ||= {}
+            @field_serializers[field] if @field_serializers.has_key? field
 
-            # first, we get the value
-            value = fields_info[field.to_sym] ||
-                      # or we get it from the cached objects
-                      @cached_objects[field.to_sym]
+            # If it's not we obtain the field type
+            field_class = field_type(field)
 
-            # If value is still nil, but the field exists we must get the object
-            # from the database
-            if value.nil?
-              field_type = field_type(field)
-              field_id = fields_info["#{field}_id".to_sym]
-              unless field_id.nil?
-                value = field_type.find(field_id)
-                @cached_objects[field.to_sym] = value
+            # If the field is an object then we check which serializer is the
+            # right one. We iterate through the configured serializers and get
+            # the first one attached to a parent class of the field (e.g if we
+            # have an ActiveRecordModel it will get the serializer configured
+            # for ActiveRecord::Base)
+            if field_class.is_a? Class
+              _, serializer = NoCms::Blocks.serializers.detect do |serialized_class, _|
+                field_class <= serialized_class.constantize
               end
             end
 
-            # If value is still nil, and the field_type is an ActiveRecord
-            # class, then we build a new one
-            if value.nil? && field_type.is_a?(Class)
-              value = field_type.new
-              @cached_objects[field.to_sym] = value
-            end
-            value
+            # if we have no serializer, then we get the default one
+            serializer ||= NoCms::Blocks.default_serializer
+
+            # And cache it and return it
+            @field_serializers[field] = serializer.constantize.new field, layout_config.field(field), self
           end
 
           ##
-          # This method stores the parameter value into the corresponding field.
-          #
-          # If the field is an Active Record object then we load it into the
-          # objects cache and assign it the value through an assign_attributes.
-          # This solves the scenario of a nested form where a hash is passed as
-          # the value of the field.
+          # This method uses the field serializer to read a field
+          def read_field field
+            raise  NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
+            field_serializer(field.to_sym).read
+          end
+
+          ##
+          # This method uses the field serializer to write a field and store
+          # its value.
           def write_field field, value
             raise NoMethodError.new("field #{field} is not defined in the block layout") unless has_field?(field)
-            field_type = field_type field
-            # If field type is a model then we update the cached object
-            if field_type.is_a?(Class) && field_type < ActiveRecord::Base
-
-              # We read the object and assign it the attributes attributes.
-              # Since we use the read_field method it will take into account
-              # if the AR object needs to be build
-              read_field(field).assign_attributes value
-
-              # Even if the fields_info has not changed we need to store the
-              # modification, so an association may be saved in cascade (e.g.
-              # the translation of a block would not be saved if we don't force
-              # this)
-              fields_info_will_change!
-            else
-            # If it's not a model then we merge with the previous value
-
-              # when updating through an object (i.e. the page updates through
-              # nested attributes) fields_info[field.to_sym] = value doesn't
-              # work. Kudos to Rubo for this fix
-              self.fields_info = fields_info.nil? ?
-                { field.to_sym => value } :
-                fields_info.merge(field.to_sym => value)
-
-            end
+            field_serializer(field.to_sym).write value
           end
 
           ##
-          # This method duplicates a field and stores its value.
-          #
-          # It takes into account that the field may be an AR object and updates
-          # the cached objects.
-          #
-          # We have different options of duplication depending on the field's
-          # configuration:
-          #
-          #  * duplication: It's the default behaviour. It just performs a dup
-          #    of the field and expects the attached object to implement dup in
-          #    a proper way.
-          #
-          #  * nullify: It doesn't dup the field, it empties it. It's useful for
-          #    objects we don't want to duplicate, like images in S3 (it can
-          #    raise a timeout exception when duplicating).
-          #
-          #  * link: It doesn't dup the field but stores the same object. It's
-          #    useful in Active Record fields so we can store the same id and
-          #    not creating a duplicate of the object (e.g. if we have a block
-          #    with a related post we don't want the post to be duplicated)
+          # This method uses the field serializer to duplicate a field and store
+          # its value.
           def duplicate_field field
-            field_type = field_type field
-            field_value = read_field(field)
-
-            dupped_value = case layout_config.field(field)[:duplicate]
-              # When dupping we just dp the object and expect it has the right
-              # behaviour. If it's nil we save nil (you can't dup NilClass)
-              when :dup
-                field_value.nil? ? nil : field_value.dup
-              # When nullifying we return nil
-              when :nullify
-                nil
-              when :link
-                field_value
-            end
-
-            if field_type.is_a?(Class) && field_type < ActiveRecord::Base
-              # We save in the objects cache the dupped object
-              @cached_objects[field.to_sym] = dupped_value
-              # and then we store the new id in the fields_info hash
-              fields_info["#{field}_id".to_sym] =
-                dupped_value.nil? ? nil : dupped_value.id
-            else
-              # else we just dup it and save it into fields_info.
-              fields_info[field.to_sym] = dupped_value
-            end
+            return field_serializer(field).duplicate
           end
 
           ##
@@ -234,10 +166,27 @@ module NoCms
               #
               # When this happens if we save! the object an error is thrown and
               # we can't leave the object blank
-              if object.is_a?(ActiveRecord::Base) && object.save
+              if object.is_a? Array
+                saveable_objects = object.select{|o| o.respond_to?(:save)}
+                saveable_objects.each(&:save)
+                fields_info["#{field}_ids".to_sym] = saveable_objects.map(&:id)
+              elsif object.respond_to?(:save) && object.save
                 fields_info["#{field}_id".to_sym] = object.id
               end
             end
+          end
+
+          ##
+          # Implementing the respond_to_missing? so respond_to? also check for
+          # the methods responded via the method_missing.
+          # This also solves an issue with attributes not assigned in rails 5.
+          #
+          # We just check that there's a field. If there's not then we delegate
+          # in the super implementation.
+          def respond_to_missing? method_name, include_private = false
+            # We get the name of the field stripping out the '=' for writers
+            field = method_name.to_s.gsub(/\=$/, '')
+            has_field?(field) || super
           end
 
           ##
@@ -246,45 +195,92 @@ module NoCms
           #
           # If there's no field we just let it go to super.
           def method_missing(m, *args, &block)
-            # We get the name of the field stripping out the '=' for writers
-            field = m.to_s
-            write_accessor = field.ends_with? '='
-            field.gsub!(/\=$/, '')
+            begin
+              # We get the name of the field stripping out the '=' for writers
+              field = m.to_s
+              write_accessor = field.ends_with? '='
+              field.gsub!(/\=$/, '')
 
+              # If we don't have this field then we send it to super and pry
+              if field == 'layout' || !has_field?(field)
+                super
+              # If this field exists, and it's not translated, then we do whatever
+              # we need to do
+              elsif !layout_config.field(field)[:translated]
+                write_accessor ?
+                  write_field(field, args.first) :
+                  read_field(field.to_sym)
 
-            # If we don't have this field then we send it to super and pry
-            if field == 'layout' || !has_field?(field)
-              super
-            # If this field exists, and it's not translated, then we do whatever
-            # we need to do
-            elsif !layout_config.field(field)[:translated]
-              write_accessor ?
-                write_field(field, args.first) :
-                read_field(field.to_sym)
+                # If it's translated but we are not in the translation (we check
+                # this by checking if we have translations) then we use the
+                # default translation to obtain it
+              elsif !self.is_translation? &&
+                  layout_config.field(field)[:translated]
 
-            # If it's translated but we are not in the translation (we check
-            # this by checking if we have translations) then we use the
-            # default translation to obtain it
-            elsif !self.is_translation? &&
-                layout_config.field(field)[:translated]
+                # When we are creating the block we still have no translation
+                # and we need to fill the layout. Otherwise no write or read
+                # field will work
+                translation.layout = self.layout
+                # If we are reading an i18n field we have to implement the whole
+                # fallback behaviour
+                if write_accessor
+                  translation.write_field(field, args.first)
+                else
+                  read_value = translation.read_field(field.to_sym)
+                  if valid_read_value?(read_value, layout_config.field(field))
+                      read_value
+                  else
 
-              # When we are creating the block we still have no translation
-              # and we need to fill the layout. Otherwise no write or read
-              # field will work
-              translation.layout = self.layout
+                    # fallbacks can be a hash pointing to which locale shoud
+                    # each locale fallback. If it's a hash then we get the the
+                    # fallbacks from it, else we will trust it's directly the
+                    # locale itself
+                    fallback_locales = NoCms::Blocks.i18n_fallbacks.is_a?(Hash) ?
+                      NoCms::Blocks.i18n_fallbacks[Globalize.locale] :
+                      NoCms::Blocks.i18n_fallbacks
 
-              write_accessor ?
-                translation.write_field(field, args.first) :
-                translation.read_field(field.to_sym)
+                    # If we still have no locale, we use the default one
+                    fallback_locales ||= I18n.default_locale
 
-            # If it's translated and we are in the translation
-            elsif self.is_translation? &&
-                layout_config.field(field)[:translated]
-              # Write or read field will work
-              write_accessor ?
-                write_field(field, args.first) :
-                read_field(field.to_sym)
+                    # Then we turn tle locales into an array and iterate through
+                    # them to get a value
+                    fallback_locales = [ fallback_locales ] unless fallback_locales.is_a? Array
+
+                    fallback_locales.detect do |locale|
+                      read_value = translation_for(locale).read_field(field.to_sym)
+                      valid_read_value?(read_value, layout_config.field(field))
+                    end
+                    read_value
+                  end
+                end
+              # If it's translated and we are in the translation
+              elsif self.is_translation? &&
+                  layout_config.field(field)[:translated]
+                # Write or read field will work
+                write_accessor ?
+                  write_field(field, args.first) :
+                  read_field(field.to_sym)
+              end
+            rescue StandardError => e
+              Rails.logger.error "Error while accessing #{m}"
+              Rails.logger.error e.message
+              Rails.logger.error e.backtrace.join("\n")
+              raise e
             end
+          end
+
+          ##
+          # A read value is valid (we must not use the fallback in other translation)
+          # when:
+          #  1. The fallback behaviour is disabled OR
+          #  2. The value is not blank
+          #  3. The value is blank (not nil) AND we have disabled the fallbacks on blank
+          private def valid_read_value? read_value, field_configuration
+            fallback_on_blank = field_configuration[:translated][:fallback_on_blank] if field_configuration[:translated].is_a?(Hash)
+            fallback_on_blank = NoCms::Blocks.i18n_fallback_on_blank if fallback_on_blank.nil?
+            !NoCms::Blocks.i18n_fallbacks_enabled ||
+            !read_value.blank? && (!read_value.id.nil? rescue true) ||
+            (read_value.blank? && !read_value.nil? && !fallback_on_blank && (!read_value.id.nil? rescue true))
           end
 
           ##
@@ -303,15 +299,17 @@ module NoCms
             self.layout = new_layout unless new_layout.nil?
 
             Rails.logger.info "Searching #{new_attributes.keys.inspect} fields"+
-              "in #{self.layout} layout"
+              " in #{self.layout} layout #{is_translation? ? 'translation' : ''}"
 
             # And now separate fields and attributes
             fields = new_attributes.select{|k, _| has_field? k }.symbolize_keys
             # Now we filter those fields we must not manage because we are (or
             # not) in a translation. I.e: if we have a translated field, but we
             # are not in a translation then we let the translated field go and
-            # not manage it here
-            fields.select!{|k, _| layout_config.field(k)[:translated] == is_translation? }
+            # not manage it here.
+            # Notice that :translated can be a hash, not a boolean. That's why
+            # we perforn a double negation, to turn it into a boolean.
+            fields.select!{|k, _| !!layout_config.field(k)[:translated] == is_translation? }
 
             # We purge the fields from the attributes
             new_attributes.reject!{|k, _| fields.has_key? k }
@@ -329,6 +327,8 @@ module NoCms
                 end
               end
             end
+
+            Rails.logger.info "Assigning #{new_attributes.inspect} through Rails"
 
             super(new_attributes)
 
@@ -353,6 +353,11 @@ module NoCms
           # duplication through the duplicate_self method.
           def dup
             new_self = super
+
+            # We need to set the blank fields because in Rails 4.0 and 4.1, when
+            # using hstore, the original fields_info hash was not symbolized and
+            # errors were detected with linked models
+            new_self.send :set_blank_fields
 
             # Now we recover all the fields that must be duplicated here
             fields_to_duplicate.keys.each do |field_to_duplicate|
@@ -382,7 +387,7 @@ module NoCms
           # nullfied we will return the field here and the duplicate_field will
           # manage it properly.
           def fields_to_duplicate
-            fields_configuration
+            fields_configuration.select{|k, config| !!config[:translated] == is_translation? }
           end
 
           ##
@@ -400,6 +405,16 @@ module NoCms
           # Initializes both the fields_info hash and the objects cache.
           def set_blank_fields
             @fields_info ||= {}
+            # When we are not serializing to Hash we need to create also the
+            # field, as it's not a Hash by default.
+            #
+            # We also need to make sure that the object has the fields_info
+            # attribute. This is due to Globalize, since the object can be a
+            # strange Block::translation without any field created
+            if (NoCms::Blocks.database_serializer != Hash) && self.respond_to?(:fields_info)
+              self.fields_info ||= {}
+              self.fields_info.symbolize_keys!
+            end
             @cached_objects ||= {}
           end
 

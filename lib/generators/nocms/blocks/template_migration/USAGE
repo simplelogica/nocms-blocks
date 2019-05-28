@@ -1,0 +1,8 @@
+Description:
+    Generates the required template migration in a model passed as parameter
+
+Example:
+    rails generate template_migration Thing
+
+    This will create:
+        db/migrate/XXXX_add_template_to_thing.rb

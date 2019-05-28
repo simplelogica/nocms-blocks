@@ -11,12 +11,28 @@ describe NoCms::Blocks::Block do
         title: block_title,
         body: Faker::Lorem.paragraph,
         logo: attributes_for(:test_image),
+        slides: [attributes_for(:test_image), attributes_for(:test_image)],
         background: attributes_for(:test_image),
         header: attributes_for(:test_image)
     end
 
+    let(:block_with_ar) do
+      NoCms::Blocks::Block.create layout: 'with_country',
+        title: block_title,
+        country_id: 66,
+        countries_ids: [4, 87, 666]
+    end
+
+    let(:block_with_blank_id_field) do
+      NoCms::Blocks::Block.create layout: 'title-long_text',
+        title: block_title,
+        body: Faker::Lorem.paragraph,
+        logo_id: ""
+    end
 
     let(:dupped_block) { block.dup }
+
+    let(:dupped_block_with_blank_id_field) { block_with_blank_id_field.dup }
 
 
     before(:all) do
@@ -28,8 +44,17 @@ describe NoCms::Blocks::Block do
               title: { type: :string, translated: false },
               body: { type: :text, translated: false, duplicate: :nullify },
               logo: { type: TestImage, translated: false, duplicate: :dup },
+              slides: { type: TestImage, translated: false, duplicate: :dup, multiple: true },
               background: { type: TestImage, translated: false, duplicate: :nil },
               header: { type: TestImage, translated: false, duplicate: :link }
+            }
+          },
+          'with_country' => {
+            template: 'with_country',
+            fields: {
+              title: { type: :string, translated: false },
+              country: { type: Country, translated: false, duplicate: :link },
+              countries: { type: Country, translated: false, duplicate: :link, multiple: true }
             }
           }
         }
@@ -39,6 +64,25 @@ describe NoCms::Blocks::Block do
     before { dupped_block.save! }
 
     subject { NoCms::Blocks::Block.find dupped_block.id }
+
+    context "duplicate with :link" do
+
+      before(:each) do
+        dupped.save!
+      end
+
+      let(:dupped) do
+        block_with_ar.dup
+      end
+
+      it "should save block with Active Resource field non multiple" do
+        expect(dupped.country_id).to eq 66
+      end
+
+      it "should save block with Active Resource field multiple" do
+        expect(dupped.countries_ids).to eq [4, 87, 666]
+      end
+    end
 
     it "should have the same layout" do
       expect(subject.layout).to eq block.layout
@@ -52,9 +96,17 @@ describe NoCms::Blocks::Block do
       expect(subject.body).to be_nil
     end
 
+    it "should not crash when duplicating an Active Record with a nil id" do
+      expect(dupped_block_with_blank_id_field.logo).to be_new_record
+    end
+
     it "should duplicate an Active Record field configured to be duplicated" do
       expect(subject.logo).to_not be_new_record
       expect(subject.logo).to_not eq block.logo
+    end
+    it "should duplicate a multiple Active Record field configured to be duplicated" do
+      expect(subject.slides).to be_a ActiveRecord::Relation
+      expect(subject.slides).to_not match_array block.slides
     end
 
     it "should return a new record when an AR field is configured to nullify" do
@@ -82,6 +134,7 @@ describe NoCms::Blocks::Block do
             title: block_title_es,
             body: Faker::Lorem.paragraph,
             logo: attributes_for(:test_image),
+            slides: [attributes_for(:test_image), attributes_for(:test_image)],
             background: attributes_for(:test_image),
             header: attributes_for(:test_image)
           },
@@ -90,6 +143,7 @@ describe NoCms::Blocks::Block do
             title: block_title_en,
             body: Faker::Lorem.paragraph,
             logo: attributes_for(:test_image),
+            slides: [attributes_for(:test_image), attributes_for(:test_image)],
             background: attributes_for(:test_image),
             header: attributes_for(:test_image)
           }
@@ -109,6 +163,7 @@ describe NoCms::Blocks::Block do
               description: { type: :string, translated: false },
               body: { type: :text, duplicate: :nullify },
               logo: { type: TestImage, duplicate: :dup },
+              slides: { type: TestImage, duplicate: :dup, multiple: true },
               background: { type: TestImage, duplicate: :nil },
               header: { type: TestImage, duplicate: :link }
             }
@@ -139,20 +194,35 @@ describe NoCms::Blocks::Block do
 
     it "should duplicate an Active Record field configured to be duplicated" do
       [:es, :en].each do |locale|
-        expect(subject.logo).to_not be_new_record
-        expect(subject.logo).to_not eq block.logo
+        I18n.with_locale(locale) do
+          expect(subject.logo).to_not be_new_record
+          expect(subject.logo).to_not eq block.logo
+        end
+      end
+    end
+    it "should duplicate a multiple Active Record field configured to be duplicated" do
+      [:es, :en].each do |locale|
+        I18n.with_locale(locale) do
+          expect(subject.slides).to be_a ActiveRecord::Relation
+          expect(subject.slides).to_not match_array block.slides
+        end
       end
     end
 
+
     it "should return a new record when an AR field is configured to nullify" do
       [:es, :en].each do |locale|
-        expect(subject.background).to be_new_record
+        I18n.with_locale(locale) do
+          expect(subject.background).to be_new_record
+        end
       end
     end
 
     it "should link an Active Record field configured to be linked" do
       [:es, :en].each do |locale|
-        expect(subject.header).to eq block.header
+        I18n.with_locale(locale) do
+          expect(subject.header).to eq block.header
+        end
       end
     end
 

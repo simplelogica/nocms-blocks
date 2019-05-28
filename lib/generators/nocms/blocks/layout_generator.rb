@@ -13,6 +13,7 @@ module NoCms
       def generate_views
         template "app/views/no_cms/blocks/blocks/layout.html.erb", File.join(destination_root, "app/views/no_cms/blocks/blocks", "_#{name}.html.erb")
         template "app/views/no_cms/admin/blocks/blocks/layout.html.erb", File.join(destination_root, "app/views/no_cms/admin/blocks/blocks", "_#{name}.html.erb")
+        template "app/views/no_cms/blocks/skeletons/default.html.erb", File.join(destination_root, "app/views/no_cms/blocks/skeletons", "_#{name}.html.erb")
       end
 
       def generate_initializer

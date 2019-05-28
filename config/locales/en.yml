@@ -13,3 +13,9 @@ en:
       blocks:
         layouts:
           default: 'Default block'
+      template_zones:
+        body: Body
+        footer: Footer
+        header: Header
+      templates:
+        default: Default
