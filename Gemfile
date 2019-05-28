@@ -25,7 +25,7 @@ group :test do
   gem 'rspec-rails', '~> 3.5.0.beta'
   gem 'capybara-screenshot'
   gem 'factory_girl'
-  gem 'capybara'
+  gem 'capybara', '< 3.16'
   gem 'database_cleaner'
   gem 'faker'
   gem 'carrierwave' # For development and testing purposes (Images)
