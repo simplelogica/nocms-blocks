@@ -1,4 +1,4 @@
-Edge
+1.2.0
 
   - Support for rails 4.2.X, 4.1.X, 5.0.X and 5.1.X
   - Slots for allowing to create multiple relationships between blocks and other
@@ -14,7 +14,7 @@ Edge
   - Added multiple ActiveRecord/ActiveResource fields
   - Added appraisals to test support with PostgreSQL
   - Configurable database serializer: Hash and JSON.
-  - Configurable database serializer: :hstore. THis includes support for
+  - Configurable database serializer: :hstore. This includes support for
     PostgreSQL's hstore serialization.
   - Fallback behaviour on translations.
   - Added template_layout parameter in block configuration.
