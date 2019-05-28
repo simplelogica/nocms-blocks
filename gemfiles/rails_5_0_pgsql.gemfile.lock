@@ -1,11 +1,11 @@
 PATH
-  remote: ../
+  remote: ..
   specs:
     nocms-blocks (1.2.0)
-      activeresource (>= 4.0.0, < 5.3)
+      activeresource (>= 4.0.0, < 6.1)
       awesome_nested_set (>= 3.0.0, < 3.2)
-      globalize (>= 4.0.0, < 5.3)
-      rails (>= 4.0.0, < 5.3)
+      globalize (>= 4.0.0, < 5.4)
+      rails (>= 4.0.0, < 6.1)
 
 GEM
   remote: https://rubygems.org/
@@ -100,9 +100,9 @@ GEM
       railties (>= 3.0.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    globalize (5.2.0)
-      activemodel (>= 4.2, < 5.3)
-      activerecord (>= 4.2, < 5.3)
+    globalize (5.3.0)
+      activemodel (>= 4.2, < 6.1)
+      activerecord (>= 4.2, < 6.1)
       request_store (~> 1.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
@@ -172,23 +172,23 @@ GEM
     regexp_parser (1.5.1)
     request_store (1.4.1)
       rack (>= 1.4)
-    rspec-core (3.5.4)
-      rspec-support (~> 3.5.0)
-    rspec-expectations (3.5.0)
+    rspec-core (3.8.0)
+      rspec-support (~> 3.8.0)
+    rspec-expectations (3.8.3)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.5.0)
-    rspec-mocks (3.5.0)
+      rspec-support (~> 3.8.0)
+    rspec-mocks (3.8.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.5.0)
-    rspec-rails (3.5.2)
+      rspec-support (~> 3.8.0)
+    rspec-rails (3.8.2)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
-      rspec-core (~> 3.5.0)
-      rspec-expectations (~> 3.5.0)
-      rspec-mocks (~> 3.5.0)
-      rspec-support (~> 3.5.0)
-    rspec-support (3.5.0)
+      rspec-core (~> 3.8.0)
+      rspec-expectations (~> 3.8.0)
+      rspec-mocks (~> 3.8.0)
+      rspec-support (~> 3.8.0)
+    rspec-support (3.8.0)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -236,9 +236,9 @@ DEPENDENCIES
   pry-remote
   pry-stack_explorer
   rails (= 5.0.7.2)
-  rspec-rails (~> 3.5.0.beta)
+  rspec-rails
   simplecov
   simplecov-json
 
 BUNDLED WITH
-   1.13.6
+   1.17.3
