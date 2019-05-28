@@ -19,6 +19,8 @@ Edge
   - Fallback behaviour on translations.
   - Added template_layout parameter in block configuration.
   - Added circleci support
+  - Added lazy block support (for loading block via Ajax)
+  - Added support for isolated CSS for the blocks
 
 1.1.3
 

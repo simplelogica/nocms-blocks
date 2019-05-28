@@ -28,6 +28,7 @@ NoCms::Blocks.configure do |config|
   # By default the no_cms/blocks/blocks folder will be used, but you can
   # customize it to fix better in your views structure (e.g: my_app/blocks)
   # config.front_partials_folder = 'no_cms/blocks/blocks'
+  # config.front_skeletons_folder = 'no_cms/blocks/blocks/skeletons'
 
   # Route inside your app/views/ folder where the block partial files for
   # amdinistration will be located.
@@ -88,13 +89,16 @@ NoCms::Blocks.configure do |config|
   # By default there's one template with three zones defined.
   config.templates = {
     'default' => {
-      blocks: [:default, :general1, :general2],
+      blocks: [:default, :general1],
+      lazy_blocks: [:general2],
       zones: {
         header: {
-          blocks: [:header1, :header2]
+          blocks: [:header1],
+          lazy_blocks: [:header2, :mixed_lazy_block]
         },
         body: {
-          blocks: [:body]
+          blocks: [:body, :mixed_lazy_block],
+          lazy_blocks: [ ]
         },
         footer: {
         }

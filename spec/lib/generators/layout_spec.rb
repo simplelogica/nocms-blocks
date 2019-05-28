@@ -42,6 +42,11 @@ describe NoCms::Blocks::LayoutGenerator, type: :generator do
                   contains 'class="block test_name"'
                 end
               end
+              directory "skeletons" do
+                file "_test_name.html.erb" do
+                  contains 'class="block skeleton test_name"'
+                end
+              end
             end
             directory "admin" do
               directory "blocks" do

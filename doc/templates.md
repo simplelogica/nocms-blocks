@@ -58,15 +58,32 @@ only blocks from valid layouts are attached into a zone.
 How is this restriction configured? with the blocks options for both the
 template and the zones.
 
-* The `blocks` option for template defines blocks that are allowed in all the
-zones of a template.
-* The `blocks` option for a zone defines blocks allowed in just one zone.
+* The `blocks` and `lazy_blocks` options for template defines blocks that are
+  allowed in all the zones of a template.
+* The `blocks` and `lazy_blocks` options for a zone defines blocks allowed in
+  just one zone.
 
 This means that the list of blocks allowed for one zone is the sum of the blocks
 globally allowed for the template and the ones explicitly allowed for the zone.
 
 If this sum is empty then we assume there's no restriction and every layout is
 allowed.
+
+#### Lazy blocks
+
+Lazy blocks that are meant to be configurable and included in the templates and
+zones but which rendering is not executed in regular controllers and views but
+through some lazy load technique such an ajax request.
+
+More info when reading about how to [render the blocks in your templates](./render.md).
+
+Configuring a block as a lazy one will allow us in a controller (e.g a pages
+controller) to perform different actions for lazy blocks, such as not loading
+data from the database that will no be used.
+
+Since the same block may have different behaviour depending on the template it's
+loaded, the configuration is set at a template or zone level so we can have a
+greater level of flexibility in our configuration.
 
 ### Attaching a template to a model
 

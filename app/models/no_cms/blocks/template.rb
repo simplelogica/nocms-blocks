@@ -6,13 +6,13 @@ class NoCms::Blocks::Template
 
   attr_reader :config, :name
 
-  DEFAULT_FIELD_CONFIGURATION = { translated: true, duplicate: :dup }
+  DEFAULT_TEMPLATE_CONFIGURATION = { blocks: [ ], lazy_blocks: [ ] }
 
   ##
   # We receive a configuration hash like the ones defined in the configuration
   # files
   def initialize name, config
-    @config = config
+    @config = DEFAULT_TEMPLATE_CONFIGURATION.merge config
     @name = name
   end
 
@@ -21,8 +21,15 @@ class NoCms::Blocks::Template
   # block is allowed then we return an empty array
   def allowed_layouts
     return @allowed_layouts if @allowed_layouts
-    @allowed_layouts = config[:blocks] || []
+    @allowed_layouts = [config[:blocks], config[:lazy_blocks]].compact.flatten.uniq
   end
+
+  ##
+  # This method checks that the layout sent as param is configured as a lazy block in the whole template
+  def is_lazy_layout? layout
+    config[:lazy_blocks].map(&:to_s).include?(layout)
+  end
+
 
   ##
   # This method returns an array of the zones contained by this template with

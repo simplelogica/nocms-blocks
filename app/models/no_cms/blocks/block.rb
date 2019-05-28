@@ -23,6 +23,19 @@ module NoCms::Blocks
       layout_config.fields
     end
 
+    ##
+    # It returns an array of arrays with the css path and the mediaquery for
+    # each css template configured
+    def css_files
+      css_templates = layout_config.css_templates || []
+      css_templates.map do |css_template|
+        media_type = css_template.split("_").last.to_sym
+        media_query = NoCms::Blocks.css_mediaqueries[media_type]
+        ["#{NoCms::Blocks.css_blocks_folder}/#{self.layout}/#{css_template}", media_query]
+      end
+    end
+
+
     validates :layout, presence: true
     validate :validate_block_layout
 
@@ -111,6 +124,15 @@ module NoCms::Blocks
     # then add the block template
     def to_admin_partial_path
       "#{NoCms::Blocks.admin_partials_folder}/#{self.template}"
+    end
+
+
+    ##
+    # Method that will define skeleton path in the public views
+    # It uses the engine configuration to read the partials folder and
+    # then add the skeleton template
+    def to_skeleton_path
+      "#{NoCms::Blocks.front_skeletons_folder}/#{layout_config.skeleton_template}"
     end
 
     ##

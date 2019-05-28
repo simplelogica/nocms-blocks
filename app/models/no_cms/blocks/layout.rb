@@ -13,11 +13,16 @@ class NoCms::Blocks::Layout
     multiple: false
   }
 
+  DEFAULT_BLOCK_CONFIGURATION = {
+    skeleton_template: 'default',
+    css_templates: ''
+  }
+
   ##
   # We receive a configuration hash like the ones defined in the configuration
   # files
   def initialize config
-    @config = config
+    @config = DEFAULT_BLOCK_CONFIGURATION.merge config
   end
 
   ##
@@ -75,6 +80,14 @@ class NoCms::Blocks::Layout
 
   def template
     config[:template]
+  end
+
+  def skeleton_template
+    config[:skeleton_template]
+  end
+
+  def css_templates
+    config[:css_templates]
   end
 
   def allow_nested_blocks

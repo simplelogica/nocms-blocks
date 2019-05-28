@@ -5,13 +5,13 @@ class NoCms::Blocks::Zone
   attr_reader :config
   attr_reader :name
 
-  DEFAULT_FIELD_CONFIGURATION = { translated: true, duplicate: :dup }
+  DEFAULT_ZONE_CONFIGURATION = { blocks: [ ], lazy_blocks: [ ] }
 
   ##
   # We receive a name, a zone configuration hash like the ones defined in the configuration
   # files and the template object associated
   def initialize name, config, template
-    @config = config
+    @config = DEFAULT_ZONE_CONFIGURATION.merge config
     @name = name
     @template = template
   end
@@ -22,7 +22,7 @@ class NoCms::Blocks::Zone
   # We can also filter the layouts for a certain level
   def allowed_layouts nest_level = nil
 
-    @allowed_layouts = [config[:blocks], @template.allowed_layouts].compact.flatten.uniq
+    @allowed_layouts = [config[:blocks], config[:lazy_blocks], @template.allowed_layouts].compact.flatten.uniq
     @allowed_layouts = NoCms::Blocks.block_layouts.keys if @allowed_layouts.blank?
     @allowed_layouts = @allowed_layouts.select do |layout_name|
       layout = NoCms::Blocks.block_layouts[layout_name]
@@ -30,6 +30,12 @@ class NoCms::Blocks::Zone
     end unless nest_level.nil?
 
     @allowed_layouts
+  end
+
+  ##
+  # This method checks that the layout sent as param is configured as a lazy block in this zone or in the whole template
+  def is_lazy_layout? layout
+    config[:lazy_blocks].map(&:to_s).include?(layout) || @template.is_lazy_layout?(layout)
   end
 
   def to_param

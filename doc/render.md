@@ -67,7 +67,7 @@ english version and a `/no_cms/blocks/blocks/title_3_columns.es.html.erb` for
 the spanish one).
 
 
-#### Nested blocks
+### Nested blocks
 
 As seen before you can nest some blocks inside others.
 
@@ -90,4 +90,90 @@ A rather typical template would be:
     <% end -%>
   <% end -%>
 </div>
+```
+
+### Lazy blocks
+
+As seen when we [defined templates and zones](./doc/templates.md) some blocks
+must be loaded not directly in the view but through some lazy loading technique,
+such as an ajax request and some front-end framework.
+
+That's why we must configure a different view for the lazy loading the block
+where we show an skeleton of the block or whatever conde is required to load it
+after the page is ready.
+
+The partial will be configured as the `skeleton_template` setting of the block
+configuration. This is not a mandatory attribute and if it's not defined it will
+take the value `default`.
+
+The folder for skeletons partials will ve configured also separately in the
+variable `NoCms::Blocks.front_skeletons_folder`. This way, you can completely
+separate your regular and your skeleton templates.
+
+The `render_block_slot` helper will check the block and template configurations
+to decide wether it must use the regular templates or the skeleton ones.
+
+You could also force it through the `render_block_slot` or the `render_block`
+helpers sending the `lazy_block` option as true.
+
+Once the skeleton is rendered, it's up to you how to manage it!
+
+### Custom CSS Files
+
+A block can have its own CSS files so the application.css doesn't get too big.
+You can configure a block to have multiple css files suitable for differente
+devices or mediaqueries.
+
+This configuration comes from the `css_templates` setting in a block
+configuration where you can set an array of css file names, such as:
+
+```
+NoCms::Blocks.configure do |config|
+  config.block_layouts = {
+    'title-long_text' => {
+      template: 'title-long_text',
+      fields: {
+        title: :string,
+        body: :text
+      },
+      css_templates: [
+        'title-long_text_desktop',
+        'title-long_text_mobile',
+        'title-long_text_tablet',
+        'title-long_text_all'
+      ]
+    }
+  }
+end
+```
+
+In this configuration the `title-long_text` has four different css files. This
+CSS files will not be automatically created and they must be created and
+included in the asset pipeline by hand.
+
+The name of the css_template uses the final suffix as an indicator of the
+mediaquery that should apply to the file. In the example, for
+`title-long_text_desktop` will apply the `desktop` mediaquery, for
+`title-long_text_mobile` the `mobile` one and so on.
+
+These mediaqueries are configured by the `css_mediaqueries` of the
+`NoCms::Blocks` engine by default the value is
+
+```
+css_mediaqueries = {
+  mobile: 'only screen and (max-width: 767px)',
+  tablet: 'only screen and (min-width: 768px) and (max-width: 1024px)',
+  desktop: 'only screen and (min-width: 1025px)',
+  all: 'All'
+}
+```
+
+The helper `stylesheet_link_tags_for_block` will return and string with all the
+`stylesheet_link_tag` for the css files. In the example:
+
+```
+<link href="/stylesheets/no_cms/blocks/title-long_text/title-long_text_desktop.css" media="only screen and (min-width: 1025px)" rel="stylesheet" />
+<link href="/stylesheets/no_cms/blocks/title-long_text/title-long_text_mobile.css" media="only screen and (max-width: 767px)" rel="stylesheet" />
+<link href="/stylesheets/no_cms/blocks/title-long_text/title-long_text_tablet.css" media="only screen and (min-width: 768px) and (max-width: 1024px)" rel="stylesheet" />
+<link href="/stylesheets/no_cms/blocks/title-long_text/title-long_text_all.css" media="All" rel="stylesheet" />
 ```

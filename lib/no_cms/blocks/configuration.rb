@@ -6,6 +6,9 @@ module NoCms
     config_accessor :cache_enabled
     config_accessor :templates
     config_accessor :front_partials_folder
+    config_accessor :front_skeletons_folder
+    config_accessor :css_blocks_folder
+    config_accessor :css_mediaqueries
     config_accessor :admin_partials_folder
     config_accessor :serializers
     config_accessor :default_serializer
@@ -43,8 +46,20 @@ module NoCms
     }
     self.cache_enabled = false
 
-    self.front_partials_folder = 'no_cms/blocks/blocks'
-    self.admin_partials_folder = 'no_cms/admin/blocks/blocks'
+    self.front_partials_folder  = 'no_cms/blocks/blocks'
+    self.front_skeletons_folder = 'no_cms/blocks/blocks/skeletons'
+    self.admin_partials_folder  = 'no_cms/admin/blocks/blocks'
+
+    #Blocks configuration
+    self.css_blocks_folder = 'no_cms/blocks'
+
+    #Media configuration
+    self.css_mediaqueries = {
+      mobile: 'only screen and (max-width: 767px)',
+      tablet: 'only screen and (min-width: 768px) and (max-width: 1024px)',
+      desktop: 'only screen and (min-width: 1025px)',
+      all: 'All'
+    }
 
     self.serializers = {
       "DateTime" => "NoCms::Blocks::DateSerializer",
