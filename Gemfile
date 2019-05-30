@@ -23,7 +23,7 @@ end
 
 group :test do
   gem 'capybara-screenshot'
-  gem 'factory_girl'
+  gem 'factory_bot'
   gem 'capybara', '< 3.16'
   gem 'database_cleaner'
   gem 'faker'
