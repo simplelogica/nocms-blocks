@@ -46,7 +46,7 @@ jobs: # a collection of steps
 
       # Store bundle cache for Ruby dependencies
       - save_cache:
-          key: nocms-blocks-bundle-v2-{{ checksum "gemfiles/*" }}
+          key: nocms-blocks-bundle-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
