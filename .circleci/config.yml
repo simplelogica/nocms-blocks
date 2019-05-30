@@ -17,9 +17,12 @@ jobs: # a collection of steps
           POSTGRES_DB: nocms_blocks_test
           POSTGRES_PASSWORD: postgres
       - image: circleci/mysql:latest-ram # database image
+        command: [--default-authentication-plugin=mysql_native_password]
         environment: # environment variables for database
           MYSQL_USER: root
           MYSQL_DATABASE: nocms_blocks_test
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ROOT_HOST: %
 
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
