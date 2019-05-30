@@ -41,11 +41,11 @@ commands: # a collection of steps
 
       - run:
           name: Create DB
-          command: bundle exec appraisal rake db:create
+          command: bundle exec appraisal ruby spec/support/database/create.rb
 
       - run:
           name: Run Migrations
-          command: bundle exec appraisal rake db:migrate
+          command: bundle exec appraisal ruby spec/support/database/migrate.rb
 
       - run:
           name: Run specs
