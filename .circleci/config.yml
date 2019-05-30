@@ -52,14 +52,17 @@ jobs: # a collection of steps
           paths:
             - vendor/bundle
 
-
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
       - run:
           name: Create DB
-          command: bundle exec appraisal rake db:create || bundle exec appraisal rake db:migrate
+          command: bundle exec appraisal rake db:create
+
+      - run:
+          name: Run Migrations
+          command: bundle exec appraisal rake db:migrate
 
       - run:
           name: Run specs
