@@ -2,9 +2,11 @@
 
 source "https://rubygems.org"
 
-gem "pg", "~> 0.21.0"
-gem "rails", "4.2.11.1"
-gem "rspec-rails", "~> 3.5.0.beta"
+gem "mysql2"
+gem "awesome_nested_set", git: "git@github.com:collectiveidea/awesome_nested_set.git"
+gem "actionpack", "6.0.0.rc1"
+gem "rails", "6.0.0.rc1"
+gem "rspec-rails"
 
 group :development, :test do
   gem "pry-rails"

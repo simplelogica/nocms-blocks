@@ -5,7 +5,6 @@ source "https://rubygems.org"
 gem "pg"
 gem "rails", "5.1.7"
 gem "rspec-rails"
-gem "globalize", "~> 5.2.0"
 
 group :development, :test do
   gem "pry-rails"
