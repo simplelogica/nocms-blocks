@@ -30,8 +30,8 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 
-  # Avoid repeating FactoryGirl
-  config.include FactoryGirl::Syntax::Methods
+  # Avoid repeating FactoryBot
+  config.include FactoryBot::Syntax::Methods
 
   # Capybara DSL only in request specs
   config.include Capybara::DSL
@@ -71,4 +71,4 @@ RSpec.configure do |config|
   config.order = "random"
 end
 
-  FactoryGirl.reload
+  FactoryBot.reload
