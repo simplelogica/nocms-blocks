@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gem "sqlite3"
 gem "rails", "5.2.3"
 gem "rspec-rails"
+gem "globalize", "~> 5.2.0"
 
 group :development, :test do
   gem "pry-rails"

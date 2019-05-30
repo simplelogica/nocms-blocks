@@ -1,5 +1,5 @@
 PATH
-  remote: ..
+  remote: ../
   specs:
     nocms-blocks (1.2.0)
       activeresource (>= 4.0.0, < 6.1)
@@ -228,6 +228,7 @@ DEPENDENCIES
   factory_bot
   faker
   generator_spec
+  globalize (~> 5.2.0)
   nocms-blocks!
   pg
   pry-byebug
