@@ -16,10 +16,10 @@ commands: # a collection of steps
 
       # Restore bundle cache
       # Read about caching dependencies: https://circleci.com/docs/2.0/caching/
-      # - restore_cache:
-      #     keys:
-      #       - nocms-blocks-bundle-v<< parameters.ruby_version>>-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/rails_4_0_mysql.gemfile.lock" }}
-      #       - nocms-blocks-bundle-v<< parameters.ruby_version>>-
+      - restore_cache:
+          keys:
+            - nocms-blocks-bundle-ruby-<< parameters.ruby_version>>-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/rails_4_0_mysql.gemfile.lock" }}
+            - nocms-blocks-bundle-ruby-<< parameters.ruby_version>>-
 
       - run: # Install Ruby dependencies
           name: Bundle Install
@@ -31,7 +31,7 @@ commands: # a collection of steps
 
       # Store bundle cache for Ruby dependencies
       - save_cache:
-          key: nocms-blocks-bundle-v<< parameters.ruby_version>>-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/rails_4_0_mysql.gemfile.lock" }}
+          key: nocms-blocks-bundle-ruby-<< parameters.ruby_version>>-{{ checksum "Gemfile.lock" }}-{{ checksum "gemfiles/rails_4_0_mysql.gemfile.lock" }}
           paths:
             - vendor/bundle
 
