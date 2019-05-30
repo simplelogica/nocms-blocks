@@ -1,5 +1,5 @@
 PATH
-  remote: ..
+  remote: ../
   specs:
     nocms-blocks (1.2.0)
       activeresource (>= 4.0.0, < 6.1)
@@ -104,9 +104,9 @@ GEM
       railties (>= 3.0.0)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
-    globalize (5.3.0)
-      activemodel (>= 4.2, < 6.1)
-      activerecord (>= 4.2, < 6.1)
+    globalize (5.2.0)
+      activemodel (>= 4.2, < 5.3)
+      activerecord (>= 4.2, < 5.3)
       request_store (~> 1.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
@@ -180,23 +180,23 @@ GEM
     regexp_parser (1.5.1)
     request_store (1.4.1)
       rack (>= 1.4)
-    rspec-core (3.8.0)
-      rspec-support (~> 3.8.0)
-    rspec-expectations (3.8.3)
+    rspec-core (3.6.0)
+      rspec-support (~> 3.6.0)
+    rspec-expectations (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.8.0)
-    rspec-mocks (3.8.0)
+      rspec-support (~> 3.6.0)
+    rspec-mocks (3.6.0)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.8.0)
-    rspec-rails (3.8.2)
+      rspec-support (~> 3.6.0)
+    rspec-rails (3.6.1)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
-      rspec-core (~> 3.8.0)
-      rspec-expectations (~> 3.8.0)
-      rspec-mocks (~> 3.8.0)
-      rspec-support (~> 3.8.0)
-    rspec-support (3.8.0)
+      rspec-core (~> 3.6.0)
+      rspec-expectations (~> 3.6.0)
+      rspec-mocks (~> 3.6.0)
+      rspec-support (~> 3.6.0)
+    rspec-support (3.6.0)
     simplecov (0.16.1)
       docile (~> 1.1)
       json (>= 1.8, < 3)
@@ -235,6 +235,7 @@ DEPENDENCIES
   factory_girl
   faker
   generator_spec
+  globalize (~> 5.2.0)
   nocms-blocks!
   pg
   pry-byebug
@@ -248,4 +249,4 @@ DEPENDENCIES
   simplecov-json
 
 BUNDLED WITH
-   1.17.3
+   1.13.6

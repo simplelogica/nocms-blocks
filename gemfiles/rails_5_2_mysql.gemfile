@@ -4,6 +4,8 @@ source "https://rubygems.org"
 
 gem "mysql2"
 gem "rails", "5.2.3"
+gem "rspec-rails"
+gem "globalize", "~> 5.2.0"
 
 group :development, :test do
   gem "pry-rails"
@@ -14,7 +16,6 @@ group :development, :test do
 end
 
 group :test do
-  gem "rspec-rails"
   gem "capybara-screenshot"
   gem "factory_girl"
   gem "capybara", "< 3.16"
