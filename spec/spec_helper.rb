@@ -49,6 +49,14 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 
+  config.before(:all) do
+    database_switch NoCms::Blocks.installed_db_gem
+  end
+
+  config.after(:all) do
+    database_switch 'common'
+  end
+
   config.around(:each, :caching) do |example|
 
     caching = ActionController::Base.perform_caching

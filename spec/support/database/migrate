@@ -1,0 +1,8 @@
+ENV["RAILS_ENV"] ||= 'test'
+require File.expand_path("../../../dummy/config/environment", __FILE__)
+require_relative 'switch.rb'
+
+database_switch NoCms::Blocks.installed_db_gem
+Dummy::Application.load_tasks
+Rake::Task['db:migrate'].execute
+database_switch 'common'
