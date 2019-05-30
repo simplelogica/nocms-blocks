@@ -10,7 +10,7 @@ development_mysql2: &development_mysql2
   pool: 5
   username: root
   password:
-  host: localhost
+  host: 127.0.0.1
 
 development_pg: &development_pg
   adapter: postgresql
@@ -18,7 +18,7 @@ development_pg: &development_pg
   timeout: 5000
   username: postgres
   password: postgres
-  host: localhost
+  host: 127.0.0.1
   encoding: utf8
 
 development_sqlite3: &development_sqlite3
@@ -42,7 +42,7 @@ test_mysql2: &test_mysql2
   pool: 5
   username: root
   password:
-  host: localhost
+  host: 127.0.0.1
 
 test_pg: &test_pg
   adapter: postgresql
@@ -50,7 +50,7 @@ test_pg: &test_pg
   timeout: 5000
   username: postgres
   password: postgres
-  host: localhost
+  host: 127.0.0.1
   encoding: utf8
 
 test_sqlite3: &test_sqlite3
