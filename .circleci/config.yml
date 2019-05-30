@@ -69,8 +69,8 @@ jobs: # a collection of steps
           MYSQL_DATABASE: nocms_blocks_test
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_ROOT_HOST: '%'
-      - steps:
-        - run_tests
+    steps:
+      - run_tests
 
   build_2_5: # runs not using Workflows must have a `build` job as entry point
     parallelism: 1 # run three instances of this job in parallel
@@ -95,8 +95,8 @@ jobs: # a collection of steps
           MYSQL_DATABASE: nocms_blocks_test
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_ROOT_HOST: '%'
-      - steps:
-        - run_tests
+    steps:
+      - run_tests
 
 workflows:
   version: 2
