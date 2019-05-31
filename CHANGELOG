@@ -1,3 +1,9 @@
+Edge:
+
+  - Updated versions 4.2.X, 5.0.X and 5.1.X to the latest in tests.
+  - Added support for rails 5.2.x and 6.0.0.rc1.
+  - Restored CircleCI compatibility.
+
 1.2.0
 
   - Support for rails 4.2.X, 4.1.X, 5.0.X and 5.1.X

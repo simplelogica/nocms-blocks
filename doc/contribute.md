@@ -45,4 +45,15 @@ appraisals:
 - `SERIALIZER=hstore appraisal rails-4-0-pgsql rake db:create RAILS_ENV=test`
 - `SERIALIZER=hstore appraisal rails-4-0-pgsql rake db:migrate RAILS_ENV=test`
 
+Since we have different databases we have ERB in database.yml. Starting Rails 6
+this is not allowed in Rake tasks such as `rake db:create` or `rake db:migrate`
+or the default `rake` task.
+
+That's why we have created scripts that wrap the rake tasks and swap the
+`database.yml` to the apropiate database. This scripts must be used to create or
+migrate in Rails 6. In order to run the specs just use the `rspec` command.
+
+  - `rake db:create` turns into `appraisal ruby spec/support/database/create`.
+  - `rake db:migrate` turns into `appraisal ruby spec/support/database/migrate`.
+
 Finally, ask for a pull request and we will be very grateful.
