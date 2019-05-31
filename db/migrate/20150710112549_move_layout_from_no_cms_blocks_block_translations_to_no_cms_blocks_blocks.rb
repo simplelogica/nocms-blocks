@@ -1,4 +1,4 @@
-class MoveLayoutFromNoCmsBlocksBlockTranslationsToNoCmsBlocksBlocks < ActiveRecord::Migration
+class MoveLayoutFromNoCmsBlocksBlockTranslationsToNoCmsBlocksBlocks < NoCms::Blocks::Migration
   def up
     add_column :no_cms_blocks_blocks, :layout, :string
 

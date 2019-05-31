@@ -1,4 +1,4 @@
-class AddNonTranslatedFieldsInfoToNoCmsBlocksBlock < ActiveRecord::Migration
+class AddNonTranslatedFieldsInfoToNoCmsBlocksBlock < NoCms::Blocks::Migration
   def change
     if NoCms::Blocks.installed_db_gem == 'pg'
       if NoCms::Blocks.database_serializer.to_s == "hstore"

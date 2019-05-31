@@ -1,5 +1,5 @@
 # This migration comes from no_cms_blocks (originally 20140405135410)
-class CreateNoCmsBlocksBlocks < ActiveRecord::Migration
+class CreateNoCmsBlocksBlocks < NoCms::Blocks::Migration
   def change
 
     if NoCms::Blocks.database_serializer.to_s == "hstore"

@@ -1,4 +1,4 @@
-class CreateNoCmsBlocksBlockSlots < ActiveRecord::Migration
+class CreateNoCmsBlocksBlockSlots < NoCms::Blocks::Migration
   def change
     create_table :no_cms_blocks_block_slots do |t|
       t.belongs_to :container, polymorphic: true, index: {name: 'index_no_cms_blocks_block_slots_on_container_type_and_id'}

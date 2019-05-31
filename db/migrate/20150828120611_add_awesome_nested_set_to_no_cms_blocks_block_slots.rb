@@ -1,4 +1,4 @@
-class AddAwesomeNestedSetToNoCmsBlocksBlockSlots < ActiveRecord::Migration
+class AddAwesomeNestedSetToNoCmsBlocksBlockSlots < NoCms::Blocks::Migration
   def change
     add_reference :no_cms_blocks_block_slots, :parent, index: true
     add_column :no_cms_blocks_block_slots, :lft, :integer

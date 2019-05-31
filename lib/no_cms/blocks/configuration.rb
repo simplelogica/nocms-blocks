@@ -16,6 +16,9 @@ module NoCms
     config_accessor :i18n_fallbacks_enabled
     config_accessor :i18n_fallbacks
     config_accessor :i18n_fallback_on_blank
+    config_accessor :active_record_version_for_migration
+
+    self.active_record_version_for_migration = "#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}"
 
     self.templates = {
       'default' => {

@@ -1,4 +1,4 @@
-class CreateTestImages < ActiveRecord::Migration
+class CreateTestImages < NoCms::Blocks::Migration
   def change
     create_table :test_images do |t|
       t.string :logo

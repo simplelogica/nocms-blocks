@@ -1,4 +1,4 @@
-class CreateSlottedPages < ActiveRecord::Migration
+class CreateSlottedPages < NoCms::Blocks::Migration
   def change
     create_table :slotted_pages do |t|
       t.string :title
