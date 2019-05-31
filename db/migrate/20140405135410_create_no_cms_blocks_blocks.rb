@@ -13,7 +13,7 @@ class CreateNoCmsBlocksBlocks < NoCms::Blocks::Migration
     NoCms::Blocks::Block.translated_attribute_names = [:locale, :layout, :fields_info, :draft]
 
     create_table :no_cms_blocks_block_translations do |t|
-      t.belongs_to :no_cms_blocks_block
+      t.belongs_to :no_cms_blocks_block, index: { name: 'no_cms_blocks_blocks_translations_block_id' }
       t.string :locale
       t.string :layout
       if NoCms::Blocks.installed_db_gem == 'pg'
@@ -27,7 +27,5 @@ class CreateNoCmsBlocksBlocks < NoCms::Blocks::Migration
       end
       t.boolean :draft
     end
-
-    add_index :no_cms_blocks_block_translations, :no_cms_blocks_block_id,  { name: 'no_cms_blocks_blocks_translations_block_id'}
   end
 end
