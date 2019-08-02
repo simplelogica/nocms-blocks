@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # Declare your gem's dependencies in nocms-blocks.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
 # development dependencies will be added by default to the :development group.
-gemspec
+# gemspec
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
@@ -22,10 +22,9 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 3.5.0.beta'
   gem 'capybara-screenshot'
   gem 'factory_girl'
-  gem 'capybara'
+  gem 'capybara', '< 3.16'
   gem 'database_cleaner'
   gem 'faker'
   gem 'carrierwave' # For development and testing purposes (Images)
