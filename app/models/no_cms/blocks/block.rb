@@ -27,7 +27,7 @@ module NoCms::Blocks
     # It returns an array of arrays with the css path and the mediaquery for
     # each css template configured
     def css_files
-      css_templates = layout_config.css_templates || []
+      css_templates = layout_config.css_templates.present? ? layout_config.css_templates : []
       css_templates.map do |css_template|
         media_type = css_template.split("_").last.to_sym
         media_query = NoCms::Blocks.css_mediaqueries[media_type]
