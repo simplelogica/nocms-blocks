@@ -3,7 +3,8 @@
 source "https://rubygems.org"
 
 gem "mysql2"
-gem "rails", "4.2.9"
+gem "rails", "4.2.11.1"
+gem "rspec-rails", "~> 3.5.0.beta"
 
 group :development, :test do
   gem "pry-rails"
@@ -14,10 +15,9 @@ group :development, :test do
 end
 
 group :test do
-  gem "rspec-rails", "~> 3.5.0.beta"
   gem "capybara-screenshot"
   gem "factory_girl"
-  gem "capybara"
+  gem "capybara", "< 3.16"
   gem "database_cleaner"
   gem "faker"
   gem "carrierwave"
