@@ -13,6 +13,11 @@ view of any object that has blocks attached.
   <%= render 'no_cms/admin/blocks/blocks/index', f: f %>
 ```
 
+To use it you will need to add two methods to your controller's helper:
+
+* **block_form_classes**: receives a block and returns an array of classes that will be used in the block's admin layout
+* **block_form_id**: receives a block and returns the id assigned to the block's admoin layout in the HTML.
+
 ### Block admin templates
 
 Same way that a block has a partial that gets rendered in the public views it
