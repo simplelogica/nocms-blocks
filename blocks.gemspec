@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 4.0.0", '< 6.1'
   s.add_dependency "activeresource", ">= 4.0.0", '< 6.1'
-  s.add_dependency "globalize", '>= 4.0.0', '< 5.4'
-  s.add_dependency "awesome_nested_set", '>= 3.0.0', '< 3.2'
+  s.add_dependency "globalize", '~> 6.0.1'
+  s.add_dependency "awesome_nested_set", '>= 3.0.0', '< 3.4'
 
 end
