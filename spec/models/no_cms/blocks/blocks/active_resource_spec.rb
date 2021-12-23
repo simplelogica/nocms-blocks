@@ -119,6 +119,10 @@ describe NoCms::Blocks::Block do
           )
         }
 
+        before do
+          subject.reload
+        end
+
         it("should respond to layout fields") do
           expect{subject.borders}.to_not raise_error
           expect{subject.borders_ids}.to_not raise_error

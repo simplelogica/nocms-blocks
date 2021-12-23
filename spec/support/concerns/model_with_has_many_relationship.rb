@@ -12,7 +12,7 @@ shared_examples_for "model with has many relationship" do |model_name, related_m
 
     subject { model_object }
 
-    it("should relate to all of its #{has_many_relationship}") { expect(subject.send(has_many_relationship.to_sym)).to match_array [related_object_1, related_object_2] }
+    it("should relate to all of its #{has_many_relationship}") { expect(subject.reload.send(has_many_relationship.to_sym)).to match_array [related_object_1, related_object_2] }
 
     context "related #{has_many_relationship.to_s.singularize}" do
 

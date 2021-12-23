@@ -33,7 +33,10 @@ describe NoCms::Blocks::Block do
         )
       }
 
-      before { subject }
+      before do
+        subject
+        subject.reload
+      end
       subject { block_with_layout }
 
       it("should respond to layout fields") do
@@ -137,6 +140,7 @@ describe NoCms::Blocks::Block do
           let(:logo) { TestImage.find_by(name: image_attributes[:name]) }
 
           before do
+            subject.reload
             subject.update_attribute :logo_id, new_logo.id
           end
 

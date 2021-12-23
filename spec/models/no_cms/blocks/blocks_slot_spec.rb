@@ -10,6 +10,7 @@ describe NoCms::Blocks::BlockSlot do
     slot.save
     sleep 1
     block.save
+    block.reload
     expect(block.slots.first.updated_at).to_not eq slot.updated_at
   end
 
