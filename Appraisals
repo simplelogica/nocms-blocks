@@ -72,12 +72,10 @@ appraise "rails-5-2-mysql" do
 end
 
 if ruby_version > ruby_2_4_4
-  appraise "rails-6-rc-mysql" do
+  appraise "rails-6-1-mysql" do
     gemspec
     gem "mysql2"
-    gem 'awesome_nested_set', git: 'git@github.com:collectiveidea/awesome_nested_set.git'
-    gem 'actionpack', '6.0.0.rc1'
-    gem 'rails', '6.0.0.rc1'
+    gem 'rails', '6.1.4.1'
     gem 'rspec-rails'
   end
 end
@@ -141,16 +139,10 @@ appraise "rails-5-2-pgsql" do
 end
 
 if ruby_version > ruby_2_4_4
-  appraise "rails-6-rc-pgsql" do
+  appraise "rails-6-1-pg" do
     gemspec
     gem "pg"
-    gem 'rails', '6.0.0.rc1'
-    gem 'actionpack', '6.0.0.rc1'
-    gem 'activemodel', '6.0.0.rc1'
-    gem 'activerecord', '6.0.0.rc1'
-    gem 'activesupport', '6.0.0.rc1'
-    gem 'railties', '6.0.0.rc1'
-    gem 'awesome_nested_set', git: 'git@github.com:collectiveidea/awesome_nested_set.git'
+    gem 'rails', '6.1.4.1'
     gem 'rspec-rails'
   end
 end
@@ -215,17 +207,10 @@ appraise "rails-5-2-sqlite" do
 end
 
 if ruby_version > ruby_2_4_4
-  appraise "rails-6-rc-sqlite" do
+  appraise "rails-6-1-sqlite" do
     gemspec
     gem "sqlite3"
-    gem 'rails', '6.0.0.rc1'
-
-    gem 'actionpack', '6.0.0.rc1'
-    gem 'activemodel', '6.0.0.rc1'
-    gem 'activerecord', '6.0.0.rc1'
-    gem 'activesupport', '6.0.0.rc1'
-    gem 'railties', '6.0.0.rc1'
-    gem 'awesome_nested_set', git: 'git@github.com:collectiveidea/awesome_nested_set.git'
+    gem 'rails', '6.1.4.1'
     gem 'rspec-rails'
   end
 end
