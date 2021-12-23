@@ -152,13 +152,11 @@ GEM
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.6.1)
     minitest (5.15.0)
-    mysql2 (0.5.3)
     nio4r (2.5.8)
-    nokogiri (1.12.5)
-      mini_portile2 (~> 2.6.1)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
+    pg (1.2.3)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -269,8 +267,8 @@ DEPENDENCIES
   factory_girl
   faker
   generator_spec
-  mysql2
   nocms-blocks!
+  pg
   pry-byebug
   pry-nav
   pry-rails

@@ -139,7 +139,7 @@ appraise "rails-5-2-pgsql" do
 end
 
 if ruby_version > ruby_2_4_4
-  appraise "rails-6-1-pg" do
+  appraise "rails-6-1-pgsql" do
     gemspec
     gem "pg"
     gem 'rails', '6.1.4.1'
