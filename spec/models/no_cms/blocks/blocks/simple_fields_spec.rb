@@ -48,7 +48,11 @@ describe NoCms::Blocks::Block do
         let(:block_body) { Faker::Lorem.paragraph }
 
         before do
-          subject.update_attributes title: new_block_title, body: block_body
+          if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+            subject.update title: new_block_title, body: block_body
+          else
+            subject.update_attributes title: new_block_title, body: block_body
+          end
         end
 
         it("should save info in layout fields") do

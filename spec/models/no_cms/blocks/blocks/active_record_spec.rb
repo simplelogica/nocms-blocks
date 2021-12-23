@@ -101,7 +101,11 @@ describe NoCms::Blocks::Block do
           let(:new_image_attributes) { attributes_for(:test_image,:second_image) }
 
           before do
-            subject.update_attributes logo: { name: new_testing_name, logo: new_image_attributes[:logo] }
+            if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+              subject.update logo: { name: new_testing_name, logo: new_image_attributes[:logo] }
+            else
+              subject.update_attributes logo: { name: new_testing_name, logo: new_image_attributes[:logo] }
+            end
           end
 
           it("should be modified in database") do
@@ -120,7 +124,11 @@ describe NoCms::Blocks::Block do
           let(:new_testing_caption) { "new testing caption" }
 
           before do
-            subject.update_attributes caption: new_testing_caption, logo: { name: nil }
+            if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+              subject.update caption: new_testing_caption, logo: { name: nil }
+            else
+              subject.update_attributes caption: new_testing_caption, logo: { name: nil }
+            end
           end
 
           it("should modify the block attribute") do
@@ -182,10 +190,17 @@ describe NoCms::Blocks::Block do
           let(:new_image_attributes) { attributes_for(:test_image,:second_image) }
 
           before do
-            subject.update_attributes slides: [
-              { id: subject.slides.first.id, name: new_testing_name, logo: new_image_attributes[:logo] },
-              { id: subject.slides.last.id }
-            ]
+            if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+              subject.update slides: [
+                { id: subject.slides.first.id, name: new_testing_name, logo: new_image_attributes[:logo] },
+                { id: subject.slides.last.id }
+              ]
+            else
+              subject.update_attributes slides: [
+                { id: subject.slides.first.id, name: new_testing_name, logo: new_image_attributes[:logo] },
+                { id: subject.slides.last.id }
+              ]
+            end
           end
 
           it("should be modified in database") do
@@ -204,10 +219,17 @@ describe NoCms::Blocks::Block do
           let(:new_testing_caption) { "new testing caption" }
 
           before do
-            subject.update_attributes caption: new_testing_caption, slides: [
-              { id: subject.slides.first.id, name: nil },
-              { id: subject.slides.last.id }
-            ]
+            if Gem::Version.new(Rails.version) > Gem::Version.new('6.0')
+              subject.update caption: new_testing_caption, slides: [
+                { id: subject.slides.first.id, name: nil },
+                { id: subject.slides.last.id }
+              ]
+            else
+              subject.update_attributes caption: new_testing_caption, slides: [
+                { id: subject.slides.first.id, name: nil },
+                { id: subject.slides.last.id }
+              ]
+            end
           end
 
           it("should modify the block attribute") do
