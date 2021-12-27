@@ -28,16 +28,16 @@ if ruby_version < ruby_2_4
     gem 'rspec-rails', '~> 3.5.0.beta'
   end
 
-end
-
-appraise "rails-4-2-mysql" do
-  gemspec
-  gem "mysql2"
-  gem "rails", "4.2.11.1"
-  gem 'rspec-rails', '~> 3.5.0.beta'
-  if ruby_version < ruby_2_4_6
-    gem 'globalize', '~> 5.2.0'
+  appraise "rails-4-2-mysql" do
+    gemspec
+    gem "mysql2"
+    gem "rails", "4.2.11.1"
+    gem 'rspec-rails', '~> 3.5.0.beta'
+    if ruby_version < ruby_2_4_6
+      gem 'globalize', '~> 5.2.0'
+    end
   end
+
 end
 
 appraise "rails-5-0-mysql" do
@@ -95,15 +95,15 @@ if ruby_version < ruby_2_4
     gem "rails", "4.1.16"
     gem 'rspec-rails', '~> 3.5.0.beta'
   end
-end
 
-appraise "rails-4-2-pgsql" do
-  gemspec
-  gem "pg", '~> 0.21.0'
-  gem "rails", "4.2.11.1"
-  gem 'rspec-rails', '~> 3.5.0.beta'
-  if ruby_version < ruby_2_4_6
-    gem 'globalize', '~> 5.2.0'
+  appraise "rails-4-2-pgsql" do
+    gemspec
+    gem "pg", '~> 0.21.0'
+    gem "rails", "4.2.11.1"
+    gem 'rspec-rails', '~> 3.5.0.beta'
+    if ruby_version < ruby_2_4_6
+      gem 'globalize', '~> 5.2.0'
+    end
   end
 end
 
@@ -163,16 +163,16 @@ if ruby_version < ruby_2_4
     gem 'rspec-rails', '~> 3.5.0.beta'
   end
 
-end
-
-appraise "rails-4-2-sqlite" do
-  gemspec
-  gem "sqlite3", '~> 1.3.13'
-  gem "rails", "4.2.11.1"
-  gem 'rspec-rails', '~> 3.5.0.beta'
-  if ruby_version < ruby_2_4_6
-    gem 'globalize', '~> 5.2.0'
+  appraise "rails-4-2-sqlite" do
+    gemspec
+    gem "sqlite3", '~> 1.3.13'
+    gem "rails", "4.2.11.1"
+    gem 'rspec-rails', '~> 3.5.0.beta'
+    if ruby_version < ruby_2_4_6
+      gem 'globalize', '~> 5.2.0'
+    end
   end
+
 end
 
 appraise "rails-5-0-sqlite" do
