@@ -49,8 +49,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    addressable (2.5.0)
-      public_suffix (~> 2.0, >= 2.0.2)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     appraisal (2.2.0)
       bundler
       rake
@@ -132,7 +132,7 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
-    public_suffix (2.0.4)
+    public_suffix (5.0.0)
     rack (1.6.5)
     rack-test (0.6.3)
       rack (>= 1.0)
